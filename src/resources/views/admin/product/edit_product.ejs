@@ -1,0 +1,79 @@
+<%- include('../header.ejs') %>
+    <%- include('../aside.ejs') %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="mt-3">
+                <div class="container-fluid">
+                    <form method="POST" action="/admin/update_product/<%= data.id %>" class="row g-3 needs-validation"
+                        novalidate enctype="multipart/form-data">
+                        <div class="col-md-4">
+                            <label for="validationCustom01" class="form-label">Danh muc san pham</label>
+                            <select class="form-control" name="danh_muc_id" id="">
+                                <option value="<%- data.danh_muc_id %>"><%- data.ten_danh_muc%>
+                                </option>
+                                <% if (danhMucList && danhMucList.length> 0) { %>
+                                    <% danhMucList.forEach(function (danhMucList, index) { %>
+                                        <option value="<%- danhMucList.id %>"><%- danhMucList.ten_danh_muc %></option>
+                                        <% }); %>
+                                            <% } else { %>
+
+                                                <p>Không có dữ liệu</p>
+
+                                                <% } %>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom02" class="form-label"> Hình ảnh </label>
+                            <input type="file" name="hinh_anh2" class="form-control" id="validationCustom02" required>
+                            <input type="hidden" name="hinh_anh" value="<%- data.hinh_anh %>">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom03" class="form-label">Nhà sản xuất </label>
+                            <select class="form-control" name="nha_san_xuat_id" id="">
+                                <option value="<%- data.nha_san_xuat_id %>"> <%- data.ten_nha_san_xuat%> </option>
+                                <% if (nhaSanXuatList && nhaSanXuatList.length> 0) { %>
+                                    <% nhaSanXuatList.forEach(function (nhaSanXuatList, index) { %>
+                                        <option value="<%- nhaSanXuatList.id %>"><%- nhaSanXuatList.ten_nha_san_xuat %>
+                                        </option>
+                                        <% }); %>
+                                            <% } else { %>
+
+                                                <p>Không có dữ liệu</p>
+
+                                                <% } %>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom02" class="form-label">Tên dòng sản phẩm</label>
+                            <input type="text" name="ten_san_pham" class="form-control" id="validationCustom02"
+                                value="<%= data.ten_san_pham %>" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom03" class="form-label">Số tháng bảo hành </label>
+                            <input type="text" name="so_thang_bao_hanh" class="form-control" id="validationCustom03"
+                                value="<%= data.so_thang_bao_hanh %>" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom03" class="form-label">Mô tả</label>
+                            <input type="text" name="mo_ta" class="form-control" id="validationCustom03"
+                                value="<%= data.mo_ta %>" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom03" class="form-label">Trạng thái</label>
+                            <select class="form-control" name="trang_thai" id="">
+                                <option value="<%- data.trang_thai %>"> <%- data.trang_thai %> </option>
+                                <option value="<%- data.trang_thai === 1 ? 0 : 1 %>"> <%- data.trang_thai===1 ? 0 : 1 %>
+                                </option>
+
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary" type="submit">Submit form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.content-wrapper -->
+        <%- include('../footer.ejs') %>

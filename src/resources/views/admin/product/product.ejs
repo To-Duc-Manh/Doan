@@ -1,0 +1,211 @@
+<%- include('../header.ejs') %>
+    <%- include('../aside.ejs') %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-outline-primary mt-2 mx-2" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">
+                        Thêm dòng sản phẩm
+                    </button>
+                </div>
+                <div class="col-md-6 mt-2 ">
+                    <form action="/admin/search_product" id="combined-form" method="get" class="sidebar-form_1 mx-2">
+                        <div class="input-group mb-3" style="width: 80%;">
+                            <input type="text" name="name" class="form-control" placeholder="Nhập tên"
+                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <select class="form-control" name="danh_muc_id" id="">
+                                <option> </option>
+                                <% if (danhMucList && danhMucList.length> 0) { %>
+                                    <% danhMucList.forEach(function (danhMucList, index) { %>
+                                        <option value="<%- danhMucList.id %>"><%- danhMucList.ten_danh_muc %></option>
+                                        <% }); %>
+                                            <% } else { %>
+
+                                                <p>Không có dữ liệu</p>
+
+                                                <% } %>
+                            </select>
+                            <select class="form-control" name="nha_san_xuat_id" id="">
+                                <option> </option>
+                                <% if (nhaSanXuatList && nhaSanXuatList.length> 0) { %>
+                                    <% nhaSanXuatList.forEach(function (nhaSanXuatList, index) { %>
+                                        <option value="<%- nhaSanXuatList.id %>"><%- nhaSanXuatList.ten_nha_san_xuat %>
+                                        </option>
+                                        <% }); %>
+                                            <% } else { %>
+
+                                                <p>Không có dữ liệu</p>
+
+                                                <% } %>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
+                                    class="fa fa-search"></i></button>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Thêm dòng sản phẩm </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="/admin/add_product" class="row g-3 needs-validation"
+                                    enctype="multipart/form-data">
+                                    <div class="col-md-6">
+                                        <label for="validationCustom01" class="form-label">Danh mục sản phẩm </label>
+                                        <select class="form-control" name="danh_muc_id" id="">
+                                            <% if (danhMucList && danhMucList.length> 0) { %>
+                                                <% danhMucList.forEach(function (danhMucList, index) { %>
+                                                    <option value="<%- danhMucList.id %>"><%- danhMucList.ten_danh_muc
+                                                            %></option>
+                                                    <% }); %>
+                                                        <% } else { %>
+
+                                                            <p>Không có dữ liệu</p>
+
+                                                            <% } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom02" class="form-label">Hình ảnh</label>
+                                        <input type="file" name="hinh_anh" class="form-control" id="validationCustom02"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập Hình ảnh
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Nhà sản xuất</label>
+                                        <select class="form-control" name="nha_san_xuat_id" id="">
+                                            <% if (nhaSanXuatList && nhaSanXuatList.length> 0) { %>
+                                                <% nhaSanXuatList.forEach(function (nhaSanXuatList, index) { %>
+                                                    <option value="<%- nhaSanXuatList.id %>"><%-
+                                                            nhaSanXuatList.ten_nha_san_xuat %></option>
+                                                    <% }); %>
+                                                        <% } else { %>
+
+                                                            <p>Không có dữ liệu</p>
+
+                                                            <% } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Tên dòng sản phẩm</label>
+                                        <input type="text" name="ten_san_pham" class="form-control"
+                                            id="validationCustom03" required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập Tên dòng sản phẩm
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom02" class="form-label"> Số tháng bảo hành </label>
+                                        <input type="text" name="so_thang_bao_hanh" class="form-control"
+                                            id="validationCustom02" value="" required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập Số tháng bảo hành
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Mô tả</label>
+                                        <input type="text" name="mo_ta" class="form-control" id="validationCustom03"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập Mô tả
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Trạng thái</label>
+                                        <select class="form-control" name="trang_thai" id="">
+                                            <option value="1">1</option>
+                                            <option value="0">0</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary" type="submit">Submit form</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Understood</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table style="margin-top: 50px;"
+                class="table table-PW table-striped table-hover table-borderless align-middle">
+                <thead class="table-light">
+                    <caption>Danh sach sản phẩm </caption>
+                    <tr>
+                        <th>STT</th>
+                        <th class="text-center"> Ảnh </th>
+                        <th>Tên sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Nhà sản xuất</th>
+                        <th> Số tháng bảo hành </th>
+                        <th> Mô tả </th>
+                        <th> Trạng thái </th>
+                        <th> Thao tác </th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <% if (data && data.length> 0) { %>
+                        <% data.forEach(function (product, index) { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td class="text-center">
+                                    <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                                        src="/imgUpload/<%= product.hinh_anh %>">
+                                </td>
+                                <td>
+                                    <%= product.ten_san_pham %>
+                                </td>
+                                <td>
+                                    <%= product.ten_danh_muc %>
+
+                                </td>
+                                <td>
+                                    <%= product.ten_nha_san_xuat %>
+
+                                </td>
+                                <td>
+                                    <%= product.so_thang_bao_hanh %>
+
+                                </td>
+                                <td>
+                                    <%= product.mo_ta %>
+
+                                </td>
+                                <td>
+                                    <%= product.trang_thai %>
+                                </td>
+                                <td>
+                                    <div class="d-flex ">
+                                        <a href="/admin/edit_product/<%= product.id %>"
+                                            class="btn btn-outline-success btn-sm mx-1">Sửa</a>
+                                        <a href="/admin/delete_tinh/<%= product.thanh_pho_id %>"
+                                            class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">Không có dữ liệu</td>
+                                    </tr>
+                                    <% } %>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.content-wrapper -->
+        <%- include('../footer.ejs') %>

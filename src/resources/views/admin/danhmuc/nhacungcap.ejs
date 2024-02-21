@@ -1,0 +1,132 @@
+<%- include('../header.ejs') %>
+    <%- include('../aside.ejs') %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-outline-primary mt-2 mx-2" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">
+                        Thêm nhà cung cấp
+                    </button>
+                </div>
+                <div class="col-md-6 mt-2 ">
+                    <form action="" id="combined-form" method="get" class="sidebar-form_1 mx-2">
+                        <div class="input-group mb-3" style="width: 80%;">
+                            <input type="text" name="name" class="form-control"
+                                placeholder="Nhập nhà cung cấp bạn muốn tìm kiếm" aria-label="Recipient's username"
+                                aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
+                                    class="fa fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Thêm nhà cung cấp</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="/admin/add_nha_cung_cap" class="row g-3 needs-validation"
+                                    novalidate>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom01" class="form-label">Tên nhà cung cấp</label>
+                                        <input type="text" name="ten_nha_cung_cap" class="form-control"
+                                            id="validationCustom01" value="" required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập tên nhà cung cấp
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom01" class="form-label">Email</label>
+                                        <input type="text" name="" class="form-control" id="validationCustom01" value=""
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập tên nhà cung cấp
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom01" class="form-label">So dien thoai</label>
+                                        <input type="text" name="" class="form-control" id="validationCustom01" value=""
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập tên nhà cung cấp
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom01" class="form-label">Dia chi</label>
+                                        <input type="text" name="" class="form-control" id="validationCustom01" value=""
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập Dia chi
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary" type="submit">Submit form</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Understood</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table style="margin-top: 50px;"
+                class="table table-PW table-striped table-hover table-borderless align-middle">
+                <thead class="table-light">
+                    <caption>Danh sach nhà cung cấp </caption>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên nhà cung cấp</th>
+                        <th>email</th>
+                        <th>So dien thoai</th>
+                        <th>Dia chi</th>
+                        <th>Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <% if (data && data.length> 0) { %>
+                        <% data.forEach(function (nhacungcap, index) { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td>
+                                    <%= nhacungcap.ten_nha_cung_cap %>
+                                </td>
+                                <td>
+                                    <%= nhacungcap.email %>
+                                </td>
+                                <td>
+                                    <%= nhacungcap.so_dien_thoai %>
+                                </td>
+                                <td>
+                                    <%= nhacungcap.dia_chi %>
+                                </td>
+                                <td>
+                                    <div class="d-flex ">
+                                        <a href="/admin/edit_nhanvien/<%= nhacungcap.id %>"
+                                            class="btn btn-outline-success btn-sm mx-1">Sửa</a>
+                                        <a href="/admin/delete_tinh/<%= nhacungcap.thanh_pho_id %>"
+                                            class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">Không có dữ liệu</td>
+                                    </tr>
+                                    <% } %>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.content-wrapper -->
+        <%- include('../footer.ejs') %>

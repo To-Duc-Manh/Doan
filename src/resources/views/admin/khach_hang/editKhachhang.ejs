@@ -1,0 +1,77 @@
+<%- include('../header.ejs') %>
+    <%- include('../aside.ejs') %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="mt-3">
+                <div class="container-fluid">
+                    <form method="POST" action="/admin/update_Khachhang/<%= data.id %>" class="row g-3 needs-validation"
+                        novalidate>
+                        <div class="col-md-4">
+                            <label for="validationCustom01" class="form-label">HỌ và Tên</label>
+                            <input type="text" name="ho_ten" class="form-control" id="validationCustom01"
+                                value="<%= data.ho_ten %>" required></input>
+                            <div class="invalid-feedback">
+                                Hãy nhập Họ và Tên
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom02" class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" id="validationCustom02"
+                                value="<%= data.email %>" required>
+                            <div class="invalid-feedback">
+                                Hãy nhập email
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom02" class="form-label"> Mật khẩu </label>
+                            <input type="text" name="mat_khau" class="form-control" id="validationCustom02"
+                                value="<%= data.mat_khau %>" required>
+                            <div class="invalid-feedback">
+                                Hãy nhập mật khẩu
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom03" class="form-label">Ngày sinh</label>
+                            <input type="date" name="ngay_sinh" class="form-control" id="validationCustom03"
+                                value="<%= data.ngay_sinh ? data.ngay_sinh.toISOString().split('T')[0] : '' %>"
+                                required>
+                            <%= data.ngay_sinh ? data.ngay_sinh.toLocaleDateString().split('T')[0] : '' %>
+                                <div class="invalid-feedback">
+                                    Hãy nhập ngày sinh
+                                </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom03" class="form-label">Giới tính</label>
+                            <input type="" name="gioi_tinh" class="form-control" id="validationCustom03"
+                                value="<%= data.gioi_tinh %>" required>
+                            <div class="invalid-feedback">
+                                Hãy nhập giới tính
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom03" class="form-label">Số điện thoại</label>
+                            <input type="text" name="so_dien_thoai" class="form-control" id="validationCustom03"
+                                value="<%= data.so_dien_thoai %>" required>
+                            <div class="invalid-feedback">
+                                Hãy nhập số điện thoại
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom03" class="form-label">Địa chỉ</label>
+                            <input type="text" name="dia_chi" class="form-control" id="validationCustom03"
+                                value="<%= data.dia_chi %>" required>
+                            <div class="invalid-feedback">
+                                Hãy nhập địa chỉ
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary" type="submit">Submit form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.content-wrapper -->
+        <%- include('../footer.ejs') %>

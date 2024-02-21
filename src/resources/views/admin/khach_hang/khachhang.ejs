@@ -1,0 +1,185 @@
+<%- include('../header.ejs') %>
+    <%- include('../aside.ejs') %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="row">
+                <!-- Button trigger modal -->
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-outline-primary mt-2 mx-2" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">
+                        Thêm khách hàng
+                    </button>
+                </div>
+                <div class="col-md-6 mt-2 ">
+                    <form action="/admin/search_khachhang" id="combined-form" method="get" class="sidebar-form_1 mx-2">
+                        <div class="input-group mb-3" style="width: 80%;">
+                            <input type="text" name="name" class="form-control" placeholder="Nhập tên bạn muốn tìm kiếm"
+                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
+                                    class="fa fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Thêm khách hàng</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="/admin/add_Khachhang" class="row g-3 needs-validation"
+                                    novalidate>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom01" class="form-label">Tên khách hàng</label>
+                                        <input type="text" name="ho_ten" class="form-control" id="validationCustom01"
+                                            value="" required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập Họ và Tên
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom02" class="form-label">Email</label>
+                                        <input type="email" name="email" class="form-control" id="validationCustom02"
+                                            value="" required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập email
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom02" class="form-label"> Mật khẩu </label>
+                                        <input type="password" name="mat_khau" class="form-control"
+                                            id="validationCustom02" value="" required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập mật khẩu
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Ngày sinh</label>
+                                        <input type="date" name="ngay_sinh" class="form-control" id="validationCustom03"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập ngày sinh
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Giới tính</label>
+                                        <input type="" name="gioi_tinh" class="form-control" id="validationCustom03"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập giới tính
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Số điện thoại</label>
+                                        <input type="text" name="so_dien_thoai" class="form-control"
+                                            id="validationCustom03" required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập số điện thoại
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Địa chỉ</label>
+                                        <input type="text" name="dia_chi" class="form-control" id="validationCustom03"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập địa chỉ
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary" type="submit">Submit form</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Understood</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table style="margin-top: 50px;"
+                class="table table-PW table-striped table-hover table-borderless align-middle">
+                <thead class="table-light">
+                    <caption>Danh sách khách hàng</caption>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên khách hàng</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Giới tính</th>
+                        <th>Ngày sinh</th>
+                        <th>Địa chỉ</th>
+                        <th>Mật khẩu</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <% if (data && data.length> 0) { %>
+                        <% data.forEach(function (khachhang, index) { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td>
+                                    <%= khachhang.ho_ten %>
+                                </td>
+                                <td>
+                                    <%= khachhang.email %>
+                                </td>
+                                <td>
+                                    <%= khachhang.so_dien_thoai %>
+                                </td>
+                                <td>
+                                    <%= khachhang.gioi_tinh %>
+                                </td>
+                                <td>
+                                    <%= new Intl.DateTimeFormat('vi-VN').format(new Date(khachhang.ngay_sinh)) %>
+                                </td>
+
+                                <td>
+                                    <%= khachhang.dia_chi %>
+                                </td>
+                                <td>
+                                    <%= khachhang.mat_khau %>
+                                </td>
+                                <td>
+                                    <div class="d-flex ">
+                                        <a href="/admin/edit_Khachhang/<%= khachhang.id %>"
+                                            class="btn btn-outline-success btn-sm mx-1">Sửa</a>
+                                        <button class="btn btn-outline-danger btn-sm mx-1"
+                                            onclick="confirmDelete(`<%= khachhang.id %>`)">Xóa</button>
+
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">Không có dữ liệu</td>
+                                    </tr>
+                                    <% } %>
+                </tbody>
+            </table>
+
+        </div>
+        <script>
+            function confirmDelete(id) {
+                if (confirm("Bạn có chắc muốn xóa?")) {
+                    // Nếu người dùng xác nhận, chuyển hướng đến đường dẫn xóa
+                    window.location.href = "/admin/delete_Khachhang/" + id;
+                } else {
+                    // Nếu người dùng không xác nhận, không thực hiện hành động gì
+                    return false;
+                }
+            }
+        </script>
+
+        <!-- /.content-wrapper -->
+        <%- include('../footer.ejs') %>

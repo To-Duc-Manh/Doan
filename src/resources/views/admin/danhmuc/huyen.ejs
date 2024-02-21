@@ -1,0 +1,130 @@
+<%- include('../header.ejs') %>
+    <%- include('../aside.ejs') %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-outline-primary mt-2 mx-2" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">
+                        Thêm quận/huyện
+                    </button>
+                </div>
+                <div class="col-md-6 mt-2 ">
+                    <form action="/admin/search_huyen" id="combined-form" method="get" class="sidebar-form_1 mx-2">
+                        <div class="input-group mb-3" style="width: 80%;">
+                            <input type="text" name="name" class="form-control" placeholder="Nhập tên bạn muốn tìm kiếm"
+                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <select class="form-control" name="thanh_pho_id" id="">
+                                <option> </option>
+                                <% if (thanhPhoList && thanhPhoList.length> 0) { %>
+                                    <% thanhPhoList.forEach(function (thanhPhoList, index) { %>
+                                        <option value="<%- thanhPhoList.thanh_pho_id %>"><%- thanhPhoList.ten_thanh_pho
+                                                %>
+                                        </option>
+                                        <% }); %>
+                                            <% } else { %>
+
+                                                <p>Không có dữ liệu</p>
+
+                                                <% } %>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
+                                    class="fa fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Thêm quận/huyện</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="/admin/add_huyen" class="row g-3 needs-validation"
+                                    novalidate>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom01" class="form-label">Tên quận/huyện</label>
+                                        <input type="text" name="ten_huyen" class="form-control" id="validationCustom01"
+                                            value="" required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập tên quận/huyện
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom02" class="form-label">Tên thành phố</label>
+                                        <select class="form-control" name="ten_thanh_pho" id="">
+                                            <% if (thanhPhoList && thanhPhoList.length> 0) { %>
+                                                <% thanhPhoList.forEach(function (thanhPhoList, index) { %>
+                                                    <option value="<%- thanhPhoList.thanh_pho_id %>"><%-
+                                                            thanhPhoList.ten_thanh_pho %></option>
+                                                    <% }); %>
+                                                        <% } else { %>
+
+                                                            <p>Không có dữ liệu</p>
+
+                                                            <% } %>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary" type="submit">Submit form</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Understood</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table style="margin-top: 50px;"
+                class="table table-PW table-striped table-hover table-borderless align-middle">
+                <thead class="table-light">
+                    <caption>Danh sach quận/huyện </caption>
+                    <tr>
+                        <th>STT</th>
+                        <th>Quận/huyện</th>
+                        <th>Tỉnh/thành phố</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+
+                    <% if (data && data.length> 0) { %>
+                        <% data.forEach(function (huyen, index) { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td>
+                                    <%= huyen.ten_huyen %>
+                                </td>
+                                <td>
+                                    <%= huyen.ten_thanh_pho %>
+                                </td>
+                                <td>
+                                    <div class="d-flex ">
+                                        <a href="/admin/edit_nhanvien/<%= huyen.id %>"
+                                            class="btn btn-outline-success btn-sm mx-1">Sửa</a>
+                                        <a href="/admin/delete_huyen/<%= huyen.id %>"
+                                            class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">Không có dữ liệu</td>
+                                    </tr>
+                                    <% } %>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.content-wrapper -->
+        <%- include('../footer.ejs') %>

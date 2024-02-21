@@ -1,0 +1,226 @@
+<%- include('../header.ejs') %>
+    <%- include('../aside.ejs') %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-outline-primary mt-2 mx-2" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">
+                        Thêm chi tiết sản phẩm
+                    </button>
+                </div>
+                <div class="col-md-6 mt-2 ">
+                    <form action="/admin/search_product_all" id="combined-form" method="get"
+                        class="sidebar-form_1 mx-2">
+                        <div class="input-group mb-3" style="width: 80%;">
+                            <input type="text" name="name" class="form-control" placeholder="Nhập tên"
+                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <select class="form-control" name="mau_sac_id" id="">
+                                <option> </option>
+                                <% if (mau_sac && mau_sac.length> 0) { %>
+                                    <% mau_sac.forEach(function (mau_sac, index) { %>
+                                        <option value="<%- mau_sac.id %>"><%- mau_sac.ten_mau_sac %>
+                                        </option>
+                                        <% }); %>
+                                            <% } else { %>
+
+                                                <p>Không có dữ liệu</p>
+
+                                                <% } %>
+                            </select>
+                            <select class="form-control" name="dung_luong_id" id="">
+                                <option> </option>
+                                <% if (dung_luong && dung_luong.length> 0) { %>
+                                    <% dung_luong.forEach(function (dung_luong, index) { %>
+                                        <option value="<%- dung_luong.id %>"><%- dung_luong.ten_dung_luong %>
+                                        </option>
+                                        <% }); %>
+                                            <% } else { %>
+
+                                                <p>Không có dữ liệu</p>
+
+                                                <% } %>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
+                                    class="fa fa-search"></i></button>
+                        </div>
+                    </form>
+                    <form action="/admin/searchPrice_product_all" id="combined-form" method="get"
+                        class="sidebar-form_1 mx-2">
+                        <div class="input-group mb-3" style="width: 80%;">
+                            <input type="text" name="min_price" class="form-control" placeholder="giá trị từ"
+                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <input type="text" name="max_price" class="form-control" placeholder="đến"
+                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
+                                    class="fa fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Thêm chi tiết sản phẩm </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="/admin/add_product_all" class="row g-3 needs-validation"
+                                    enctype="multipart/form-data">
+                                    <div class="col-md-6">
+                                        <label for="validationCustom02" class="form-label">Hình ảnh</label>
+                                        <input type="file" name="hinh_anh3" class="form-control" id="validationCustom02"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập Hình ảnh
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Dòng sản phẩm </label>
+                                        <select class="form-control" name="san_pham_id" id="">
+                                            <option></option>
+                                            <% if (product && product.length> 0) { %>
+                                                <% product.forEach(function (product, index) { %>
+                                                    <option value="<%- product.id %>"><%- product.ten_san_pham %>
+                                                    </option>
+                                                    <% }); %>
+                                                        <% } else { %>
+
+                                                            <p>Không có dữ liệu</p>
+
+                                                            <% } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Màu sắc </label>
+                                        <select class="form-control" name="mau_sac_id" id="">
+                                            <option></option>
+                                            <% if (mau_sac && mau_sac.length> 0) { %>
+                                                <% mau_sac.forEach(function (mau_sac, index) { %>
+                                                    <option value="<%- mau_sac.id %>"><%- mau_sac.ten_mau_sac %>
+                                                    </option>
+                                                    <% }); %>
+                                                        <% } else { %>
+
+                                                            <p>Không có dữ liệu</p>
+
+                                                            <% } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom02" class="form-label"> Dung lượng </label>
+                                        <select class="form-control" name="dung_luong_id" id="">
+                                            <option></option>
+                                            <% if (dung_luong && dung_luong.length> 0) { %>
+                                                <% dung_luong.forEach(function (dung_luong, index) { %>
+                                                    <option value="<%- dung_luong.id %>"><%- dung_luong.ten_dung_luong
+                                                            %>
+                                                    </option>
+                                                    <% }); %>
+                                                        <% } else { %>
+
+                                                            <p>Không có dữ liệu</p>
+
+                                                            <% } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Giá</label>
+                                        <input type="text" name="gia_ban" class="form-control" id="validationCustom03"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập Giá
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">Serial</label>
+                                        <input type="text" name="serial" class="form-control" id="validationCustom03"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Hãy nhập serial
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="validationCustom03" class="form-label">serial</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary" type="submit">Submit form</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Understood</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table style="margin-top: 50px;"
+                class="table table-PW table-striped table-hover table-borderless align-middle">
+                <thead class="table-light">
+                    <caption>Danh sach sản phẩm </caption>
+                    <tr>
+                        <th>STT</th>
+                        <th class="text-center">Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Màu sắc</th>
+                        <th>Dung lượng</th>
+                        <th> Giá bán </th>
+                        <th> Serial </th>
+                        <th> Thao tác </th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <% if (product_all && product_all.length> 0) { %>
+                        <% product_all.forEach(function (item, index) { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td class="text-center">
+                                    <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                                        src="/imgUpload/<%= item.hinh_anh_chi_tiet %>">
+                                </td>
+                                <td>
+                                    <%= item.ten_san_pham %>
+                                </td>
+                                <td>
+                                    <%= item.ten_mau_sac %>
+
+                                </td>
+                                <td>
+                                    <%= item.ten_dung_luong %>
+
+                                </td>
+
+                                <td>
+                                    <%= item.gia_ban %>
+
+                                </td>
+                                <td>
+                                    <%= item.serial %>
+                                </td>
+                                <td>
+                                    <div class="d-flex ">
+                                        <a href="/admin/edit_product_all/<%= item.id %>"
+                                            class="btn btn-outline-success btn-sm mx-1">Sửa</a>
+                                        <a href="/admin/delete_product_all/<%= item.id %>"
+                                            class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">Không có dữ liệu</td>
+                                    </tr>
+                                    <% } %>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.content-wrapper -->
+        <%- include('../footer.ejs') %>
