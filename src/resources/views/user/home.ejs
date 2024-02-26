@@ -178,12 +178,9 @@
                         <div class="col-md-3 mt-5">
                             <div class="card">
                                 <a href="/chi_tiet_sp/<%= product.chi_tiet_id %>">
-                                    <img src="img/macbook.jpg" class="card-img-top" alt="...">
+                                    <img src="imgUpload/<%= product.hinh_anh %>" class="card-img-top" alt="...">
                                 </a>
                                 <div class="card-body">
-                                    <p>
-                                        <%= product.hinh_anh %>
-                                    </p>
                                     <h5 class="card-title">
                                         <%= product.ten_san_pham %> màu <%= product.ten_mau_sac %>
                                     </h5>
@@ -195,6 +192,11 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">Giá: <%= product.gia_ban %> vnd</li>
                                     </ul>
+                                    <div class="text-center d-flex">
+                                        <button class="btn btn-primary">Thêm với giỏ hàng</button>
+                                        <a href="/dat_hang/<%= product.chi_tiet_id %>" class="btn btn-success">Mua
+                                            ngay</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

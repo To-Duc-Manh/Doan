@@ -14,6 +14,7 @@ class homeUserController {
                 user: req.session.user
             });
             console.log(data);
+
         });
     }
 
@@ -41,6 +42,52 @@ class homeUserController {
         console.log('id', id);
     }
 
+    cart(req, res) {
+        res.render('user/cart.ejs', {
+            user: req.session.user
+        });
+    }
+
+    add_to_cart(req, res) {
+
+    }
+
+    dat_hang(req, res) {
+        let id = req.params.id;
+
+        // Gọi stored procedure GetProductDetails với tham số là id
+        let sql = "CALL GetProduct_datHang(?)";
+        let so_luong = 0;
+        connect.query(sql, [id], (err, results) => {
+            if (err) throw err;
+
+            // Kết quả trả về từ stored procedure
+            let product_datHang = results[0][0]; // Lấy thông tin chi tiết sản phẩm cụ thể
+
+            res.render('user/dat_hang.ejs', {
+                user: req.session.user,
+                product_datHang: product_datHang,
+                so_luong: so_luong + 1
+            });
+            console.log('p', product_datHang);
+        });
+        console.log('id', id);
+    }
+
+    dat_hang2(req, res) {
+        // Lấy dữ liệu từ request body
+        const { hoTen, soDienThoai, diaChi, ghiChu, hinhThucThanhToan, soLuong, tongGia } = req.body;
+        console.log('Dữ liệu nhận được từ client:', hoTen);
+        // Log dữ liệu nhận được từ client
+        console.log('Dữ liệu nhận được từ client:', req.body);
+
+        // Thực hiện các thao tác lưu dữ liệu vào cơ sở dữ liệu hoặc xử lý dữ liệu ở đây
+        // Ví dụ:
+        // Lưu dữ liệu vào cơ sở dữ liệu
+
+        // Gửi phản hồi cho client
+        res.json({ message: 'Dữ liệu đã được nhận thành công.' });
+    }
 }
 
 

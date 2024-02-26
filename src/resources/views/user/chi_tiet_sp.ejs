@@ -1,6 +1,6 @@
 <%- include('headerUser.ejs') %>
 
-    <div class="container" style="margin-top: 150px;">
+    <div class="container" style="margin-top: 150px; margin-bottom: 150px">
         <div class="row">
             <p class="title">
                 <%= productDetail.ten_san_pham %>
@@ -8,9 +8,13 @@
                         <%= productDetail.chi_tiet_id %>
             </p>
             <div class="col-md-6">
-                <div>
+                <div class="text-center">
                     <img style="width: 400px; margin-bottom: 50px;" src="/imgUpload/<%= productDetail.hinh_anh %>"
                         class="" alt="...">
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary">Thêm với giỏ hàng</button>
+                    <button class="btn btn-success">Mua ngay</button>
                 </div>
             </div>
             <div class="col-md-6">

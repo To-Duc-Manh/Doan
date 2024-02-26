@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 const route = require('./routes');
 
 const session = require('express-session');
-
+app.use(express.json());
 
 app.use(session({
     secret: 'keyboard cat',

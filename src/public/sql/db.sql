@@ -446,38 +446,38 @@ DELIMITER
 
 CREATE PROCEDURE GetProductDetails()
 BEGIN
-    SELECT
-        tbl_san_pham.ten_san_pham,
-        tbl_danh_muc.ten_danh_muc,
-        tbl_nha_san_xuat.ten_nha_san_xuat,
-        tbl_mau_sac.ten_mau_sac,
-        tbl_dung_luong.ten_dung_luong,
-        max_ctsp.id AS chi_tiet_id, -- Thêm trường id của bảng chi tiết sản phẩm
-        max_ctsp.gia_ban,
-        max_ctsp.serial,
-        max_ctsp.ngay_tao,
-        max_ctsp.ngay_cap_nhat,
-        max_ctsp.hinh_anh
-    FROM
-        tbl_san_pham
-        JOIN
-        tbl_danh_muc ON tbl_san_pham.danh_muc_id = tbl_danh_muc.id
-        JOIN
-        tbl_nha_san_xuat ON tbl_san_pham.nha_san_xuat_id = tbl_nha_san_xuat.id
-        JOIN (
+  SELECT
+    tbl_san_pham.ten_san_pham,
+    tbl_danh_muc.ten_danh_muc,
+    tbl_nha_san_xuat.ten_nha_san_xuat,
+    tbl_mau_sac.ten_mau_sac,
+    tbl_dung_luong.ten_dung_luong,
+    max_ctsp.id AS chi_tiet_id, -- Thêm trường id của bảng chi tiết sản phẩm
+    max_ctsp.gia_ban,
+    max_ctsp.serial,
+    max_ctsp.ngay_tao,
+    max_ctsp.ngay_cap_nhat,
+    max_ctsp.hinh_anh
+  FROM
+    tbl_san_pham
+    JOIN
+    tbl_danh_muc ON tbl_san_pham.danh_muc_id = tbl_danh_muc.id
+    JOIN
+    tbl_nha_san_xuat ON tbl_san_pham.nha_san_xuat_id = tbl_nha_san_xuat.id
+    JOIN (
       SELECT
-            san_pham_id,
-            MAX(id) AS max_id
-        FROM
-            tbl_chi_tiet_san_pham
-        GROUP BY
+      san_pham_id,
+      MAX(id) AS max_id
+    FROM
+      tbl_chi_tiet_san_pham
+    GROUP BY
         san_pham_id
     ) AS max_ids ON tbl_san_pham.id = max_ids.san_pham_id
-        JOIN tbl_chi_tiet_san_pham max_ctsp ON max_ids.max_id = max_ctsp.id
-        JOIN
-        tbl_mau_sac ON max_ctsp.mau_sac_id = tbl_mau_sac.id
-        JOIN
-        tbl_dung_luong ON max_ctsp.dung_luong_id = tbl_dung_luong.id;
+    JOIN tbl_chi_tiet_san_pham max_ctsp ON max_ids.max_id = max_ctsp.id
+    JOIN
+    tbl_mau_sac ON max_ctsp.mau_sac_id = tbl_mau_sac.id
+    JOIN
+    tbl_dung_luong ON max_ctsp.dung_luong_id = tbl_dung_luong.id;
 END
 //
 
@@ -488,49 +488,79 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE GetProductDetailsAndRelated(IN productDetailId INT)
 BEGIN
-    -- Lấy thông tin chi tiết sản phẩm cụ thể
-    SELECT
-        tbl_san_pham.id AS product_id,
-        tbl_san_pham.ten_san_pham,
-        tbl_danh_muc.ten_danh_muc,
-        tbl_nha_san_xuat.ten_nha_san_xuat,
-        tbl_mau_sac.ten_mau_sac,
-        tbl_dung_luong.ten_dung_luong,
-        tbl_chi_tiet_san_pham.id AS chi_tiet_id,
-        tbl_chi_tiet_san_pham.gia_ban,
-        tbl_chi_tiet_san_pham.serial,
-        tbl_chi_tiet_san_pham.ngay_tao,
-        tbl_chi_tiet_san_pham.ngay_cap_nhat
-    FROM
-        tbl_chi_tiet_san_pham
-        JOIN tbl_san_pham ON tbl_chi_tiet_san_pham.san_pham_id = tbl_san_pham.id
-        JOIN tbl_danh_muc ON tbl_san_pham.danh_muc_id = tbl_danh_muc.id
-        JOIN tbl_nha_san_xuat ON tbl_san_pham.nha_san_xuat_id = tbl_nha_san_xuat.id
-        JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
-        JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id
-    WHERE
+  -- Lấy thông tin chi tiết sản phẩm cụ thể
+  SELECT
+    tbl_san_pham.id AS product_id,
+    tbl_san_pham.ten_san_pham,
+    tbl_danh_muc.ten_danh_muc,
+    tbl_nha_san_xuat.ten_nha_san_xuat,
+    tbl_mau_sac.ten_mau_sac,
+    tbl_dung_luong.ten_dung_luong,
+    tbl_chi_tiet_san_pham.id AS chi_tiet_id,
+    tbl_chi_tiet_san_pham.gia_ban,
+    tbl_chi_tiet_san_pham.serial,
+    tbl_chi_tiet_san_pham.ngay_tao,
+    tbl_chi_tiet_san_pham.ngay_cap_nhat
+  FROM
+    tbl_chi_tiet_san_pham
+    JOIN tbl_san_pham ON tbl_chi_tiet_san_pham.san_pham_id = tbl_san_pham.id
+    JOIN tbl_danh_muc ON tbl_san_pham.danh_muc_id = tbl_danh_muc.id
+    JOIN tbl_nha_san_xuat ON tbl_san_pham.nha_san_xuat_id = tbl_nha_san_xuat.id
+    JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
+    JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id
+  WHERE
         tbl_chi_tiet_san_pham.id = productDetailId;
 
-    -- Lấy danh sách chi tiết sản phẩm khác có cùng sản phẩm ID
-    SELECT
-        tbl_chi_tiet_san_pham.id AS related_chi_tiet_id,
-        tbl_chi_tiet_san_pham.gia_ban,
-        tbl_chi_tiet_san_pham.serial,
-        tbl_mau_sac.ten_mau_sac,
-        tbl_dung_luong.ten_dung_luong
-    FROM
-        tbl_chi_tiet_san_pham
-        JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
-        JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id
-    WHERE
+  -- Lấy danh sách chi tiết sản phẩm khác có cùng sản phẩm ID
+  SELECT
+    tbl_chi_tiet_san_pham.id AS related_chi_tiet_id,
+    tbl_chi_tiet_san_pham.gia_ban,
+    tbl_chi_tiet_san_pham.serial,
+    tbl_mau_sac.ten_mau_sac,
+    tbl_dung_luong.ten_dung_luong
+  FROM
+    tbl_chi_tiet_san_pham
+    JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
+    JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id
+  WHERE
         tbl_chi_tiet_san_pham.san_pham_id = (
             SELECT
-        san_pham_id
-    FROM
-        tbl_chi_tiet_san_pham
-    WHERE
+    san_pham_id
+  FROM
+    tbl_chi_tiet_san_pham
+  WHERE
                 id = productDetailId
         );
+END
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE GetProduct_datHang(IN productDetailId INT)
+BEGIN
+  -- Lấy thông tin chi tiết sản phẩm cụ thể
+  SELECT
+    tbl_san_pham.id AS product_id,
+    tbl_san_pham.ten_san_pham,
+    tbl_danh_muc.ten_danh_muc,
+    tbl_nha_san_xuat.ten_nha_san_xuat,
+    tbl_mau_sac.ten_mau_sac,
+    tbl_dung_luong.ten_dung_luong,
+    tbl_chi_tiet_san_pham.id AS chi_tiet_id,
+    tbl_chi_tiet_san_pham.gia_ban,
+    tbl_chi_tiet_san_pham.hinh_anh,
+    tbl_chi_tiet_san_pham.serial,
+    tbl_chi_tiet_san_pham.ngay_tao,
+    tbl_chi_tiet_san_pham.ngay_cap_nhat
+  FROM
+    tbl_chi_tiet_san_pham
+    JOIN tbl_san_pham ON tbl_chi_tiet_san_pham.san_pham_id = tbl_san_pham.id
+    JOIN tbl_danh_muc ON tbl_san_pham.danh_muc_id = tbl_danh_muc.id
+    JOIN tbl_nha_san_xuat ON tbl_san_pham.nha_san_xuat_id = tbl_nha_san_xuat.id
+    JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
+    JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id
+  WHERE
+        tbl_chi_tiet_san_pham.id = productDetailId;
 END
 //
 DELIMITER ;
