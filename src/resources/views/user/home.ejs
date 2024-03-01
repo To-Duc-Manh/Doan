@@ -193,7 +193,8 @@
                                         <li class="list-group-item">Giá: <%= product.gia_ban %> vnd</li>
                                     </ul>
                                     <div class="text-center d-flex">
-                                        <button class="btn btn-primary">Thêm với giỏ hàng</button>
+                                        <a href="/add_to_cart/<%= product.chi_tiet_id %>" class="btn btn-primary">Thêm
+                                            với giỏ hàng</a>
                                         <a href="/dat_hang/<%= product.chi_tiet_id %>" class="btn btn-success">Mua
                                             ngay</a>
                                     </div>

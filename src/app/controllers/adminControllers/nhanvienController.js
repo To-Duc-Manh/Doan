@@ -41,7 +41,7 @@ class nhanvienController {
                         so_dien_thoai: so_dien_thoai,
                         dia_chi: dia_chi,
                         mat_khau: mat_khau,
-                        content: content,
+                        // content: content,
                         ngay_tao: ngay_tao
                     };
                     const insertUserQuery = "INSERT INTO tbl_nhan_vien SET ?";

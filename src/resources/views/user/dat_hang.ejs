@@ -34,7 +34,7 @@
                         <td>
                             <%= product_datHang.ten_san_pham %>
                         </td>
-                        <td>
+                        <td id="gia_ban">
                             <%= product_datHang.gia_ban %>
                         </td>
                         <td>
@@ -57,8 +57,8 @@
                     <p>PHƯƠNG THỨC THANH TOÁN</p>
                     <hr>
                     <select id="hinh_thuc_thanh_toan">
-                        <option value="0">Thanh toán khi nhận hàng</option>
-                        <option value="1">Thanh toán bằng ngân hàng</option>
+                        <option value="1">Thanh toán khi nhận hàng</option>
+                        <option value="2">Thanh toán bằng ngân hàng</option>
                     </select>
                 </div>
                 <div class="col-lg-4"></div>
@@ -67,7 +67,8 @@
                     <hr>
                     <p>Tổng phụ: ...</p>
                     <p>Phí vận chuyển: ...</p>
-                    <p>Tổng tiền: ...</p>
+                    <p>Tổng tiền:</p>
+                    <p id="tong_tien_thanh_toan"></p>
 
                     <button class="btn btn-primary" onclick="datHang()">ĐẶT HÀNG</button>
                 </div>
@@ -113,8 +114,10 @@
             var ghiChu = document.getElementById("ghi_chu").value;
             var hinhThucThanhToan = document.getElementById("hinh_thuc_thanh_toan").value;
             var soLuong = parseInt(document.getElementById("so_luong").innerText);
+            var giaBan = parseFloat(document.getElementById("gia_ban").innerText);
             var tongGia = parseFloat(document.getElementById("tong_gia").innerText);
-
+            var tong_tien_thanh_toan = parseFloat(document.getElementById("tong_tien_thanh_toan").innerText);
+            var san_pham_id = '<%= product_datHang.chi_tiet_id %>'
             console.log(soDienThoai)
             // Gửi dữ liệu đến máy chủ bằng Ajax hoặc fetch API
             // Ví dụ sử dụng fetch API
@@ -130,7 +133,10 @@
                     ghiChu: ghiChu,
                     hinhThucThanhToan: hinhThucThanhToan,
                     soLuong: soLuong,
-                    tongGia: tongGia
+                    tongGia: tongGia,
+                    giaBan: giaBan,
+                    tong_tien_thanh_toan: tong_tien_thanh_toan,
+                    san_pham_id: san_pham_id,
                 })
             })
                 .then(response => {

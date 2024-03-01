@@ -309,20 +309,22 @@ CREATE TABLE tbl_gio_hang
 DELETE CASCADE
 );
 -- Bảng Chi tiết giỏ hàng
-CREATE TABLE tbl_chi_tiet_gio_hang
+CREATE TABLE tbl_gio_hang
 (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  gio_hang_id BIGINT,
+  khach_hang_id BIGINT,
   chi_tiet_san_pham_id BIGINT,
   so_luong INT NOT NULL,
   ngay_tao DATETIME,
   ngay_cap_nhat DATETIME,
   FOREIGN KEY
-(gio_hang_id) REFERENCES tbl_gio_hang
+(chi_tiet_san_pham_id)
+REFERENCES tbl_chi_tiet_san_pham
 (id) ON
 DELETE CASCADE,
-  FOREIGN KEY (chi_tiet_san_pham_id)
-REFERENCES tbl_chi_tiet_san_pham
+  FOREIGN KEY
+(khach_hang_id)
+REFERENCES tbl_khach_hang
 (id) ON
 DELETE CASCADE
 );
