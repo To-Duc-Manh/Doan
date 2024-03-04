@@ -147,6 +147,28 @@ class homeUserController {
         console.log('id', id);
     }
 
+    submit_selected_products(req, res) {
+        let selectedProducts = req.body.selectedProducts; // Danh sách các id sản phẩm được chọn từ form
+        let productDetailIds = selectedProducts.join(','); // Chuyển danh sách thành chuỗi ngăn cách bởi dấu phẩy
+
+        let sql = "CALL GetProducts_datHang(?)";
+        let so_luong = 0;
+        connect.query(sql, [productDetailIds], (err, results) => {
+            if (err) throw err;
+
+            // Kết quả trả về từ stored procedure
+            let products_datHang = results[0]; // Lấy danh sách thông tin chi tiết sản phẩm
+
+            // res.render('user/dat_hang.ejs', {
+            //     user: req.session.user,
+            //     products_datHang: products_datHang,
+            //     so_luong: so_luong + 1
+            // });
+            console.log('p', products_datHang);
+        });
+        console.log('selectedProducts', selectedProducts);
+
+    }
     dat_hang2(req, res) {
         const { hoTen, soDienThoai, diaChi, ghiChu, hinhThucThanhToan, soLuong, giaBan, tongGia, tong_tien_thanh_toan, san_pham_id } = req.body;
 
