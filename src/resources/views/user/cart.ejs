@@ -67,29 +67,28 @@
     </div>
 
     <script>
-        // JavaScript code to handle getting selected product IDs and sending them to the server
-        document.getElementById('submitBtn').addEventListener('click', function () {
-            var selectedProducts = [];
-            var checkboxes = document.getElementsByName('selectedProducts');
-            checkboxes.forEach(function (checkbox) {
-                if (checkbox.checked) {
-                    selectedProducts.push(checkbox.value);
-                }
-            });
+       document.getElementById('submitBtn').addEventListener('click', function () {
+    var selectedProducts = [];
+    var checkboxes = document.getElementsByName('selectedProducts');
+    checkboxes.forEach(function (checkbox) {
+        if (checkbox.checked) {
+            selectedProducts.push(checkbox.value);
+        }
+    });
 
-            // Now 'selectedProducts' array contains the IDs of the selected products
-            // You can send this array to the server using AJAX
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/submit_selected_products', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    // Request was successful
-                    console.log(xhr.responseText); // Log the server response
-                }
-            };
-            xhr.send(JSON.stringify({ selectedProducts: selectedProducts }));
-        });
+    // Now 'selectedProducts' array contains the IDs of the selected products
+    // You can send this array to the server using synchronous AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/submit_selected_products', false); // Đặt tham số cuối cùng là false để yêu cầu đồng bộ
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ selectedProducts: selectedProducts }));
+
+    // Khi máy chủ gửi trang web 'user/dat_hang.ejs' như phản hồi, chúng ta có thể hiển thị trang web đó trực tiếp
+    document.open(); // Xóa nội dung của trang hiện tại
+    document.write(xhr.responseText); // Hiển thị trang web nhận được từ máy chủ
+    document.close(); // Đóng tài liệu để ngăn việc viết thêm
+});
+
 
     </script>
     <%- include('footerUser.ejs') %>

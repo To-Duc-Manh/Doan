@@ -1,0 +1,18 @@
+<% if (products_datHang && products_datHang.length> 0) { %>
+    <% products_datHang.forEach(function (item, index) { %>
+        <tr>
+           
+            <td>
+                <%= item.ten_san_pham %>
+            </td>
+            <td>
+                <%= item.ten_danh_muc %>
+            </td>
+            
+        </tr>
+        <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="7">Không có dữ liệu</td>
+                </tr>
+                <% } %>
