@@ -108,10 +108,13 @@
                     <caption>Danh sách khách hàng</caption>
                     <tr>
                         <th>STT</th>
+                        <th>Mã hóa đơn</th>
                         <th>Tên khách hàng</th>
-                        <th>Số điện thoại</th>
-                        <th>Địa chỉ</th>
+                        <th>Ngày mua</th>
+                        <th>Thanh toán</th>
+                        <th>Phí ship</th>
                         <th>Tong tien</th>
+                        <th>Trạng Thái</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -123,19 +126,36 @@
                                     <%= index + 1 %>
                                 </td>
                                 <td>
+                                    
+                                </td>
+                                <td>
                                     <%= hoadon.ten_nguoi_mua %>
                                 </td>
                                 <td>
-                                    <%= hoadon.so_dien_thoai %>
+                                    <%= new Intl.DateTimeFormat('vi-VN').format(new Date(hoadon.ngay_tao)) %>                     
+                                </td>
+                                <td style="font-size: 13px;">
+                                    <% if (hoadon.hinh_thuc_thanh_toan === 1) { %>
+                                        Thanh toán khi nhận hàng
+                                      <% } else if (hoadon.hinh_thuc_thanh_toan === 2) { %>
+                                        Thanh toán bằng ngân hàng liên kết
+                                      <% } else { %>
+                                        Phương thức thanh toán không xác định
+                                      <% } %>
+                                      
                                 </td>
                                 <td>
-                                    <%= hoadon.dia_chi_mua_hang %>
+                                    <%= hoadon.phi_van_chuyen %>
                                 </td>
                                 <td>
                                     <%= hoadon.tong_tien %>
                                 </td>
                                 <td>
+                                    <%= hoadon.trang_thai %>
+                                </td>
+                                <td>
                                     <div class="d-flex ">
+                                        <a class="btn btn-outline-success btn-sm mx-1" > Chuyển</a>
                                         <a href="" class="btn btn-outline-success btn-sm mx-1">Sửa</a>
                                         <button class="btn btn-outline-danger btn-sm mx-1">Xóa</button>
                                         <a href="/admin/chi_tiet_hoa_don/<%= hoadon.id %>"
@@ -152,7 +172,6 @@
                                     <% } %>
                 </tbody>
             </table>
-
         </div>
         <script>
             function confirmDelete(id) {

@@ -201,6 +201,12 @@ class homeUserController {
         });
 
     }
+
+    order(req, res) {
+        res.render('user/order.ejs', {
+            user: req.session.user
+        });
+    }
 }
 
 

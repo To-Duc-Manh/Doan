@@ -11,4 +11,5 @@ router.get('/add_to_cart/:id', homeUserController.add_to_cart);
 router.get('/dat_hang/:id', homeUserController.dat_hang);
 router.post('/dat_hang2', homeUserController.dat_hang2);
 router.post('/submit_selected_products', homeUserController.submit_selected_products);
+router.get('/order', homeUserController.order);
 module.exports = router;

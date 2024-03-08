@@ -2,23 +2,77 @@
     <%- include('../aside.ejs') %>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <% if (chi_tiet_hoa_don && chi_tiet_hoa_don.length> 0) { %>
-                <% chi_tiet_hoa_don.forEach(function (hoadon, index) { %>
-                    <tr>
-                        <!-- <td>
-                            <%= index + 1 %>
-                        </td> -->
-                        <td>
-                            <%= hoadon.chi_tiet_san_pham_id %>
-                        </td>
+            <h2 class="text-center"> Đơn bán hàng</h2>
+            <h4 class="text-center"><%= don_mua_hang.ngay_dat %></h4>
+            <hr>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <p><span>Tên khách hàng:</span><%= don_mua_hang.ten_nguoi_mua %></p>
+                    <p><span>Số điện thoại:</span><%= don_mua_hang.so_dien_thoai %></p>
+                </div>
+                <div class="col-md-6">
+                    <p><span>Địa chỉ:</span><%= don_mua_hang.dia_chi_mua_hang %></p>
+                    <p><span>Ghi chú:</span><%= don_mua_hang.ghi_chu %></p>
+                </div>
+            </div>
 
+            <table style="margin-top: 50px;"
+                class="table table-PW table-striped table-hover table-borderless align-middle">
+                <thead class="table-light">
+                    <caption>Danh sách khách hàng</caption>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Tong tien</th>
+                        <th>Thời gian bảo hành </th>
                     </tr>
-                    <% }); %>
-                        <% } else { %>
+                </thead>
+                <tbody class="table-group-divider">
+                    <% if (chi_tiet_hoa_don && chi_tiet_hoa_don.length> 0) { %>
+                        <% chi_tiet_hoa_don.forEach(function (hoadon, index) { %>
                             <tr>
-                                <td colspan="7">Không có dữ liệu</td>
+                                <td>
+                                    <%= hoadon.chi_tiet_san_pham_id %>
+                                </td>
+                                <td>
+                                    <%= hoadon.so_luong %>
+                                </td>
+                                <td>
+                                    <%= hoadon.gia %>
+                                </td>
+                                <td>
+                                    <%= hoadon.so_luong  * hoadon.gia %>
+                                </td>
+                                <td>
+                                    <%= hoadon.chi_tiet_san_pham_id %>
+                                </td>
+        
                             </tr>
-                            <% } %>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">Không có dữ liệu</td>
+                                    </tr>
+                                    <% } %>
+                </tbody>
+            </table>
+
+            <div class="row mt-5">
+                <div class="col-lg-4">
+                    
+                </div>
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                    <p>Thành tiền: ...</p>
+                    <p>Phí vận chuyển: ...</p>
+                    <p>Tổng tiền:</p>
+                </div>
+            </div>
+            
         </div>
+
+       
         <!-- /.content-wrapper -->
         <%- include('../footer.ejs') %>
