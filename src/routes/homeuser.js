@@ -6,10 +6,10 @@ const homeUserController = require('../app/controllers/userControllers/homeUserC
 
 router.get('/', homeUserController.index);
 router.get('/chi_tiet_sp/:id', homeUserController.chi_tiet_sp);
-router.get('/cart', homeUserController.cart);
-router.get('/add_to_cart/:id', homeUserController.add_to_cart);
-router.get('/dat_hang/:id', homeUserController.dat_hang);
-router.post('/dat_hang2', homeUserController.dat_hang2);
+router.get('/cart', authMiddleware.loggedinUser, homeUserController.cart);
+router.get('/add_to_cart/:id', authMiddleware.loggedinUser, homeUserController.add_to_cart);
+router.get('/dat_hang/:id', authMiddleware.loggedinUser, homeUserController.dat_hang);
+router.post('/dat_hang2', authMiddleware.loggedinUser, homeUserController.dat_hang2);
 router.post('/submit_selected_products', homeUserController.submit_selected_products);
-router.get('/order', homeUserController.order);
+router.get('/order', authMiddleware.loggedinUser, homeUserController.order);
 module.exports = router;

@@ -5,10 +5,9 @@
             <div class="row">
                 <!-- Button trigger modal -->
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-outline-primary mt-2 mx-2" data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop">
+                    <a href="/admin/them_hoa_don" class="btn btn-outline-primary mt-2 mx-2">
                         Thêm hóa đơn
-                    </button>
+                    </a>
                 </div>
                 <div class="col-md-6 mt-2 ">
                     <form action="/admin/search_khachhang" id="combined-form" method="get" class="sidebar-form_1 mx-2">
@@ -20,75 +19,33 @@
                         </div>
                     </form>
                 </div>
-
+                <div class="col-md-6" style="display: none !important;">
+                    <button type="button" class="btn btn-outline-primary mt-2 mx-2" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">
+                    </button>
+                </div>
                 <!-- Modal -->
                 <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Thêm hóa đơn</h5>
+                                <h5 class="modal-title" id="staticBackdropLabel">Thêm hình ảnh giao hàng</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="" class="row g-3 needs-validation" novalidate>
+                                <form method="POST" action="" class="row g-3 needs-validation"
+                                    enctype="multipart/form-data" id="submitForm">
                                     <div class="col-md-6">
-                                        <label for="validationCustom01" class="form-label">Tên khách hàng</label>
-                                        <input type="text" name="ho_ten" class="form-control" id="validationCustom01"
+                                        <label for="validationCustom01" class="form-label">Hình ảnh giao hàng</label>
+                                        <input type="file" name="hinh_anh5" class="form-control" id="validationCustom01"
                                             value="" required>
                                         <div class="invalid-feedback">
-                                            Hãy nhập Họ và Tên
+                                            Hãy thiêm hình ảnh giao hàng
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="validationCustom02" class="form-label">Email</label>
-                                        <input type="email" name="email" class="form-control" id="validationCustom02"
-                                            value="" required>
-                                        <div class="invalid-feedback">
-                                            Hãy nhập email
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="validationCustom02" class="form-label"> Mật khẩu </label>
-                                        <input type="password" name="mat_khau" class="form-control"
-                                            id="validationCustom02" value="" required>
-                                        <div class="invalid-feedback">
-                                            Hãy nhập mật khẩu
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="validationCustom03" class="form-label">Ngày sinh</label>
-                                        <input type="date" name="ngay_sinh" class="form-control" id="validationCustom03"
-                                            required>
-                                        <div class="invalid-feedback">
-                                            Hãy nhập ngày sinh
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="validationCustom03" class="form-label">Giới tính</label>
-                                        <input type="" name="gioi_tinh" class="form-control" id="validationCustom03"
-                                            required>
-                                        <div class="invalid-feedback">
-                                            Hãy nhập giới tính
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="validationCustom03" class="form-label">Số điện thoại</label>
-                                        <input type="text" name="so_dien_thoai" class="form-control"
-                                            id="validationCustom03" required>
-                                        <div class="invalid-feedback">
-                                            Hãy nhập số điện thoại
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="validationCustom03" class="form-label">Địa chỉ</label>
-                                        <input type="text" name="dia_chi" class="form-control" id="validationCustom03"
-                                            required>
-                                        <div class="invalid-feedback">
-                                            Hãy nhập địa chỉ
-                                        </div>
-                                    </div>
+
                                     <div class="col-12">
                                         <button class="btn btn-primary" type="submit">Submit form</button>
                                     </div>
@@ -126,23 +83,23 @@
                                     <%= index + 1 %>
                                 </td>
                                 <td>
-                                    
+
                                 </td>
                                 <td>
                                     <%= hoadon.ten_nguoi_mua %>
                                 </td>
                                 <td>
-                                    <%= new Intl.DateTimeFormat('vi-VN').format(new Date(hoadon.ngay_tao)) %>                     
+                                    <%= new Intl.DateTimeFormat('vi-VN').format(new Date(hoadon.ngay_tao)) %>
                                 </td>
                                 <td style="font-size: 13px;">
-                                    <% if (hoadon.hinh_thuc_thanh_toan === 1) { %>
+                                    <% if (hoadon.hinh_thuc_thanh_toan===1) { %>
                                         Thanh toán khi nhận hàng
-                                      <% } else if (hoadon.hinh_thuc_thanh_toan === 2) { %>
-                                        Thanh toán bằng ngân hàng liên kết
-                                      <% } else { %>
-                                        Phương thức thanh toán không xác định
-                                      <% } %>
-                                      
+                                        <% } else if (hoadon.hinh_thuc_thanh_toan===2) { %>
+                                            Thanh toán bằng ngân hàng liên kết
+                                            <% } else { %>
+                                                Phương thức thanh toán không xác định
+                                                <% } %>
+
                                 </td>
                                 <td>
                                     <%= hoadon.phi_van_chuyen %>
@@ -151,11 +108,21 @@
                                     <%= hoadon.tong_tien %>
                                 </td>
                                 <td>
-                                    <%= hoadon.trang_thai %>
+                                    <% if (hoadon.trang_thai===1) { %>
+                                        <button class="btn btn-outline-secondary btn-sm"> Chờ xác nhận</button>
+                                        <% } else if (hoadon.trang_thai===2) { %>
+                                            <button class="btn btn-outline-primary btn-sm">Đã xác nhận</button>
+                                            <% } else if (hoadon.trang_thai===3) { %>
+                                                <button class="btn btn-outline-warning btn-sm">Đang giao</button>
+                                                <% } else if (hoadon.trang_thai===4) { %>
+                                                    <button class="btn btn-outline-success btn-sm">Đã giao</button>
+                                                    <% } %>
+
                                 </td>
                                 <td>
                                     <div class="d-flex ">
-                                        <a class="btn btn-outline-success btn-sm mx-1" > Chuyển</a>
+                                        <button class="btn btn-outline-info btn-sm mx-1 chuyenBtn"
+                                            data-order-id="<%= hoadon.id %>">Chuyển</button>
                                         <a href="" class="btn btn-outline-success btn-sm mx-1">Sửa</a>
                                         <button class="btn btn-outline-danger btn-sm mx-1">Xóa</button>
                                         <a href="/admin/chi_tiet_hoa_don/<%= hoadon.id %>"
@@ -173,17 +140,67 @@
                 </tbody>
             </table>
         </div>
+
         <script>
-            function confirmDelete(id) {
-                if (confirm("Bạn có chắc muốn xóa?")) {
-                    // Nếu người dùng xác nhận, chuyển hướng đến đường dẫn xóa
-                    window.location.href = "/admin/delete_Khachhang/" + id;
-                } else {
-                    // Nếu người dùng không xác nhận, không thực hiện hành động gì
-                    return false;
-                }
-            }
+            document.addEventListener('DOMContentLoaded', () => {
+                const chuyenBtns = document.querySelectorAll('.chuyenBtn');
+                chuyenBtns.forEach(btn => {
+                    btn.addEventListener('click', async (event) => {
+                        try {
+                            const orderId = btn.dataset.orderId; // Lấy id của đơn hàng từ thuộc tính data
+                            document.getElementById("submitForm").action = `/admin/hoan_thanh_gh/${orderId}`;
+                            // Lấy trạng thái hiện tại của đơn hàng từ giao diện người dùng
+                            const statusElement = document.querySelector(`[data-order-id="${orderId}"]`).closest('tr').querySelector('td:nth-child(8)');
+                            const currentStatus = statusElement.textContent.trim();
+                            console.log(currentStatus);
+
+                            // Kiểm tra nếu trạng thái hiện tại là 'Đang giao' và nút đã được nhấn
+                            if (currentStatus.includes('Đang giao') && btn.classList.contains('chuyenBtn')) {
+                                // Gọi hàm click() để mở modal
+                                const modalBtn = document.querySelector('[data-bs-toggle="modal"]');
+                                modalBtn.click();
+                            } else {
+                                const confirmation = confirm('Bạn có chắc chắn muốn chuyển trạng thái không?');
+                                if (!confirmation) {
+                                    // Nếu người dùng không xác nhận, ngăn chặn hành động tiếp theo
+                                    return;
+                                }
+                                // Nếu không phải trạng thái 'Đang giao', thực hiện cập nhật trạng thái thông thường
+                                const response = await fetch('/admin/chuyen_trang_thai', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ orderId: orderId }) // Truyền id của đơn hàng trong yêu cầu fetch
+                                });
+
+                                if (response.ok) {
+                                    const newStatus = await response.text(); // Nhận trạng thái mới từ phản hồi
+                                    // Cập nhật trạng thái của đơn hàng trên giao diện người dùng
+                                    if (newStatus === '1') {
+                                        statusElement.innerHTML = '<button class="btn btn-outline-Secondary btn-sm">Chờ xác nhận</button>';
+                                    } else if (newStatus === '2') {
+                                        statusElement.innerHTML = '<button class="btn btn-outline-primary btn-sm">Đã xác nhận</button>';
+                                    } else if (newStatus === '3') {
+                                        statusElement.innerHTML = '<button class="btn btn-outline-warning btn-sm">Đang giao</button>';
+                                    } else if (newStatus === '4') {
+                                        statusElement.innerHTML = '<button class="btn btn-outline-success btn-sm">Đã giao</button>';
+                                    }
+                                    console.log('Cập nhật trạng thái thành công');
+                                } else {
+                                    console.error('Có lỗi xảy ra khi cập nhật trạng thái');
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Lỗi:', error);
+                        }
+                    });
+                });
+            });
+
+
         </script>
+
 
         <!-- /.content-wrapper -->
         <%- include('../footer.ejs') %>
