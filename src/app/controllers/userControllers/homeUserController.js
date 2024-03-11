@@ -171,10 +171,10 @@ class homeUserController {
     
     dat_hang2(req, res) {
         const { hoTen, soDienThoai, diaChi, ghiChu, hinhThucThanhToan, soLuong, giaBan, tongGia, tong_tien_thanh_toan, san_pham_id } = req.body;
-
+        const userId = req.session.user.id;
         // Thực hiện chèn dữ liệu vào bảng "tbl_don_mua_hang"
-        const donHangQuery = `INSERT INTO tbl_don_mua_hang (ten_nguoi_mua, so_dien_thoai, dia_chi_mua_hang, ghi_chu, tong_tien, tong_tien_thanh_toan, hinh_thuc_thanh_toan, trang_thai, ngay_tao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
-        const donHangValues = [hoTen, soDienThoai, diaChi, ghiChu, tongGia, 0, hinhThucThanhToan, 1];
+        const donHangQuery = `INSERT INTO tbl_don_mua_hang (khach_hang_id, ten_nguoi_mua, so_dien_thoai, dia_chi_mua_hang, ghi_chu, tong_tien, tong_tien_thanh_toan, hinh_thuc_thanh_toan, trang_thai, ngay_tao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
+        const donHangValues = [userId, hoTen, soDienThoai, diaChi, ghiChu, tongGia, 0, hinhThucThanhToan, 1];
 
         connect.query(donHangQuery, donHangValues, (error, results, fields) => {
             if (error) {
@@ -203,9 +203,34 @@ class homeUserController {
     }
 
     order(req, res) {
-        res.render('user/order.ejs', {
-            user: req.session.user
+        let sql = `SELECT 
+        tbl_chi_tiet_don_mua_hang.so_luong AS so_luong,
+        tbl_chi_tiet_san_pham.hinh_anh AS hinh_anh,
+        tbl_san_pham.ten_san_pham AS ten_san_pham,
+        tbl_dung_luong.ten_dung_luong AS dung_luong,
+        tbl_mau_sac.ten_mau_sac AS mau_sac,
+        tbl_chi_tiet_san_pham.gia_ban AS gia_ban,
+        tbl_don_mua_hang.tong_tien AS tong_tien,
+        tbl_don_mua_hang.trang_thai AS trang_thai,
+        tbl_don_mua_hang.khach_hang_id AS khach_hang_id
+    FROM 
+        tbl_chi_tiet_don_mua_hang
+    JOIN tbl_don_mua_hang ON tbl_chi_tiet_don_mua_hang.don_mua_hang_id = tbl_don_mua_hang.id
+    JOIN tbl_chi_tiet_san_pham ON tbl_chi_tiet_don_mua_hang.chi_tiet_san_pham_id = tbl_chi_tiet_san_pham.id
+    JOIN tbl_san_pham ON tbl_chi_tiet_san_pham.san_pham_id = tbl_san_pham.id
+    JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
+    JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id;
+    `;
+
+        connect.query(sql, (err, data) => {
+            res.render('user/order.ejs', {
+                data: data,
+                user: req.session.user
         });
+            console.log(data);
+
+        });
+       
     }
 }
 

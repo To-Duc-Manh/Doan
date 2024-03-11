@@ -171,12 +171,12 @@ class hoadonController {
                 res.status(500).send("Lỗi máy chủ nội bộ");
                 return;
             }
-
-
             // Xử lý bất kỳ bước bổ sung nào ở đây
             res.redirect('/admin/hoadon');
         });
     }
+
+    
 
 }
 

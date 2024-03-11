@@ -18,23 +18,23 @@ class LoginController {
 
                 if (result.length) {
                     const user = result[0];
-                    // So sánh mật khẩu trực tiếp (không sử dụng bcrypt)
+                    // So sánh mật khẩu trực tiếp 
                     if (password === user.mat_khau) {
                         req.session.loggedin = true;
                         req.session.user = user;
                         res.redirect('/admin');
                     } else {
-                        // Password is incorrect
+           
                         const conflictError = 'User credentials are not valid.';
                         res.render('auth/loginAdmin.ejs', { email, password, conflictError });
                     }
                 } else {
-                    // A user with that email address does not exist
+                    
                     res.redirect('/auth/loginAdmin');
                 }
             });
         } else {
-            // A user with that email address does not exist or password is incorrect
+
             const conflictError = 'User credentials are not valid.';
             res.render('auth/loginAdmin.ejs', { email, password, conflictError });
         }
@@ -55,23 +55,23 @@ class LoginController {
 
                 if (result.length) {
                     const user = result[0];
-                    // So sánh mật khẩu trực tiếp (không sử dụng bcrypt)
+   
                     if (password === user.mat_khau) {
                         req.session.loggedinUser = true;
                         req.session.user = user;
                         res.redirect('/');
                     } else {
-                        // Password is incorrect
+
                         const conflictError = 'User credentials are not valid.';
                         res.render('auth/loginUser.ejs', { email, password, conflictError });
                     }
                 } else {
-                    // A user with that email address does not exist
+
                     res.redirect('/auth/loginUser');
                 }
             });
         } else {
-            // A user with that email address does not exist or password is incorrect
+
             const conflictError = 'User credentials are not valid.';
             res.render('auth/loginUser', { email, password, conflictError });
         }
