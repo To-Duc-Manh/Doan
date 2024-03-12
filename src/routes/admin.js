@@ -105,10 +105,12 @@ router.get('/search_hangsanxuat', authMiddleware.loggedin, danhmucController.sea
 //hoadon
 router.get('/hoadon', authMiddleware.loggedin, hoadonController.index);
 router.get('/chi_tiet_hoa_don/:id', authMiddleware.loggedin, hoadonController.chi_tiet_hoa_don);
-router.get('/them_hoa_don', authMiddleware.loggedin, hoadonController.them_hoa_don);
-router.get('/them_don_mua_hang', authMiddleware.loggedin, hoadonController.them_don_mua_hang);
+router.get('/them_hoa_don', authMiddleware.loggedin, hoadonController.get_sp_don_mua_hang);
 router.post('/chuyen_trang_thai', authMiddleware.loggedin, hoadonController.chuyen_trang_thai);
 router.post('/hoan_thanh_gh/:id', upload.single("hinh_anh5"), hoadonController.hoan_thanh_gh);
+router.post('/them_don_mua_hang_get', authMiddleware.loggedin, hoadonController.them_don_mua_hang_get);
+router.get('/search_sp_hd', authMiddleware.loggedin, hoadonController.search_sp_hd);
+router.get('/search_khach_hang_hd', authMiddleware.loggedin, hoadonController.search_khach_hang_hd);
 
 
 router.post('/uploadfile', multipartMiddleware, (req, res) => {
