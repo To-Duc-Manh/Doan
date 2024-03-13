@@ -156,7 +156,6 @@ class homeUserController {
         connect.query(sql, [productDetailIds], (err, results) => {
             if (err) throw err;
 
-            // Kết quả trả về từ stored procedure
             let products_datHang = results[0]; // Lấy danh sách thông tin chi tiết sản phẩm
 
             res.render('user/mm.ejs', {
