@@ -59,7 +59,6 @@
 
         <script>
             let selectedProducts = []; // Danh sách sản phẩm đã chọn
-            // Hàm bắt sự kiện khi gửi form thêm hóa đơn
             function submitOrderForm(event) {
                 event.preventDefault(); // Ngăn chặn hành động mặc định của form
 
@@ -108,7 +107,6 @@
                     });
             }
 
-
             function searchCustomers() {
                 const keyword = document.getElementById('searchCustomer').value;
                 fetch(`/admin/search_khach_hang_hd?ten_khach_hang=${keyword}`)
@@ -147,7 +145,6 @@
                 searchResultDiv.innerHTML = '';
                 results.forEach(product => {
                     const checkbox = ` <input type="checkbox" name="san_pham_id" value="${product.id}" ${selectedProducts.includes(product.id) ? 'checked' : ''} onclick="toggleCheckbox(${product.id})">`;
-                    // Tạo chuỗi HTML để hiển thị thông tin sản phẩm
                     const image = `<img src="${product.hinh_anh}">`;
                     const productName = `<span>${product.ten_san_pham}</span>`;
                     const price = `<span>Giá: ${product.gia_ban}đ</span>`;
@@ -170,5 +167,4 @@
             }
         </script>
 
-        <!-- /.content-wrapper -->
-        <%- include('../footer.ejs') %>
+<%- include('../footer.ejs') %>
