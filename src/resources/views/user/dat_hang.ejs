@@ -81,14 +81,12 @@
         var tong_gia_element = document.getElementById("tong_gia");
         var gia_ban = '<%= product_datHang.gia_ban %>';
 
-        // Hàm cập nhật giá bán khi số lượng thay đổi
         function updateTotalPrice() {
             var so_luong = parseInt(so_luong_element.innerText);
             var tong_gia = gia_ban * so_luong;
             tong_gia_element.innerText = tong_gia;
         }
 
-        // Hàm giảm số lượng
         function decreaseQuantity() {
             var so_luong = parseInt(so_luong_element.innerText);
             if (so_luong > 1) {
@@ -98,7 +96,6 @@
             }
         }
 
-        // Hàm tăng số lượng
         function increaseQuantity() {
             var so_luong = parseInt(so_luong_element.innerText);
             so_luong++;
@@ -106,7 +103,6 @@
             updateTotalPrice();
         }
 
-        // Hàm gửi dữ liệu đặt hàng đến máy chủ
         function datHang() {
             var hoTen = document.getElementById("ho_ten").innerText;
             var soDienThoai = document.getElementById("so_dien_thoai").innerText;
@@ -119,8 +115,7 @@
             var tong_tien_thanh_toan = parseFloat(document.getElementById("tong_tien_thanh_toan").innerText);
             var san_pham_id = '<%= product_datHang.chi_tiet_id %>'
             console.log(soDienThoai)
-            // Gửi dữ liệu đến máy chủ bằng Ajax hoặc fetch API
-            // Ví dụ sử dụng fetch API
+         
             fetch('/dat_hang2', {
                 method: 'POST',
                 headers: {
