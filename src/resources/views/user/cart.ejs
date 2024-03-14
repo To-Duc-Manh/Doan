@@ -67,33 +67,32 @@
     </div>
 
     <!-- truyền các id vào form rồi gửi đi -->
-    <form id="productForm" hidden action="/submit_selected_products" method="POST">
+    <form id="productForm" hidden action="/dat_hang_cart" method="POST">
         <input type="text" name="selectedProducts" id="selectedProducts" value="">
     </form>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             // Lắng nghe sự kiện khi người dùng nhấn vào nút "Đặt hàng"
-            document.getElementById("submitBtn").addEventListener("click", function() {
+            document.getElementById("submitBtn").addEventListener("click", function () {
                 var selectedProducts = []; // Mảng chứa các ID của các sản phẩm đã chọn
-    
+
                 // Lặp qua tất cả các checkbox trong form
-                var checkboxes = document.querySelectorAll('input[name="selectedProducts"]');
-                checkboxes.forEach(function(checkbox) {
+                var checkboxes = document.querySelectorAll('input[name="selectedProducts"]:checked');
+                checkboxes.forEach(function (checkbox) {
                     // Nếu checkbox được chọn, thêm ID của sản phẩm tương ứng vào mảng
-                    if (checkbox.checked) {
-                        selectedProducts.push(checkbox.value);
-                    }
+                    selectedProducts.push(checkbox.value);
                 });
-    
+
                 // Gắn các ID của các sản phẩm đã chọn vào input hidden trong form
                 var input = document.getElementById("selectedProducts");
-                input.value = selectedProducts.join(','); // Chuyển mảng thành chuỗi và gán vào input
-    
+                input.value = selectedProducts.join(',');
+
                 // Submit form
                 document.getElementById("productForm").submit();
             });
         });
+
     </script>
 
 

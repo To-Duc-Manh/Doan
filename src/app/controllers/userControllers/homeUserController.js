@@ -147,27 +147,32 @@ class homeUserController {
         console.log('id', id);
     }
 
-    submit_selected_products(req, res) {
+    dat_hang_cart(req, res) {
         let selectedProducts = req.body.selectedProducts; // Danh sách các id sản phẩm được chọn từ form
-        let productDetailIds = selectedProducts.join(','); // Chuyển danh sách thành chuỗi ngăn cách bởi dấu phẩy
-
-        let sql = "CALL GetProducts_datHang(?)";
+        let selectedProductIds = selectedProducts.split(',').map(Number); // Chia chuỗi thành một mảng các ID sản phẩm
+    
+        let sql = "CALL GetProducts_datHang(?)"; // Stored procedure chỉ mong đợi một tham số
         let so_luong = 0;
-        connect.query(sql, [productDetailIds], (err, results) => {
+    
+        connect.query(sql, [selectedProductIds.join(',')], (err, results) => {
             if (err) throw err;
-
-            let products_datHang = results[0]; // Lấy danh sách thông tin chi tiết sản phẩm
-
+    
+            let products_datHang = results[0]; // Đây là kết quả đầu tiên của stored procedure
+    
+            console.log(products_datHang);
             res.render('user/mm.ejs', {
                 user: req.session.user,
                 products_datHang: products_datHang,
                 so_luong: so_luong + 1
             });
         });
-        console.log('selectedProducts', selectedProducts);
-
+        console.log('selectedProductIds', selectedProductIds);
     }
     
+
+
+
+
     dat_hang2(req, res) {
         const { hoTen, soDienThoai, diaChi, ghiChu, hinhThucThanhToan, soLuong, giaBan, tongGia, tong_tien_thanh_toan, san_pham_id } = req.body;
         const userId = req.session.user.id;
@@ -225,11 +230,11 @@ class homeUserController {
             res.render('user/order.ejs', {
                 data: data,
                 user: req.session.user
-        });
+            });
             console.log(data);
 
         });
-       
+
     }
 }
 
