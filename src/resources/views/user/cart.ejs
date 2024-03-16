@@ -4,11 +4,14 @@
             <thead class="table-light">
                 <caption>Danh sách sản phẩm có trong giỏ hàng </caption>
                 <tr>
-                    <th>STT</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th class="text-center">STT</th>
+                    <th class="text-center">Hình ảnh</th>
+                    <th>Sản phẩm</th>
+                    <th>Mau sắc</th>
+                    <th>Dung lượng</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Chọn</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -18,6 +21,10 @@
                             <td>
                                 <%= index + 1 %>
                             </td>
+                            <td class="text-center">
+                                <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                                    src="/imgUpload/<%= item.hinh_anh %>">
+                            </td>
                             <td>
                                 <%= item.ten_san_pham %>
                             </td>
@@ -25,18 +32,29 @@
                                 <%= item.mau_sac %>
                             </td>
                             <td>
-                                <%= item.gia_ban %>
+                                <%= item.dung_luong %>
                             </td>
                             <td>
-                                <%= item.so_luong %>
+                                <div>
+                                    <button onclick="decreaseQuantity('<%= item.id %>')">-</button>
+                                    <span id="so_luong_<%= item.id %>">
+                                        <%= item.so_luong %>
+                                    </span>
+                                    <button onclick="increaseQuantity('<%= item.id %>')">+</button>
+                                </div>
+
                             </td>
+                            <td>
+                                <%= item.gia_ban %>
+                            </td>
+
                             <td>
                                 <input type="checkbox" name="selectedProducts" value="<%= item.id %>">
                             </td>
                             <td>
                                 <div class="d-flex ">
-                                    <a href="" class="btn btn-outline-success btn-sm mx-1">Sửa</a>
-                                    <a href="" class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
+                                    <a href="/delete_cart/<%= item.id %>"
+                                        class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
                                 </div>
                             </td>
                         </tr>
@@ -49,24 +67,11 @@
 
             </tbody>
         </table>
-
-        <div class="row mt-5">
-            <div class="col-lg-4">
-
-            </div>
-            <div class="col-lg-4"></div>
-            <div class="col-lg-4">
-                <p>TỔNG TIỀN</p>
-                <hr>
-                <p>Tổng tiền:</p>
-                <p id="tong_tien_thanh_toan"></p>
-
-                <button class="btn btn-primary" id="submitBtn">ĐẶT HÀNG</button>
-            </div>
+        <div class="mt-5 d-flex justify-content-end">
+            <button class="btn btn-primary" id="submitBtn">Mua Hàng</button>
         </div>
     </div>
 
-    <!-- truyền các id vào form rồi gửi đi -->
     <form id="productForm" hidden action="/dat_hang_cart" method="POST">
         <input type="text" name="selectedProducts" id="selectedProducts" value="">
     </form>
@@ -95,28 +100,32 @@
 
     </script>
 
+    <script>
+        function decreaseQuantity(itemId) {
+            var quantityElement = document.getElementById('so_luong_' + itemId);
+            var currentQuantity = parseInt(quantityElement.innerText);
+            if (currentQuantity > 1) {
+                updateQuantity(itemId, currentQuantity - 1);
+            }
+        }
 
-    <!-- <script>
-        document.getElementById('submitBtn').addEventListener('click', function () {
-            var selectedProducts = [];
-            var checkboxes = document.getElementsByName('selectedProducts');
-            checkboxes.forEach(function (checkbox) {
-                if (checkbox.checked) {
-                    selectedProducts.push(checkbox.value);
+        function increaseQuantity(itemId) {
+            var quantityElement = document.getElementById('so_luong_' + itemId);
+            var currentQuantity = parseInt(quantityElement.innerText);
+            updateQuantity(itemId, currentQuantity + 1);
+        }
+
+        function updateQuantity(itemId, newQuantity) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById('so_luong_' + itemId).innerText = newQuantity;
                 }
-            });
+            };
+            xhttp.open("POST", "/updateQuantity", true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.send(JSON.stringify({ itemId: itemId, newQuantity: newQuantity }));
+        }
+    </script>
 
-            // Now 'selectedProducts' array contains the IDs of the selected products
-            // You can send this array to the server using synchronous AJAX
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/submit_selected_products', false); // Đặt tham số cuối cùng là false để yêu cầu đồng bộ
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify({ selectedProducts: selectedProducts }));
-
-            // Khi máy chủ gửi trang web 'user/dat_hang.ejs' như phản hồi, chúng ta có thể hiển thị trang web đó trực tiếp
-            document.open(); // Xóa nội dung của trang hiện tại
-            document.write(xhr.responseText); // Hiển thị trang web nhận được từ máy chủ
-            document.close(); // Đóng tài liệu để ngăn việc viết thêm
-        });
-    </script> -->
     <%- include('footerUser.ejs') %>

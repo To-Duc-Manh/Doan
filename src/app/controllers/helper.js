@@ -15,6 +15,20 @@ function deleteRecord(tableName, tableId, redirectPath, req, res) {
     });
 }
 
+function deleteRecord_user(tableName, tableId, redirectPath, req, res) {
+    let id = req.params.id;
+
+    const deleteQuery = `DELETE FROM ${tableName} WHERE ${tableId} = ?`;
+    connect.query(deleteQuery, [id], (err, result) => {
+        if (err) {
+            console.log("error: ", err);
+            res.status(500).send("Internal Server Error");
+            return;
+        }
+        res.redirect(`/${redirectPath}`);
+    });
+}
+
 function addDanhMuc(tableName, tenFieldName, redirectPath, req, res) {
     const ten = req.body[tenFieldName];
 
@@ -113,4 +127,4 @@ function checkAndInsertRecord(tableName, recordData, checkColumn, redirectPath, 
     });
 }
 
-module.exports = { deleteRecord, addDanhMuc, searchInTable, checkAndInsertRecord };
+module.exports = { deleteRecord, addDanhMuc, searchInTable, checkAndInsertRecord, deleteRecord_user };

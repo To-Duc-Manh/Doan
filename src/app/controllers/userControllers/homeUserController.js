@@ -1,13 +1,12 @@
 const connect = require('../../../config/db');
 const moment = require('moment');
 
+const helper = require('../../controllers/helper');
 
 class homeUserController {
 
     index(req, res) {
         let sql = "CALL GetProductDetails();";
-        //let sql = "SELECT tbl_san_pham.ten_san_pham, tbl_danh_muc.ten_danh_muc, tbl_nha_san_xuat.ten_nha_san_xuat, tbl_mau_sac.ten_mau_sac, tbl_dung_luong.ten_dung_luong, tbl_chi_tiet_san_pham.gia_ban, tbl_chi_tiet_san_pham.serial, tbl_chi_tiet_san_pham.ngay_tao, tbl_chi_tiet_san_pham.ngay_cap_nhat FROM tbl_san_pham JOIN tbl_danh_muc ON tbl_san_pham.danh_muc_id = tbl_danh_muc.id JOIN tbl_nha_san_xuat ON tbl_san_pham.nha_san_xuat_id = tbl_nha_san_xuat.id JOIN tbl_chi_tiet_san_pham ON tbl_san_pham.id = tbl_chi_tiet_san_pham.san_pham_id JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id;";
-        //let sql = "SELECT tbl_san_pham.ten_san_pham, tbl_danh_muc.ten_danh_muc, tbl_nha_san_xuat.ten_nha_san_xuat, tbl_mau_sac.ten_mau_sac, tbl_dung_luong.ten_dung_luong, max_ctsp.gia_ban, max_ctsp.serial, max_ctsp.ngay_tao, max_ctsp.ngay_cap_nhat FROM tbl_san_pham JOIN tbl_danh_muc ON tbl_san_pham.danh_muc_id = tbl_danh_muc.id JOIN tbl_nha_san_xuat ON tbl_san_pham.nha_san_xuat_id = tbl_nha_san_xuat.id JOIN ( SELECT san_pham_id, MAX(id) AS max_id FROM tbl_chi_tiet_san_pham GROUP BY san_pham_id ) AS max_ids ON tbl_san_pham.id = max_ids.san_pham_id JOIN tbl_chi_tiet_san_pham max_ctsp ON max_ids.max_id = max_ctsp.id JOIN tbl_mau_sac ON max_ctsp.mau_sac_id = tbl_mau_sac.id JOIN tbl_dung_luong ON max_ctsp.dung_luong_id = tbl_dung_luong.id;";
         connect.query(sql, (err, data) => {
             res.render('user/home.ejs', {
                 data: data[0],
@@ -20,8 +19,6 @@ class homeUserController {
 
     chi_tiet_sp(req, res) {
         let id = req.params.id;
-
-        // Gọi stored procedure GetProductDetailsAndRelated với tham số là id
         let sql = "CALL GetProductDetailsAndRelated(?)";
 
         connect.query(sql, [id], (err, results) => {
@@ -43,18 +40,17 @@ class homeUserController {
     }
 
     cart(req, res) {
-        // Lấy id của khách hàng từ session
+
         let khach_hang_id = req.session.user.id;
 
-        // Truy vấn để lấy dữ liệu từ bảng tbl_gio_hang cho khách hàng hiện tại
         const query = `SELECT 
         sp.ten_san_pham AS ten_san_pham,
-        sp.hinh_anh AS hinh_anh_san_pham,
         ms.ten_mau_sac AS mau_sac,
         dl.ten_dung_luong AS dung_luong,
+        cts.hinh_anh AS hinh_anh,
         cts.gia_ban,
-        cts.id,
-        gh.so_luong
+        gh.so_luong,
+        gh.id
     FROM 
         tbl_gio_hang gh
     JOIN 
@@ -74,14 +70,13 @@ class homeUserController {
                 res.status(500).json({ error: 'Error retrieving cart items' });
                 return;
             }
-            // Render view và truyền dữ liệu giỏ hàng vào đó
             res.render('user/cart.ejs', {
                 user: req.session.user,
                 cartItems: results
             });
+            console.log(results)
         });
     }
-
 
     add_to_cart(req, res) {
         let chi_tiet_san_pham_id = req.params.id;
@@ -124,6 +119,24 @@ class homeUserController {
         });
     }
 
+    delete_cart(req, res) {
+        const tableName = 'tbl_gio_hang';
+        const tableId = 'id';
+        const redirectPath = 'cart';
+        helper.deleteRecord_user(tableName, tableId, redirectPath, req, res);
+    }
+    updateQuantity(req, res) {
+        const { itemId, newQuantity } = req.body;
+        const sql = 'UPDATE tbl_gio_hang SET so_luong = ? WHERE id = ?';
+
+        connect.query(sql, [newQuantity, itemId], (error, results, fields) => {
+            if (error) {
+                res.status(500).json({ error: 'Internal Server Error' });
+            } else {
+                res.status(200).send('Update successful');
+            }
+        });
+    }
 
     dat_hang(req, res) {
         let id = req.params.id;
@@ -146,32 +159,6 @@ class homeUserController {
         });
         console.log('id', id);
     }
-
-    dat_hang_cart(req, res) {
-        let selectedProducts = req.body.selectedProducts; // Danh sách các id sản phẩm được chọn từ form
-        let selectedProductIds = selectedProducts.split(',').map(Number); // Chia chuỗi thành một mảng các ID sản phẩm
-    
-        let sql = "CALL GetProducts_datHang(?)"; // Stored procedure chỉ mong đợi một tham số
-        let so_luong = 0;
-    
-        connect.query(sql, [selectedProductIds.join(',')], (err, results) => {
-            if (err) throw err;
-    
-            let products_datHang = results[0]; // Đây là kết quả đầu tiên của stored procedure
-    
-            console.log(products_datHang);
-            res.render('user/mm.ejs', {
-                user: req.session.user,
-                products_datHang: products_datHang,
-                so_luong: so_luong + 1
-            });
-        });
-        console.log('selectedProductIds', selectedProductIds);
-    }
-    
-
-
-
 
     dat_hang2(req, res) {
         const { hoTen, soDienThoai, diaChi, ghiChu, hinhThucThanhToan, soLuong, giaBan, tongGia, tong_tien_thanh_toan, san_pham_id } = req.body;
@@ -205,6 +192,78 @@ class homeUserController {
         });
 
     }
+    dat_hang_cart(req, res) {
+        let selectedProducts = req.body.selectedProducts;
+        let selectedProductIds = selectedProducts.split(',').map(Number);
+
+        let sql = "CALL GetProducts2_datHang(?)";
+
+        connect.query(sql, [selectedProductIds.join(',')], (err, results) => {
+            if (err) throw err;
+
+            let products_datHang = results[0];
+
+            console.log(products_datHang);
+            res.render('user/dat_hang_cart.ejs', {
+                user: req.session.user,
+                products_datHang: products_datHang,
+
+            });
+        });
+        console.log('selectedProductIds', selectedProductIds);
+    }
+
+    dat_hang_cart_hd(req, res) {
+        const { hoTen, soDienThoai, diaChi, ghiChu, hinhThucThanhToan, tong_tien_thanh_toan, sanPhamArray } = req.body;
+        const userId = req.session.user.id;
+
+        // Thực hiện chèn dữ liệu vào bảng "tbl_don_mua_hang"
+        const donHangQuery = `
+            INSERT INTO tbl_don_mua_hang 
+            (khach_hang_id, ten_nguoi_mua, so_dien_thoai, dia_chi_mua_hang, ghi_chu, tong_tien, tong_tien_thanh_toan, hinh_thuc_thanh_toan, trang_thai, ngay_tao) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
+        const donHangValues = [userId, hoTen, soDienThoai, diaChi, ghiChu, 0, tong_tien_thanh_toan, hinhThucThanhToan, 1];
+
+        connect.query(donHangQuery, donHangValues, (error, results, fields) => {
+            if (error) {
+                console.error('Lỗi khi thêm đơn hàng: ' + error);
+                res.status(500).json({ message: 'Đã xảy ra lỗi khi đặt hàng.' });
+                return;
+            }
+
+            const donMuaHangId = results.insertId;
+
+            // Duyệt qua mảng sản phẩm và thêm từng sản phẩm vào bảng "tbl_chi_tiet_don_mua_hang"
+            sanPhamArray.forEach((sanPham) => {
+                const { chiTietId, soLuong, giaBan } = sanPham;
+                const chiTietQuery = `
+                    INSERT INTO tbl_chi_tiet_don_mua_hang 
+                    (don_mua_hang_id, chi_tiet_san_pham_id, so_luong, gia, ngay_tao) 
+                    VALUES (?, ?, ?, ?, NOW())`;
+                const chiTietValues = [donMuaHangId, chiTietId, soLuong, giaBan];
+
+                connect.query(chiTietQuery, chiTietValues, (error, results, fields) => {
+                    if (error) {
+                        console.error('Lỗi khi thêm chi tiết đơn hàng: ' + error);
+                        res.status(500).json({ message: 'Đã xảy ra lỗi khi đặt hàng.' });
+                        return;
+                    }
+                });
+
+                const xoaSanPhamQuery = `DELETE FROM tbl_gio_hang WHERE chi_tiet_san_pham_id = ? AND khach_hang_id = ?`;
+                const xoaSanPhamValues = [chiTietId, userId];
+                connect.query(xoaSanPhamQuery, xoaSanPhamValues, (error, results, fields) => {
+                    if (error) {
+                        console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng: ' + error);
+                        return;
+                    }
+                });
+            });
+
+            res.json({ message: 'Đặt hàng thành công.' });
+        });
+    }
+
 
     order(req, res) {
         let sql = `SELECT 
@@ -233,6 +292,18 @@ class homeUserController {
             });
             console.log(data);
 
+        });
+
+    }
+
+
+    all_product(req, res) {
+        let sql = 'SELECT * FROM tbl_chi_tiet_san_pham';
+        connect.query(sql, (err, data) => {
+            res.render('user/all_product.ejs', {
+                data: data,
+                user: req.session.user
+            });
         });
 
     }

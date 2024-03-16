@@ -502,7 +502,8 @@ BEGIN
     tbl_chi_tiet_san_pham.gia_ban,
     tbl_chi_tiet_san_pham.serial,
     tbl_chi_tiet_san_pham.ngay_tao,
-    tbl_chi_tiet_san_pham.ngay_cap_nhat
+    tbl_chi_tiet_san_pham.ngay_cap_nhat,
+    tbl_chi_tiet_san_pham.hinh_anh
   FROM
     tbl_chi_tiet_san_pham
     JOIN tbl_san_pham ON tbl_chi_tiet_san_pham.san_pham_id = tbl_san_pham.id
@@ -569,30 +570,61 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProducts_datHang`(IN productDetailIds TEXT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProducts_datHang`
+(IN productDetailIds TEXT)
 BEGIN
-    -- Lấy thông tin chi tiết sản phẩm dựa trên danh sách id được truyền vào
-    SELECT
-        tbl_san_pham.id AS product_id,
-        tbl_san_pham.ten_san_pham,
-        tbl_danh_muc.ten_danh_muc,
-        tbl_nha_san_xuat.ten_nha_san_xuat,
-        tbl_mau_sac.ten_mau_sac,
-        tbl_dung_luong.ten_dung_luong,
-        tbl_chi_tiet_san_pham.id AS chi_tiet_id,
-        tbl_chi_tiet_san_pham.gia_ban,
-        tbl_chi_tiet_san_pham.hinh_anh,
-        tbl_chi_tiet_san_pham.serial,
-        tbl_chi_tiet_san_pham.ngay_tao,
-        tbl_chi_tiet_san_pham.ngay_cap_nhat
-    FROM
-        tbl_chi_tiet_san_pham
-        JOIN tbl_san_pham ON tbl_chi_tiet_san_pham.san_pham_id = tbl_san_pham.id
-        JOIN tbl_danh_muc ON tbl_san_pham.danh_muc_id = tbl_danh_muc.id
-        JOIN tbl_nha_san_xuat ON tbl_san_pham.nha_san_xuat_id = tbl_nha_san_xuat.id
-        JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
-        JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id
-    WHERE
+  -- Lấy thông tin chi tiết sản phẩm dựa trên danh sách id được truyền vào
+  SELECT
+    tbl_san_pham.id AS product_id,
+    tbl_san_pham.ten_san_pham,
+    tbl_danh_muc.ten_danh_muc,
+    tbl_nha_san_xuat.ten_nha_san_xuat,
+    tbl_mau_sac.ten_mau_sac,
+    tbl_dung_luong.ten_dung_luong,
+    tbl_chi_tiet_san_pham.id AS chi_tiet_id,
+    tbl_chi_tiet_san_pham.gia_ban,
+    tbl_chi_tiet_san_pham.hinh_anh,
+    tbl_chi_tiet_san_pham.serial,
+    tbl_chi_tiet_san_pham.ngay_tao,
+    tbl_chi_tiet_san_pham.ngay_cap_nhat
+  FROM
+    tbl_chi_tiet_san_pham
+    JOIN tbl_san_pham ON tbl_chi_tiet_san_pham.san_pham_id = tbl_san_pham.id
+    JOIN tbl_danh_muc ON tbl_san_pham.danh_muc_id = tbl_danh_muc.id
+    JOIN tbl_nha_san_xuat ON tbl_san_pham.nha_san_xuat_id = tbl_nha_san_xuat.id
+    JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
+    JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id
+  WHERE
         FIND_IN_SET(tbl_chi_tiet_san_pham.id, productDetailIds);
-END$$
+  END$$
+DELIMITER
+;
+
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProducts_datHang`
+(IN gioHangIds TEXT)
+BEGIN
+  -- Lấy thông tin sản phẩm từ các sản phẩm trong giỏ hàng, bao gồm cả thông tin về nhà sản xuất
+  SELECT
+    tbl_san_pham.ten_san_pham,
+    tbl_nha_san_xuat.ten_nha_san_xuat,
+    tbl_chi_tiet_san_pham.hinh_anh,
+    tbl_mau_sac.ten_mau_sac,
+    tbl_dung_luong.ten_dung_luong,
+    tbl_chi_tiet_san_pham.gia_ban,
+    tbl_gio_hang.so_luong,
+    tbl_chi_tiet_san_pham.id AS chi_tiet_id
+  FROM
+    tbl_gio_hang
+    JOIN tbl_chi_tiet_san_pham ON tbl_gio_hang.chi_tiet_san_pham_id = tbl_chi_tiet_san_pham.id
+    JOIN tbl_san_pham ON tbl_chi_tiet_san_pham.san_pham_id = tbl_san_pham.id
+    JOIN tbl_nha_san_xuat ON tbl_san_pham.nha_san_xuat_id = tbl_nha_san_xuat.id
+    JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
+    JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id
+  WHERE
+        FIND_IN_SET(tbl_gio_hang.id, gioHangIds);
+  END$$
 DELIMITER ;

@@ -1,0 +1,42 @@
+<%- include('headerUser.ejs') %>
+    <div class="container" style="margin-top: 150px; margin-bottom: 150px">
+        <div class="danh_sach_san_pham mt-5">
+            <h3 class="mt-5"> Danh sách sản phẩm </h3>
+            <div class="row">
+                <% if (data && data.length> 0) { %>
+                    <% data.forEach(function (product, index) { %>
+                        <div class="col-md-3 mt-5">
+                            <div class="card">
+                                <a href="/chi_tiet_sp/<%= product.id %>">
+                                    <img src="imgUpload/<%= product.hinh_anh %>" class="card-img-top" alt="...">
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= product.ten_san_pham %> màu <%= product.ten_mau_sac %>
+                                    </h5>
+                                    <div class="card-body d-flex p-0">
+                                        <p class="card-link">Ram 8GB</p>
+                                        <p class="card-link">SSD <%= product.ten_dung_luong %>
+                                        </p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">Giá: <%= product.gia_ban %> vnd</li>
+                                    </ul>
+                                    <div class="text-center d-flex">
+                                        <a href="/add_to_cart/<%= product.chi_tiet_id %>" class="btn btn-primary">Thêm
+                                            với giỏ hàng</a>
+                                        <a href="/dat_hang/<%= product.chi_tiet_id %>" class="btn btn-success">Mua
+                                            ngay</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                            <% } else { %>
+                                <p colspan="7">Không có dữ liệu</p>
+                                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <%- include('footerUser.ejs') %>

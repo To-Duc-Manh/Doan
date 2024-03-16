@@ -1,0 +1,166 @@
+<%- include('headerUser.ejs') %>
+
+    <div class="container" style="margin-top: 150px; margin-bottom: 150px">
+        <div>
+            <h3 class="text-start">ĐẶT HÀNG </h3>
+            <p>Địa chỉ: <span id="ho_ten">
+                    <%= user.ho_ten %>
+                </span> - <span id="so_dien_thoai">
+                    <%= user.so_dien_thoai %>
+                </span> - <span id="dia_chi">
+                    <%= user.dia_chi %>
+                </span></p>
+            <textarea id="ghi_chu" style="width: 100%;" placeholder="Ghi chu"></textarea>
+        </div>
+
+        <div>
+            <table style="margin-top: 50px;"
+                class="table table-PW table-striped table-hover table-borderless align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center">Hình ảnh</th>
+                        <th>Sản phẩm</th>
+                        <th>Mau sắc</th>
+                        <th>Dung lượng</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+
+                    <% if (products_datHang && products_datHang.length> 0) { %>
+                        <% products_datHang.forEach(function (item, index) { %>
+                            <tr>
+                                <td id="chi_tiet_id" hidden>
+                                    <%= item.chi_tiet_id %>
+                                </td>
+                                <td class="text-center">
+                                    <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                                        src="/imgUpload/<%= item.hinh_anh %>">
+                                </td>
+                                <td>
+                                    <%= item.ten_san_pham %>
+                                </td>
+                                <td>
+                                    <%= item.ten_mau_sac %>
+                                </td>
+                                <td>
+                                    <%= item.ten_dung_luong %>
+                                </td>
+                                <td>
+                                    <div>
+                                        <span id="so_luong">
+                                            <%= item.so_luong %>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td id="gia_ban">
+                                    <%= item.gia_ban %>
+                                </td>
+                                <td><span id="tong_gia">
+                                        <%= item.gia_ban * item.so_luong %> %>
+                                    </span></td>
+
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">Không có dữ liệu</td>
+                                    </tr>
+                                    <% } %>
+
+
+                </tbody>
+            </table>
+            <div class="row mt-5">
+                <div class="col-lg-4">
+                    <p>PHƯƠNG THỨC THANH TOÁN</p>
+                    <hr>
+                    <select id="hinh_thuc_thanh_toan">
+                        <option value="1">Thanh toán khi nhận hàng</option>
+                        <option value="2">Thanh toán bằng ngân hàng</option>
+                    </select>
+                </div>
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                    <p>TỔNG TIỀN</p>
+                    <hr>
+                    <p>Tổng phụ: ...</p>
+                    <p>Phí vận chuyển: ...</p>
+                    <p>Tổng tiền:</p>
+                    <p id="tong_tien_thanh_toan"></p>
+
+                    <button class="btn btn-primary" onclick="datHang()">ĐẶT HÀNG</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function datHang() {
+            var hoTen = document.getElementById("ho_ten").innerText;
+            var soDienThoai = document.getElementById("so_dien_thoai").innerText;
+            var diaChi = document.getElementById("dia_chi").innerText;
+            var ghiChu = document.getElementById("ghi_chu").value;
+            var hinhThucThanhToan = document.getElementById("hinh_thuc_thanh_toan").value;
+
+            var tongGia = 0;
+            var sanPhamArray = []; // Mảng lưu thông tin của từng sản phẩm
+
+            var rows = document.querySelectorAll("tbody tr"); // Lấy tất cả các hàng trong bảng sản phẩm
+            rows.forEach(function (row) {
+                var soLuong = parseInt(row.querySelector("#so_luong").innerText); // Lấy số lượng từng sản phẩm
+                var giaBan = parseFloat(row.querySelector("#gia_ban").innerText);
+                var chiTietId = parseFloat(row.querySelector("#chi_tiet_id").innerText);
+                var tongGiaSanPham = soLuong * giaBan; // Tính tổng giá của từng sản phẩm
+                tongGia += tongGiaSanPham; // Tính tổng giá của đơn hàng
+
+                var sanPham = {
+                    soLuong: soLuong,
+                    giaBan: giaBan,
+                    chiTietId,
+                };
+                sanPhamArray.push(sanPham); // Thêm thông tin sản phẩm vào mảng
+            });
+
+            var tong_tien_thanh_toan = tongGia; // Sét tổng tiền thanh toán bằng tổng giá
+
+            // Gửi dữ liệu thông qua fetch
+            fetch('/dat_hang_cart_hd', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    hoTen: hoTen,
+                    soDienThoai: soDienThoai,
+                    diaChi: diaChi,
+                    ghiChu: ghiChu,
+                    hinhThucThanhToan: hinhThucThanhToan,
+                    tongGia: tongGia,
+                    tong_tien_thanh_toan: tong_tien_thanh_toan,
+                    sanPhamArray: sanPhamArray // Gửi mảng thông tin sản phẩm
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Có lỗi khi đặt hàng');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Đặt hàng thành công: ', data);
+                    alert('Đặt hàng thành công!');
+                    window.location.href = '/order';
+                })
+                .catch(error => {
+                    console.error('Đặt hàng thất bại: ', error);
+                    alert('Đặt hàng thất bại!');
+                });
+        }
+
+
+    </script>
+
+    <%- include('footerUser.ejs') %>
