@@ -1,140 +1,252 @@
 <%- include('headerUser.ejs') %>
 
-
-
   <div class="container" style="margin-top: 150px; margin-bottom: 150px">
-    <div class="col-lg-3">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="link_order">
+          <div class="user_order">
+            <p>Manh</p>
+          </div>
+          <ul class="">
+            <li class="item_"><a href="#">Dơn mua hàng</a></li>
+            <li class="item_ mt-3"><a>Đơn bảo hành</a></li>
+            <li class="item_ mt-3 pb-3"><a>Lịch sử mua hàng</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#cho_xac_nhan" data-toggle="tab">Chờ xác nhận</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#da_xac_nhan" data-toggle="tab">Đã xác nhận</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#dang_giao" data-toggle="tab">Đang giao hàng</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#da_giao" data-toggle="tab">Đã giao</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#da_huy" data-toggle="tab">Đã hủy</a>
+          </li>
+        </ul>
 
-    </div>
-    <div class="col-lg-9">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" href="#cho_xac_nhan" data-toggle="tab">Chờ xác nhận</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#da_xac_nhan" data-toggle="tab">Đã xác nhận</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#dang_giao" data-toggle="tab">Đang giao hàng</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#da_giao" data-toggle="tab">Đã giao</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#da_huy" data-toggle="tab">Đã hủy</a>
-        </li>
-      </ul>
+        <div class="tab-content mt-1">
+          <div class="tab-pane active link_order" id="cho_xac_nhan">
+            <div class="">
+              <% if (don_mua_hang.length> 0) {
+                var hasActiveOrder = false;
+                don_mua_hang.forEach(function(don_mua_hang_item, index) {
+                if (don_mua_hang_item.trang_thai === 1) {
+                hasActiveOrder = true;
+                %>
+                <div class="row">
+                  <div class="">
+                    <p class="user_order text-start">HD: <%= don_mua_hang_item.id %>
+                    </p>
+                  </div>
+                  <% var hasActiveProducts=false; if (data && data.length> 0) {
+                    data.forEach(function(order, index) {
+                    if (user.id == order.khach_hang_id && order.don_mua_hang_id === don_mua_hang_item.id) {
+                    hasActiveProducts = true;
+                    %>
+                    <div class="row">
+                      <div class="col-lg-3">
+                        <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                          src="/imgUpload/<%= order.hinh_anh %>">
+                      </div>
+                      <div class="col-lg-6">
+                        <p>Thông tin sản phẩm</p>
+                        <p>
+                          <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%=
+                                  order.so_luong %>
+                        </p>
+                      </div>
+                      <div class="col-lg-3">
+                        <p>Giá</p>
+                        <p>
+                          <%= order.gia_ban %>
+                        </p>
+                        <p>Tổng tiền: <%= order.tong_tien %>
+                        </p>
+                      </div>
+                    </div>
+                    <% } }); } if (!hasActiveProducts) { %>
+                      <p>Không có dữ liệu</p>
+                      <% } %>
+                        <div>
+                          <p class="text-end mx-2">Tổng tiền phải thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan
+                              %>
+                          </p>
+                        </div>
+                        <div class="text-end">
+                          <button class="btn btn-danger mx-2 mb-3">Hủy đơn hàng</button>
+                        </div>
+                </div>
+                <% } }); if (!hasActiveOrder) { %>
+                  <p>Không có dữ liệu</p>
+                  <% } } else { %>
+                    <p>Không có dữ liệu</p>
+                    <% } %>
+            </div>
+          </div>
+          <div class="tab-pane" id="da_xac_nhan">
+            <% if (don_mua_hang.length> 0) {
+              var hasActiveOrder = false;
+              don_mua_hang.forEach(function(don_mua_hang_item, index) {
+              if (don_mua_hang_item.trang_thai === 2) {
+              hasActiveOrder = true;
+              %>
+              <div class="row">
+                <div class="">
+                  <p class="user_order text-start">HD: <%= don_mua_hang_item.id %>
+                  </p>
+                </div>
+                <% var hasActiveProducts=false; if (data && data.length> 0) {
+                  data.forEach(function(order, index) {
+                  if (user.id == order.khach_hang_id && order.don_mua_hang_id === don_mua_hang_item.id) {
+                  hasActiveProducts = true;
+                  %>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                        src="/imgUpload/<%= order.hinh_anh %>">
+                    </div>
+                    <div class="col-lg-6">
+                      <p>Thông tin sản phẩm</p>
+                      <p>
+                        <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%= order.so_luong
+                                %>
+                      </p>
+                    </div>
+                    <div class="col-lg-3">
+                      <p>Giá</p>
+                      <p>
+                        <%= order.gia_ban %>
+                      </p>
+                      <p>Tổng tiền: <%= order.tong_tien %>
+                      </p>
+                    </div>
+                  </div>
+                  <% } }); } if (!hasActiveProducts) { %>
+                    <p>Không có dữ liệu</p>
+                    <% } %>
+                      <p class="text-end">Tổng tiền phải thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
+                      </p>
+              </div>
+              <% } }); if (!hasActiveOrder) { %>
+                <p>Không có dữ liệu</p>
+                <% } } else { %>
+                  <p>Không có dữ liệu</p>
+                  <% } %>
 
-      <div class="tab-content">
-        <div class="tab-pane active" id="cho_xac_nhan">
-          <% var hasActiveProducts=false; if (data && data.length> 0) {
-            data.forEach(function(order, index) {
-            if (order.trang_thai === 1 && user.id == order.khach_hang_id) {
-            hasActiveProducts = true;
-            %>
-            <tr>
-              <td>
-                <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %>
-              </td>
-              <td>
-                <%= order.gia_ban %>
-              </td>
-              <td>
-                <%= order.so_luong %>
-              </td>
-              <td>
-                <%= order.tong_tien %>
-              </td>
-            </tr>
-            <% } }); } if (!hasActiveProducts) { %>
-              <tr>
-                <td colspan="2">Không có sản phẩm </td>
-              </tr>
-              <% } %>
 
-                
-        </div>
-        <div class="tab-pane" id="da_xac_nhan">
-          <% var hasActiveProducts=false; if (data && data.length> 0) {
-            data.forEach(function(order, index) {
-            if (order.trang_thai === 2 && user.id == order.khach_hang_id) {
-            hasActiveProducts = true;
-            %>
-            <tr>
-              <td>
-                <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %>
-              </td>
-              <td>
-                <%= order.gia_ban %>
-              </td>
-              <td>
-                <%= order.so_luong %>
-              </td>
-              <td>
-                <%= order.tong_tien %>
-              </td>
-            </tr>
-            <% } }); } if (!hasActiveProducts) { %>
-              <tr>
-                <td colspan="2">Không có sản phẩm </td>
-              </tr>
-              <% } %>
-        </div>
-        <div class="tab-pane" id="dang_giao">
-      
-          <% var hasActiveProducts=false; if (data && data.length> 0) {
-            data.forEach(function(order, index) {
-            if (order.trang_thai === 3 && user.id == order.khach_hang_id) {
-            hasActiveProducts = true;
-            %>
-            <tr>
-              <td>
-                <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %>
-              </td>
-              <td>
-                <%= order.gia_ban %>
-              </td>
-              <td>
-                <%= order.so_luong %>
-              </td>
-              <td>
-                <%= order.tong_tien %>
-              </td>
-            </tr>
-            <% } }); } if (!hasActiveProducts) { %>
-              <tr>
-                <td colspan="2">Không có sản phẩm haha</td>
-              </tr>
-              <% } %>
-        </div>
-        <div class="tab-pane" id="da_giao">
-          <% var hasActiveProducts=false; if (data && data.length> 0) {
-            data.forEach(function(order, index) {
-            if (order.trang_thai === 4 && user.id == order.khach_hang_id) {
-            hasActiveProducts = true;
-            %>
-            <tr>
-              <td>
-                <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %>
-              </td>
-              <td>
-                <%= order.gia_ban %>
-              </td>
-              <td>
-                <%= order.so_luong %>
-              </td>
-              <td>
-                <%= order.tong_tien %>
-              </td>
-            </tr>
-            <% } }); } if (!hasActiveProducts) { %>
-              <tr>
-                <td colspan="2">Không có sản phẩm </td>
-              </tr>
-              <% } %>
-        </div>
-        <div class="tab-pane" id="da_huy">
-          Đã hủy
+          </div>
+          <div class="tab-pane" id="dang_giao">
+            <% if (don_mua_hang.length> 0) {
+              var hasActiveOrder = false;
+              don_mua_hang.forEach(function(don_mua_hang_item, index) {
+              if (don_mua_hang_item.trang_thai === 3) {
+              hasActiveOrder = true;
+              %>
+              <div class="row">
+                <div class="">
+                  <p class="user_order text-start">HD: <%= don_mua_hang_item.id %>
+                  </p>
+                </div>
+                <% var hasActiveProducts=false; if (data && data.length> 0) {
+                  data.forEach(function(order, index) {
+                  if (user.id == order.khach_hang_id && order.don_mua_hang_id === don_mua_hang_item.id) {
+                  hasActiveProducts = true;
+                  %>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                        src="/imgUpload/<%= order.hinh_anh %>">
+                    </div>
+                    <div class="col-lg-6">
+                      <p>Thông tin sản phẩm</p>
+                      <p>
+                        <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%= order.so_luong
+                                %>
+                      </p>
+                    </div>
+                    <div class="col-lg-3">
+                      <p>Giá</p>
+                      <p>
+                        <%= order.gia_ban %>
+                      </p>
+                      <p>Tổng tiền: <%= order.tong_tien %>
+                      </p>
+                    </div>
+                  </div>
+                  <% } }); } if (!hasActiveProducts) { %>
+                    <p>Không có dữ liệu</p>
+                    <% } %>
+                      <p class="text-end">Tổng tiền phải thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
+                      </p>
+              </div>
+              <% } }); if (!hasActiveOrder) { %>
+                <p>Không có dữ liệu</p>
+                <% } } else { %>
+                  <p>Không có dữ liệu</p>
+                  <% } %>
+          </div>
+          <div class="tab-pane" id="da_giao">
+            <% if (don_mua_hang.length> 0) {
+              var hasActiveOrder = false;
+              don_mua_hang.forEach(function(don_mua_hang_item, index) {
+              if (don_mua_hang_item.trang_thai === 4) {
+              hasActiveOrder = true;
+              %>
+              <div class="row">
+                <div class="">
+                  <p class="user_order text-start">HD: <%= don_mua_hang_item.id %>
+                  </p>
+                </div>
+                <% var hasActiveProducts=false; if (data && data.length> 0) {
+                  data.forEach(function(order, index) {
+                  if (user.id == order.khach_hang_id && order.don_mua_hang_id === don_mua_hang_item.id) {
+                  hasActiveProducts = true;
+                  %>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                        src="/imgUpload/<%= order.hinh_anh %>">
+                    </div>
+                    <div class="col-lg-6">
+                      <p>Thông tin sản phẩm</p>
+                      <p>
+                        <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%= order.so_luong
+                                %>
+                      </p>
+                    </div>
+                    <div class="col-lg-3">
+                      <p>Giá</p>
+                      <p>
+                        <%= order.gia_ban %>
+                      </p>
+                      <p>Tổng tiền: <%= order.tong_tien %>
+                      </p>
+                    </div>
+                  </div>
+                  <% } }); } if (!hasActiveProducts) { %>
+                    <p>Không có dữ liệu</p>
+                    <% } %>
+                      <p class="text-end">Tổng tiền phải thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
+                      </p>
+              </div>
+              <% } }); if (!hasActiveOrder) { %>
+                <p>Không có dữ liệu</p>
+                <% } } else { %>
+                  <p>Không có dữ liệu</p>
+                  <% } %>
+          </div>
+          <div class="tab-pane" id="da_huy">
+            Đã hủy
+          </div>
         </div>
       </div>
     </div>

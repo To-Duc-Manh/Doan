@@ -4,7 +4,9 @@
   background-color: rgba(224, 224, 224, 0.9);
   height: 90px;
 } */
-
+ul li {
+  list-style-type: none;
+}
 @font-face {
   font-family: "Proxima"; /* Đặt tên font */
   src: url("/font/proxima-soft-11.ttf"); /* Đường dẫn đến font và định dạng */
@@ -459,7 +461,25 @@ a {
   text-align: center;
   color: #000;
 }
-
-.active {
+.nav-link {
+  color: #000;
+}
+.active_ {
   border: red solid 1px;
+}
+
+/* order */
+.link_order {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.user_order {
+  background-color: #ccc;
+  text-align: center;
+}
+.item_ {
+}
+
+.nav_order {
+  background-color: #ccc;
 }

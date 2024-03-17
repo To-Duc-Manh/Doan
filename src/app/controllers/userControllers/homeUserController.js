@@ -266,8 +266,15 @@ class homeUserController {
 
 
     order(req, res) {
-        let sql = `SELECT 
+        let sql_hd = 'SELECT * FROM tbl_don_mua_hang';
+        connect.query(sql_hd, (err, don_mua_hang) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Internal Server Error');
+            }
+            let sql = `SELECT 
         tbl_chi_tiet_don_mua_hang.so_luong AS so_luong,
+        tbl_chi_tiet_don_mua_hang.don_mua_hang_id AS don_mua_hang_id,
         tbl_chi_tiet_san_pham.hinh_anh AS hinh_anh,
         tbl_san_pham.ten_san_pham AS ten_san_pham,
         tbl_dung_luong.ten_dung_luong AS dung_luong,
@@ -285,13 +292,15 @@ class homeUserController {
     JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id;
     `;
 
-        connect.query(sql, (err, data) => {
-            res.render('user/order.ejs', {
-                data: data,
-                user: req.session.user
-            });
-            console.log(data);
+            connect.query(sql, (err, data) => {
+                res.render('user/order.ejs', {
+                    data: data,
+                    don_mua_hang: don_mua_hang,
+                    user: req.session.user
+                });
+                console.log(data);
 
+            });
         });
 
     }
