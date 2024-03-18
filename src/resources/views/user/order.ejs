@@ -1,6 +1,6 @@
 <%- include('headerUser.ejs') %>
 
-  <div class="container" style="margin-top: 150px; margin-bottom: 150px">
+  <div class="container" style="margin-top: 50px; margin-bottom: 150px">
     <div class="row">
       <div class="col-lg-3">
         <div class="link_order">
@@ -82,7 +82,7 @@
                           </p>
                         </div>
                         <div class="text-end">
-                          <button class="btn btn-danger mx-2 mb-3">Hủy đơn hàng</button>
+                          <a href="#" onclick="confirmCancelOrder(`<%= don_mua_hang_item.id %>`)" class="btn btn-outline-danger mx-2 mb-3">Hủy đơn hàng</a>
                         </div>
                 </div>
                 <% } }); if (!hasActiveOrder) { %>
@@ -245,7 +245,60 @@
                   <% } %>
           </div>
           <div class="tab-pane" id="da_huy">
-            Đã hủy
+            <% if (don_mua_hang.length> 0) {
+              var hasActiveOrder = false;
+              don_mua_hang.forEach(function(don_mua_hang_item, index) {
+              if (don_mua_hang_item.trang_thai === 5) {
+              hasActiveOrder = true;
+              %>
+              <div class="row">
+                <div class="">
+                  <p class="user_order text-start">HD: <%= don_mua_hang_item.id %>
+                  </p>
+                </div>
+                <% var hasActiveProducts=false; if (data && data.length> 0) {
+                  data.forEach(function(order, index) {
+                  if (user.id == order.khach_hang_id && order.don_mua_hang_id === don_mua_hang_item.id) {
+                  hasActiveProducts = true;
+                  %>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                        src="/imgUpload/<%= order.hinh_anh %>">
+                    </div>
+                    <div class="col-lg-6">
+                      <p>Thông tin sản phẩm</p>
+                      <p>
+                        <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%=
+                                order.so_luong %>
+                      </p>
+                    </div>
+                    <div class="col-lg-3">
+                      <p>Giá</p>
+                      <p>
+                        <%= order.gia_ban %>
+                      </p>
+                      <p>Tổng tiền: <%= order.tong_tien %>
+                      </p>
+                    </div>
+                  </div>
+                  <% } }); } if (!hasActiveProducts) { %>
+                    <p>Không có dữ liệu</p>
+                    <% } %>
+                      <div>
+                        <p class="text-end mx-2">Tổng tiền phải thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan
+                            %>
+                        </p>
+                      </div>
+                      <div class="text-end">
+                        <a href="#" class="btn btn-outline-success mx-2 mb-3">Mua lại</a>
+                      </div>
+              </div>
+              <% } }); if (!hasActiveOrder) { %>
+                <p>Không có dữ liệu</p>
+                <% } } else { %>
+                  <p>Không có dữ liệu</p>
+                  <% } %>
           </div>
         </div>
       </div>
@@ -253,4 +306,18 @@
   </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+  <script>
+    function confirmCancelOrder(orderId) {
+        if (confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?")) {
+            // Nếu người dùng đồng ý, gửi yêu cầu hủy đơn hàng đến máy chủ
+            window.location.href = "/order_huy/" + orderId;
+        } else {
+            // Nếu người dùng không đồng ý, không thực hiện hành động nào
+            return false;
+        }
+    }
+</script>
   <%- include('footerUser.ejs') %>

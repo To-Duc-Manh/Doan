@@ -604,7 +604,7 @@ DELIMITER
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProducts_datHang`
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetProducts2_datHang`
 (IN gioHangIds TEXT)
 BEGIN
   -- Lấy thông tin sản phẩm từ các sản phẩm trong giỏ hàng, bao gồm cả thông tin về nhà sản xuất

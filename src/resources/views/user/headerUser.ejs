@@ -30,82 +30,62 @@
 </head>
 
 <body>
-    <div class="row g-0 header px-0 mx-0">
-        <div class="col-3">
-            <div class="logo">
-                <a href="/"> <img class="logo_img" src="/img/logo.png" alt=""></a>
-            </div>
-        </div>
-        <div class="col-9 px-0">
-            <div class="menu">
-
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a href="/"> <img class="logo_img" src="/img/logo.png" alt=""></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
                 <% if (user) { %>
-                    <p class="tt" style="color: black; z-index: 11;">
+                    <p class="" style="color: black; z-index: 11;">
                         <%= user.ho_ten %>
-                    </p class="tt">
+                    </p class="">
                     <% } %>
-
+        
                         <% if (user) { %>
-                            <a class="btn btn-outline-secondary btn-sm mx-3 btl-logout" href="/auth/logoutUser">
+                            <a class="btn btn-outline-secondary btn-sm mx-3" href="/auth/logoutUser">
                                 Đăng xuất
                             </a>
                             <% } else { %>
-                                <a class="btn btn-outline-secondary btn-sm mx-3 btl-login" href="/auth/loginUser">
+                                <a class="btn btn-outline-secondary btn-sm mx-3" href="/auth/loginUser">
                                     Đăng
                                     nhập
                                 </a>
                                 <% } %>
-
-
-                                    <div class="row g-0 px-0">
-                                        <div class="col-lg-6 px-0">
-                                            <!-- <div class="toggle">
-                                                <i class="fa-solid fa-bars"></i>
-                                            </div> -->
-                                            <nav>
-                                                <ul class="main-menu ul_ab">
-                                                    <li class="li_ab">
-                                                        <a href="/" class="text_menu">TRANG CHỦ</a>
-                                                    </li>
-                                                    <li class="li_ab dropdown">
-                                                        <a class="dropdown-toggle text_menu" href="#"
-                                                            id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                                                            aria-expanded="false">
-                                                            DANH MỤC SẢN PHẨM
-                                                        </a>
-                                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                            <li><a class="dropdown-item" href="/all_product">Sản
-                                                                    phẩm</a></li>
-                                                            <li><a class="dropdown-item" href="#">Phụ kiện</a></li>
-                                                            <li><a class="dropdown-item" href="#">Something else
-                                                                    here</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-
-                                                    </li>
-                                                </ul>
-                                            </nav>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <form action="" method="get" class="input-group form_input search-bar "
-                                                role="search">
-                                                <input type="text" name="keyword" value="" autocomplete="off"
-                                                    placeholder="Tìm kiếm" class="input_header_1 form-control white"
-                                                    required="" />
-                                                <button class="btn btn-outline-secondary cart" type="submit"
-                                                    id="button-addon2"><i class="fa fa-search"></i></button>
-                                            </form>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <a href="/cart" class="btn btn-secondary cart">gio hang</a>
-                                            <a href="/order" class="btn btn-outline-primary cart">Đơn hàng</a>
-                                        </div>
-
-
-
-                                    </div>
-            </div>
-
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dropdown
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/all_product">Sản
+                    phẩm</a></li></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="/cart" class="btn btn-secondary cart">gio hang</a>
+                
+              </li>
+              <li class="nav-item">
+                <a href="/order" class="btn btn-outline-primary cart">Đơn hàng</a>
+              </li>
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
         </div>
-    </div>
+      </nav>
+      <!-- <div class="logo">
+        <a href="/"> <img class="logo_img" src="/img/logo.png" alt=""></a>
+    </div> -->

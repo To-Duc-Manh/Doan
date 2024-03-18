@@ -14,7 +14,11 @@ router.get('/delete_cart/:id', authMiddleware.loggedinUser, homeUserController.d
 router.get('/dat_hang/:id', authMiddleware.loggedinUser, homeUserController.dat_hang);
 router.post('/dat_hang2', authMiddleware.loggedinUser, homeUserController.dat_hang2);
 router.post('/dat_hang_cart', homeUserController.dat_hang_cart);
+
+
 router.get('/order', authMiddleware.loggedinUser, homeUserController.order);
+router.get('/order_huy/:id', authMiddleware.loggedinUser, homeUserController.order_huy);
+
 
 router.get('/all_product', homeUserController.all_product);
 module.exports = router;

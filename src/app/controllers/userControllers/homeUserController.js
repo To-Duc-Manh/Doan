@@ -305,6 +305,55 @@ class homeUserController {
 
     }
 
+    async order_huy(req, res) {
+        try {
+            // Lấy id của đơn hàng từ request
+            const orderId = req.params.id;
+
+            // Truy vấn trạng thái hiện tại của đơn hàng từ cơ sở dữ liệu
+            const data = await new Promise((resolve, reject) => {
+                connect.query(`SELECT * FROM tbl_don_mua_hang WHERE id = ${orderId}`, (err, data) => {
+                    if (err) reject(err);
+                    else resolve(data);
+                });
+            });
+
+            if (data.length === 0) {
+                console.log('Không tìm thấy đơn hàng.');
+                res.status(404).send('Không tìm thấy đơn hàng.');
+                return;
+            }
+
+            const currentStatus = data[0].trang_thai;
+
+            // Xác định trạng thái mới
+            let newStatus;
+            if (currentStatus === 1) {
+                newStatus = 5;
+            } else if (currentStatus === 2) {
+                newStatus = 5;
+            }
+            else {
+                console.log('Không có trạng thái nào phù hợp để cập nhật.');
+                res.status(400).send('Không có trạng thái nào phù hợp để cập nhật.');
+                return;
+            }
+
+            // Cập nhật trạng thái mới vào cơ sở dữ liệu
+            await new Promise((resolve, reject) => {
+                connect.query('UPDATE tbl_don_mua_hang SET trang_thai = ? WHERE id = ?', [newStatus, orderId], (err) => {
+                    if (err) reject(err);
+                    else resolve();
+                });
+            });
+
+            console.log(`Cập nhật trạng thái thành công: ${newStatus} cho đơn hàng có id ${orderId}`);
+            res.status(200).send(newStatus.toString()); // Trả về trạng thái mới
+        } catch (error) {
+            console.error('Lỗi khi cập nhật trạng thái:', error);
+            res.status(500).send('Lỗi khi cập nhật trạng thái.');
+        }
+    }
 
     all_product(req, res) {
         let sql = 'SELECT * FROM tbl_chi_tiet_san_pham';
