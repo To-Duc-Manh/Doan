@@ -356,7 +356,22 @@ class homeUserController {
     }
 
     all_product(req, res) {
-        let sql = 'SELECT * FROM tbl_chi_tiet_san_pham';
+        let sql = `
+        SELECT 
+            sp.ten_san_pham, 
+            ctsanpham.hinh_anh AS hinh_anh_chi_tiet, 
+            mausac.ten_mau_sac, 
+            dungluong.ten_dung_luong, 
+            ctsanpham.gia_ban, 
+            ctsanpham.serial,
+            ctsanpham.hinh_anh
+        FROM 
+            tbl_san_pham sp 
+            JOIN tbl_chi_tiet_san_pham ctsanpham ON sp.id = ctsanpham.san_pham_id 
+            JOIN tbl_mau_sac mausac ON ctsanpham.mau_sac_id = mausac.id 
+            JOIN tbl_dung_luong dungluong ON ctsanpham.dung_luong_id = dungluong.id 
+        WHERE 1 = 1
+    `;
         connect.query(sql, (err, data) => {
             res.render('user/all_product.ejs', {
                 data: data,
@@ -365,6 +380,129 @@ class homeUserController {
         });
 
     }
+
+    search_product_all_user(req, res) {
+        const keyword = req.query.name;
+        const mau_sac_name = req.query.mau_sac_name;
+        const dung_luong_name = req.query.dung_luong_name;
+    
+        let mau_sac_sql = "SELECT * FROM tbl_mau_sac";
+        let dung_luong_sql = "SELECT * FROM tbl_dung_luong";
+        let sql_san_pham = "SELECT * FROM tbl_san_pham;";
+    
+        connect.query(mau_sac_sql, (err, mau_sac) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Internal Server Error');
+            }
+    
+            connect.query(dung_luong_sql, (err, dung_luong) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Internal Server Error');
+                }
+    
+                connect.query(sql_san_pham, (err, product) => {
+                    let sql = `
+                    SELECT 
+                        sp.ten_san_pham, 
+                        ctsanpham.hinh_anh AS hinh_anh, 
+                        mausac.ten_mau_sac, 
+                        dungluong.ten_dung_luong, 
+                        ctsanpham.gia_ban, 
+                        ctsanpham.serial 
+                    FROM 
+                        tbl_san_pham sp 
+                        JOIN tbl_chi_tiet_san_pham ctsanpham ON sp.id = ctsanpham.san_pham_id 
+                        JOIN tbl_mau_sac mausac ON ctsanpham.mau_sac_id = mausac.id 
+                        JOIN tbl_dung_luong dungluong ON ctsanpham.dung_luong_id = dungluong.id 
+                    WHERE 1 = 1
+                `;
+    
+                    const queryParams = [];
+    
+                    if (keyword) {
+                        sql += " AND sp.ten_san_pham LIKE ?";
+                        queryParams.push(`%${keyword}%`);
+                    }
+    
+                    if (mau_sac_name) {
+                        sql += " AND mausac.ten_mau_sac LIKE ?";
+                        queryParams.push(`%${mau_sac_name}%`);
+                    }
+    
+                    if (dung_luong_name) {
+                        sql += " AND dungluong.ten_dung_luong LIKE ?";
+                        queryParams.push(`%${dung_luong_name}%`);
+                    }
+    
+                    connect.query(sql, queryParams, (err, data) => {
+                        if (err) {
+                            console.error(err);
+                            return res.status(500).send('Internal Server Error');
+                        }
+    
+                        res.render('user/all_product.ejs', {
+                            data: data,
+                            product: product,
+                            mau_sac: mau_sac,
+                            dung_luong: dung_luong,
+                            user: req.session.user
+                        });
+                    });
+                });
+            });
+        });
+    }
+    
+
+    searchPrice_product_all_user(req, res) {
+        const min_price = req.query.min_price;
+        const max_price = req.query.max_price;
+    
+        let sql = `
+            SELECT 
+                sp.ten_san_pham, 
+                ctsanpham.hinh_anh AS hinh_anh, 
+                mausac.ten_mau_sac, 
+                dungluong.ten_dung_luong, 
+                ctsanpham.gia_ban, 
+                ctsanpham.serial 
+            FROM 
+                tbl_san_pham sp 
+                JOIN tbl_chi_tiet_san_pham ctsanpham ON sp.id = ctsanpham.san_pham_id 
+                JOIN tbl_mau_sac mausac ON ctsanpham.mau_sac_id = mausac.id 
+                JOIN tbl_dung_luong dungluong ON ctsanpham.dung_luong_id = dungluong.id 
+            WHERE 1 = 1
+        `;
+    
+        const queryParams = [];
+    
+        // Kiểm tra và thêm điều kiện tìm kiếm giá
+        if (min_price && max_price) {
+            sql += " AND ctsanpham.gia_ban BETWEEN ? AND ?";
+            queryParams.push(min_price, max_price);
+        } else if (min_price) { // Nếu chỉ có min_price
+            sql += " AND ctsanpham.gia_ban >= ?";
+            queryParams.push(min_price);
+        } else if (max_price) { // Nếu chỉ có max_price
+            sql += " AND ctsanpham.gia_ban <= ?";
+            queryParams.push(max_price);
+        }
+    
+        connect.query(sql, queryParams, (err, data) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Internal Server Error');
+            }
+    
+            res.render('user/all_product.ejs', {
+                data: data,
+                user: req.session.user
+            });
+        });
+    }
+    
 }
 
 

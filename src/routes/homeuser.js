@@ -21,4 +21,6 @@ router.get('/order_huy/:id', authMiddleware.loggedinUser, homeUserController.ord
 
 
 router.get('/all_product', homeUserController.all_product);
+router.get('/search_product_all_user', homeUserController.search_product_all_user);
+router.get('/searchPrice_product_all_user', homeUserController.searchPrice_product_all_user);
 module.exports = router;

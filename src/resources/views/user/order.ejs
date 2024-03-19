@@ -235,8 +235,11 @@
                   <% } }); } if (!hasActiveProducts) { %>
                     <p>Không có dữ liệu</p>
                     <% } %>
-                      <p class="text-end">Tổng tiền phải thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
+                      <p class="text-end">Tổng tiền thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
                       </p>
+                      <div class="text-end">
+                        <button href="#" onclick="" class="btn btn-outline-danger mx-2 mb-3">Đã nhận hàng</button>
+                      </div>
               </div>
               <% } }); if (!hasActiveOrder) { %>
                 <p>Không có dữ liệu</p>
@@ -286,9 +289,10 @@
                     <p>Không có dữ liệu</p>
                     <% } %>
                       <div>
-                        <p class="text-end mx-2">Tổng tiền phải thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan
+                        <p class="text-end mx-2">Tổng tiền thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan
                             %>
                         </p>
+                        
                       </div>
                       <div class="text-end">
                         <a href="#" class="btn btn-outline-success mx-2 mb-3">Mua lại</a>
