@@ -29,6 +29,9 @@
             <a class="nav-link" href="#da_giao" data-toggle="tab">Đã giao</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="#thanh_cong" data-toggle="tab">Thành công</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="#da_huy" data-toggle="tab">Đã hủy</a>
           </li>
         </ul>
@@ -237,6 +240,59 @@
                       <div class="text-end">
                         <a onclick="da_nhan_hang(`<%= don_mua_hang_item.id %>`)"
                           class="btn btn-outline-danger mx-2 mb-3">Đã nhận hàng</a>
+                      </div>
+              </div>
+              <% } }); if (!hasActiveOrder) { %>
+                <p>Không có dữ liệu</p>
+                <% } } else { %>
+                  <p>Không có dữ liệu</p>
+                  <% } %>
+          </div>
+          <div class="tab-pane" id="thanh_cong">
+            <% if (don_mua_hang.length> 0) {
+              var hasActiveOrder = false;
+              don_mua_hang.forEach(function(don_mua_hang_item, index) {
+              if (don_mua_hang_item.trang_thai === 6) {
+              hasActiveOrder = true;
+              %>
+              <div class="row">
+                <div class="">
+                  <p class="user_order text-start">HD: <%= don_mua_hang_item.id %>
+                  </p>
+                </div>
+                <% var hasActiveProducts=false; if (data && data.length> 0) {
+                  data.forEach(function(order, index) {
+                  if (user.id == order.khach_hang_id && order.don_mua_hang_id === don_mua_hang_item.id) {
+                  hasActiveProducts = true;
+                  %>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                        src="/imgUpload/<%= order.hinh_anh %>">
+                    </div>
+                    <div class="col-lg-6">
+                      <p>Thông tin sản phẩm</p>
+                      <p>
+                        <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%= order.so_luong
+                                %>
+                      </p>
+                    </div>
+                    <div class="col-lg-3">
+                      <p>Giá</p>
+                      <p>
+                        <%= order.gia_ban %>
+                      </p>
+
+                    </div>
+                  </div>
+                  <% } }); } if (!hasActiveProducts) { %>
+                    <p>Không có dữ liệu</p>
+                    <% } %>
+                      <p class="text-end">Tổng tiền thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
+                      </p>
+                      <div class="text-end">
+                        <a onclick=""
+                          class="btn btn-outline-danger mx-2 mb-3">Bảo hành</a>
                       </div>
               </div>
               <% } }); if (!hasActiveOrder) { %>

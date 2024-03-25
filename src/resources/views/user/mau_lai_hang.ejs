@@ -50,17 +50,23 @@
                                 </td>
                                 <td>
                                     <div>
-                                        <span id="so_luong">
+                                        <button onclick="decreaseQuantity('<%= item.id %>')">-</button>
+                                        <span id="so_luong_<%= item.id %>">
                                             <%= item.so_luong %>
                                         </span>
+                                        <button onclick="increaseQuantity('<%= item.id %>')">+</button>
                                     </div>
                                 </td>
-                                <td id="gia_ban">
+                                <td id="gia_ban_<%= item.id %>">
                                     <%= item.gia_ban %>
                                 </td>
-                                <td><span id="tong_gia">
-                                        <%= item.gia_ban * item.so_luong %> %>
-                                    </span></td>
+                                <td><span id="tong_gia_<%= item.id %>">
+                                        <%= item.gia_ban * item.so_luong %>
+                                    </span>
+                                </td>
+                                <td id="don_mua_hang_id_<%= index + 1 %>">
+                                    <%= item.don_mua_hang_id %>
+                                </td>
 
                             </tr>
                             <% }); %>
@@ -86,15 +92,90 @@
                 <div class="col-lg-4">
                     <p>TỔNG TIỀN</p>
                     <hr>
-                    <p>Tổng phụ: ...</p>
                     <p>Phí vận chuyển: ...</p>
-                    <p>Tổng tiền:</p>
                     <p id="tong_tien_thanh_toan"></p>
 
-                    <button class="btn btn-primary" onclick="">ĐẶT HÀNG</button>
+                    <button class="btn btn-primary" onclick="placeOrder()">ĐẶT HÀNG</button>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            calculateTotalPrice(); // Tính tổng tiền khi trang được tải
+        });
 
+        function decreaseQuantity(itemId) {
+            var quantityElement = document.getElementById('so_luong_' + itemId);
+            var currentQuantity = parseInt(quantityElement.innerText);
+            if (currentQuantity > 1) {
+                updateQuantity(itemId, currentQuantity - 1);
+            }
+        }
+
+        function increaseQuantity(itemId) {
+            var quantityElement = document.getElementById('so_luong_' + itemId);
+            var currentQuantity = parseInt(quantityElement.innerText);
+            updateQuantity(itemId, currentQuantity + 1);
+        }
+
+        function updateQuantity(itemId, newQuantity) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById('so_luong_' + itemId).innerText = newQuantity;
+                    updateTotalPrice(itemId); // Cập nhật tổng tiền cho sản phẩm này
+                    calculateTotalPrice(); // Tính lại tổng tiền cho tất cả các sản phẩm
+                }
+            };
+            xhttp.open("POST", "/updateQuantity_mua_lai", true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.send(JSON.stringify({ itemId: itemId, newQuantity: newQuantity }));
+        }
+
+        function updateTotalPrice(itemId) {
+            var quantityElement = document.getElementById('so_luong_' + itemId);
+            var priceElement = document.getElementById('gia_ban_' + itemId);
+            var totalPriceElement = document.getElementById('tong_gia_' + itemId);
+
+            var currentQuantity = parseInt(quantityElement.innerText);
+            var price = parseFloat(priceElement.innerText);
+
+            totalPriceElement.innerText = (price * currentQuantity).toFixed(0);
+        }
+
+        function calculateTotalPrice() {
+            var total = 0;
+            var totalPriceElements = document.querySelectorAll('[id^="tong_gia_"]');
+
+            totalPriceElements.forEach(function (element) {
+                total += parseFloat(element.innerText);
+            });
+
+            document.getElementById('tong_tien_thanh_toan').innerText ="Tổng tiền: " + total.toFixed(0);
+        }
+
+        function placeOrder() {
+            var totalPrice = parseFloat(document.getElementById('tong_tien_thanh_toan').innerText);
+            var donMuaHangId = document.getElementById('don_mua_hang_id_1').innerText;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    // Thông báo cho người dùng rằng đơn hàng đã được đặt thành công
+                    alert('Đơn hàng của bạn đã được đặt thành công!');
+
+                    // Sau khi đặt hàng thành công, bạn có thể thực hiện các hành động khác, ví dụ: chuyển hướng người dùng đến trang cảm ơn
+                    window.location.href = "/order"; // Điều hướng đến trang cảm ơn
+                } else if (this.readyState == 4 && this.status != 200) {
+                    // Thông báo cho người dùng rằng có lỗi khi đặt hàng
+                    alert('Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại sau.');
+                }
+            };
+
+            xhttp.open("POST", "/placeOrder/" + donMuaHangId, true); // Thay đổi đường dẫn API của bạn tương ứng
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.send(JSON.stringify({ totalPrice: totalPrice, donMuaHangId: donMuaHangId }));
+        }
+
+    </script>
     <%- include('footerUser.ejs') %>

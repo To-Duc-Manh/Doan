@@ -605,7 +605,7 @@ class homeUserController {
         });
     }
 
-    mua_lai_hang(req, res) {
+    select_mua_lai_hang(req, res) {
         const orderId = req.params.id;
 
         let sql_hd = 'SELECT * FROM tbl_don_mua_hang';
@@ -616,6 +616,7 @@ class homeUserController {
             }
             let sql = `SELECT 
         tbl_chi_tiet_don_mua_hang.so_luong AS so_luong,
+        tbl_chi_tiet_don_mua_hang.id as id,
         tbl_chi_tiet_don_mua_hang.don_mua_hang_id AS don_mua_hang_id,
         tbl_chi_tiet_san_pham.hinh_anh AS hinh_anh,
         tbl_san_pham.ten_san_pham AS ten_san_pham,
@@ -645,8 +646,34 @@ class homeUserController {
             });
         });
     }
+    updateQuantity_mua_lai(req, res) {
+        const { itemId, newQuantity } = req.body;
+        const sql = 'UPDATE tbl_chi_tiet_don_mua_hang SET so_luong = ? WHERE id = ?';
 
+        connect.query(sql, [newQuantity, itemId], (error, results, fields) => {
+            if (error) {
+                res.status(500).json({ error: 'Internal Server Error' });
+            } else {
+                res.status(200).send('Update successful');
+            }
+        });
+    }
 
+    xac_nhan_mua_lai_hang(req, res) {
+        const { totalPrice, donMuaHangId } = req.body;
+        console.log(totalPrice, donMuaHangId);
+        const sql = 'UPDATE tbl_don_mua_hang SET tong_tien_thanh_toan = ?, trang_thai = 1, ngay_tao = now() WHERE id = ?';
+    
+        connect.query(sql, [totalPrice, donMuaHangId], (err, result) => {
+            if (err) {
+                res.status(500).json({ message: 'Error updating order', error: err });
+                return;
+            }
+    
+            res.status(200).json({ message: 'Order updated successfully', result: result });
+        });
+    }
+    
 }
 
 

@@ -13,17 +13,19 @@ router.post('/dat_hang_cart_hd', authMiddleware.loggedinUser, homeUserController
 router.get('/delete_cart/:id', authMiddleware.loggedinUser, homeUserController.delete_cart);
 router.get('/dat_hang/:id', authMiddleware.loggedinUser, homeUserController.dat_hang);
 router.post('/dat_hang2', authMiddleware.loggedinUser, homeUserController.dat_hang2);
-router.post('/dat_hang_cart', homeUserController.dat_hang_cart);
+router.post('/dat_hang_cart', authMiddleware.loggedinUser, homeUserController.dat_hang_cart);
 
 
 router.get('/order', authMiddleware.loggedinUser, homeUserController.order);
 router.get('/order_huy/:id', authMiddleware.loggedinUser, homeUserController.order_huy);
-router.get('/da_nhan_hang/:id', homeUserController.da_nhan_hang);
+router.get('/da_nhan_hang/:id', authMiddleware.loggedinUser, homeUserController.da_nhan_hang);
 
-router.get('/all_product', homeUserController.all_product);
+router.get('/all_product', authMiddleware.loggedinUser, homeUserController.all_product);
 router.get('/search_product_all_user', homeUserController.search_product_all_user);
 router.get('/searchPrice_product_all_user', homeUserController.searchPrice_product_all_user);
 
-router.get('/lich_su_mua_hang', homeUserController.lich_su_mua_hang);
-router.get('/mua_lai_hang/:id', homeUserController.mua_lai_hang);
+router.get('/lich_su_mua_hang', authMiddleware.loggedinUser, homeUserController.lich_su_mua_hang);
+router.get('/mua_lai_hang/:id', authMiddleware.loggedinUser, homeUserController.select_mua_lai_hang);
+router.post('/updateQuantity_mua_lai', authMiddleware.loggedinUser, homeUserController.updateQuantity_mua_lai)
+router.post('/placeOrder/:id', authMiddleware.loggedinUser, homeUserController.xac_nhan_mua_lai_hang);
 module.exports = router;
