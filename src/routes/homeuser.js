@@ -18,9 +18,12 @@ router.post('/dat_hang_cart', homeUserController.dat_hang_cart);
 
 router.get('/order', authMiddleware.loggedinUser, homeUserController.order);
 router.get('/order_huy/:id', authMiddleware.loggedinUser, homeUserController.order_huy);
-
+router.get('/da_nhan_hang/:id', homeUserController.da_nhan_hang);
 
 router.get('/all_product', homeUserController.all_product);
 router.get('/search_product_all_user', homeUserController.search_product_all_user);
 router.get('/searchPrice_product_all_user', homeUserController.searchPrice_product_all_user);
+
+router.get('/lich_su_mua_hang', homeUserController.lich_su_mua_hang);
+router.get('/mua_lai_hang/:id', homeUserController.mua_lai_hang);
 module.exports = router;

@@ -86,9 +86,8 @@
                 <div class="col-lg-4">
                     <p>TỔNG TIỀN</p>
                     <hr>
-                    <p>Tổng phụ: ...</p>
                     <p>Phí vận chuyển: ...</p>
-                    <p>Tổng tiền:</p>
+                    <p id="tong_tien_thanh_toan">Tổng tiền:</p>
                     <p id="tong_tien_thanh_toan"></p>
 
                     <button class="btn btn-primary" onclick="datHang()">ĐẶT HÀNG</button>
@@ -98,6 +97,23 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var phi_ship = 10;
+            var tongGia = 0;
+
+            var rows = document.querySelectorAll("tbody tr");
+            rows.forEach(function (row) {
+                var soLuong = parseInt(row.querySelector("#so_luong").innerText);
+                var giaBan = parseFloat(row.querySelector("#gia_ban").innerText);
+                var tongGiaSanPham = soLuong * giaBan;
+                tongGia += tongGiaSanPham;
+            });
+
+            var tong_tien_thanh_toan = tongGia + phi_ship;
+
+            document.getElementById("tong_tien_thanh_toan").innerText = "Tổng tiền: " + tong_tien_thanh_toan + " đ";
+        });
+
         function datHang() {
             var hoTen = document.getElementById("ho_ten").innerText;
             var soDienThoai = document.getElementById("so_dien_thoai").innerText;
@@ -105,6 +121,7 @@
             var ghiChu = document.getElementById("ghi_chu").value;
             var hinhThucThanhToan = document.getElementById("hinh_thuc_thanh_toan").value;
 
+            var phi_ship = 10;
             var tongGia = 0;
             var sanPhamArray = []; // Mảng lưu thông tin của từng sản phẩm
 
@@ -124,7 +141,7 @@
                 sanPhamArray.push(sanPham); // Thêm thông tin sản phẩm vào mảng
             });
 
-            var tong_tien_thanh_toan = tongGia; // Sét tổng tiền thanh toán bằng tổng giá
+            var tong_tien_thanh_toan = tongGia + phi_ship; // Sét tổng tiền thanh toán bằng tổng giá
 
             // Gửi dữ liệu thông qua fetch
             fetch('/dat_hang_cart_hd', {

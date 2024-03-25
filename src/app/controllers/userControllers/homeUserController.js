@@ -165,7 +165,7 @@ class homeUserController {
         const userId = req.session.user.id;
         // Thực hiện chèn dữ liệu vào bảng "tbl_don_mua_hang"
         const donHangQuery = `INSERT INTO tbl_don_mua_hang (khach_hang_id, ten_nguoi_mua, so_dien_thoai, dia_chi_mua_hang, ghi_chu, tong_tien, tong_tien_thanh_toan, hinh_thuc_thanh_toan, trang_thai, ngay_tao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
-        const donHangValues = [userId, hoTen, soDienThoai, diaChi, ghiChu, tongGia, 0, hinhThucThanhToan, 1];
+        const donHangValues = [userId, hoTen, soDienThoai, diaChi, ghiChu, tongGia, tong_tien_thanh_toan, hinhThucThanhToan, 1];
 
         connect.query(donHangQuery, donHangValues, (error, results, fields) => {
             if (error) {
@@ -210,11 +210,11 @@ class homeUserController {
 
             });
         });
-        console.log('selectedProductIds', selectedProductIds);
+
     }
 
     dat_hang_cart_hd(req, res) {
-        const { hoTen, soDienThoai, diaChi, ghiChu, hinhThucThanhToan, tong_tien_thanh_toan, sanPhamArray } = req.body;
+        const { hoTen, soDienThoai, diaChi, ghiChu, hinhThucThanhToan, tongGia, tong_tien_thanh_toan, sanPhamArray } = req.body;
         const userId = req.session.user.id;
 
         // Thực hiện chèn dữ liệu vào bảng "tbl_don_mua_hang"
@@ -222,7 +222,7 @@ class homeUserController {
             INSERT INTO tbl_don_mua_hang 
             (khach_hang_id, ten_nguoi_mua, so_dien_thoai, dia_chi_mua_hang, ghi_chu, tong_tien, tong_tien_thanh_toan, hinh_thuc_thanh_toan, trang_thai, ngay_tao) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
-        const donHangValues = [userId, hoTen, soDienThoai, diaChi, ghiChu, 0, tong_tien_thanh_toan, hinhThucThanhToan, 1];
+        const donHangValues = [userId, hoTen, soDienThoai, diaChi, ghiChu, tongGia, tong_tien_thanh_toan, hinhThucThanhToan, 1];
 
         connect.query(donHangQuery, donHangValues, (error, results, fields) => {
             if (error) {
@@ -348,7 +348,7 @@ class homeUserController {
             });
 
             console.log(`Cập nhật trạng thái thành công: ${newStatus} cho đơn hàng có id ${orderId}`);
-            res.status(200).send(newStatus.toString()); // Trả về trạng thái mới
+            res.redirect('/order');
         } catch (error) {
             console.error('Lỗi khi cập nhật trạng thái:', error);
             res.status(500).send('Lỗi khi cập nhật trạng thái.');
@@ -462,13 +462,18 @@ class homeUserController {
         });
     }
 
-
-
     searchPrice_product_all_user(req, res) {
         const min_price = req.query.min_price;
         const max_price = req.query.max_price;
 
-        let sql = `
+        let nha_san_xuat_sql = "SELECT * FROM tbl_nha_san_xuat";
+
+        connect.query(nha_san_xuat_sql, (err, nhaSanXuatList) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Internal Server Error');
+            }
+            let sql = `
             SELECT 
                 sp.ten_san_pham, 
                 ctsanpham.hinh_anh AS hinh_anh, 
@@ -484,32 +489,163 @@ class homeUserController {
             WHERE 1 = 1
         `;
 
-        const queryParams = [];
+            const queryParams = [];
 
-        // Kiểm tra và thêm điều kiện tìm kiếm giá
-        if (min_price && max_price) {
-            sql += " AND ctsanpham.gia_ban BETWEEN ? AND ?";
-            queryParams.push(min_price, max_price);
-        } else if (min_price) { // Nếu chỉ có min_price
-            sql += " AND ctsanpham.gia_ban >= ?";
-            queryParams.push(min_price);
-        } else if (max_price) { // Nếu chỉ có max_price
-            sql += " AND ctsanpham.gia_ban <= ?";
-            queryParams.push(max_price);
+            // Kiểm tra và thêm điều kiện tìm kiếm giá
+            if (min_price && max_price) {
+                sql += " AND ctsanpham.gia_ban BETWEEN ? AND ?";
+                queryParams.push(min_price, max_price);
+            } else if (min_price) { // Nếu chỉ có min_price
+                sql += " AND ctsanpham.gia_ban >= ?";
+                queryParams.push(min_price);
+            } else if (max_price) { // Nếu chỉ có max_price
+                sql += " AND ctsanpham.gia_ban <= ?";
+                queryParams.push(max_price);
+            }
+
+            connect.query(sql, queryParams, (err, data) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Internal Server Error');
+                }
+
+                res.render('user/all_product.ejs', {
+                    data: data,
+                    user: req.session.user,
+                    nhaSanXuatList: nhaSanXuatList
+                });
+            });
+        });
+    }
+
+    async da_nhan_hang(req, res) {
+        try {
+            // Lấy id của đơn hàng từ request
+            const orderId = req.params.id;
+
+            // Truy vấn trạng thái hiện tại của đơn hàng từ cơ sở dữ liệu
+            const data = await new Promise((resolve, reject) => {
+                connect.query(`SELECT * FROM tbl_don_mua_hang WHERE id = ${orderId}`, (err, data) => {
+                    if (err) reject(err);
+                    else resolve(data);
+                });
+            });
+
+            if (data.length === 0) {
+                console.log('Không tìm thấy đơn hàng.');
+                res.status(404).send('Không tìm thấy đơn hàng.');
+                return;
+            }
+
+            const currentStatus = data[0].trang_thai;
+
+            // Xác định trạng thái mới
+            let newStatus;
+            if (currentStatus === 4) {
+                newStatus = 6;
+            }
+            else {
+                console.log('Không có trạng thái nào phù hợp để cập nhật.');
+                res.status(400).send('Không có trạng thái nào phù hợp để cập nhật.');
+                return;
+            }
+
+            // Cập nhật trạng thái mới vào cơ sở dữ liệu
+            await new Promise((resolve, reject) => {
+                connect.query('UPDATE tbl_don_mua_hang SET trang_thai = ? WHERE id = ?', [newStatus, orderId], (err) => {
+                    if (err) reject(err);
+                    else resolve();
+                });
+            });
+
+            console.log(`Cập nhật trạng thái thành công: ${newStatus} cho đơn hàng có id ${orderId}`);
+            res.redirect('/lich_su_mua_hang');
+        } catch (error) {
+            console.error('Lỗi khi cập nhật trạng thái:', error);
+            res.status(500).send('Lỗi khi cập nhật trạng thái.');
         }
+    }
 
-        connect.query(sql, queryParams, (err, data) => {
+    lich_su_mua_hang(req, res) {
+        let sql_hd = 'SELECT * FROM tbl_don_mua_hang';
+        connect.query(sql_hd, (err, don_mua_hang) => {
             if (err) {
                 console.error(err);
                 return res.status(500).send('Internal Server Error');
             }
+            let sql = `SELECT 
+        tbl_chi_tiet_don_mua_hang.so_luong AS so_luong,
+        tbl_chi_tiet_don_mua_hang.don_mua_hang_id AS don_mua_hang_id,
+        tbl_chi_tiet_san_pham.hinh_anh AS hinh_anh,
+        tbl_san_pham.ten_san_pham AS ten_san_pham,
+        tbl_dung_luong.ten_dung_luong AS dung_luong,
+        tbl_mau_sac.ten_mau_sac AS mau_sac,
+        tbl_chi_tiet_san_pham.gia_ban AS gia_ban,
+        tbl_don_mua_hang.tong_tien AS tong_tien,
+        tbl_don_mua_hang.trang_thai AS trang_thai,
+        tbl_don_mua_hang.khach_hang_id AS khach_hang_id
+    FROM 
+        tbl_chi_tiet_don_mua_hang
+    JOIN tbl_don_mua_hang ON tbl_chi_tiet_don_mua_hang.don_mua_hang_id = tbl_don_mua_hang.id
+    JOIN tbl_chi_tiet_san_pham ON tbl_chi_tiet_don_mua_hang.chi_tiet_san_pham_id = tbl_chi_tiet_san_pham.id
+    JOIN tbl_san_pham ON tbl_chi_tiet_san_pham.san_pham_id = tbl_san_pham.id
+    JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
+    JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id;
+    `;
 
-            res.render('user/all_product.ejs', {
-                data: data,
-                user: req.session.user
+            connect.query(sql, (err, data) => {
+                res.render('user/lich_su_mua_hang.ejs', {
+                    data: data,
+                    don_mua_hang: don_mua_hang,
+                    user: req.session.user
+                });
+                console.log(data);
+
             });
         });
     }
+
+    mua_lai_hang(req, res) {
+        const orderId = req.params.id;
+
+        let sql_hd = 'SELECT * FROM tbl_don_mua_hang';
+        connect.query(sql_hd, (err, don_mua_hang) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Internal Server Error');
+            }
+            let sql = `SELECT 
+        tbl_chi_tiet_don_mua_hang.so_luong AS so_luong,
+        tbl_chi_tiet_don_mua_hang.don_mua_hang_id AS don_mua_hang_id,
+        tbl_chi_tiet_san_pham.hinh_anh AS hinh_anh,
+        tbl_san_pham.ten_san_pham AS ten_san_pham,
+        tbl_dung_luong.ten_dung_luong AS dung_luong,
+        tbl_mau_sac.ten_mau_sac AS mau_sac,
+        tbl_chi_tiet_san_pham.gia_ban AS gia_ban,
+        tbl_don_mua_hang.tong_tien AS tong_tien,
+        tbl_don_mua_hang.trang_thai AS trang_thai,
+        tbl_don_mua_hang.khach_hang_id AS khach_hang_id
+    FROM 
+        tbl_chi_tiet_don_mua_hang
+    JOIN tbl_don_mua_hang ON tbl_chi_tiet_don_mua_hang.don_mua_hang_id = tbl_don_mua_hang.id
+    JOIN tbl_chi_tiet_san_pham ON tbl_chi_tiet_don_mua_hang.chi_tiet_san_pham_id = tbl_chi_tiet_san_pham.id
+    JOIN tbl_san_pham ON tbl_chi_tiet_san_pham.san_pham_id = tbl_san_pham.id
+    JOIN tbl_mau_sac ON tbl_chi_tiet_san_pham.mau_sac_id = tbl_mau_sac.id
+    JOIN tbl_dung_luong ON tbl_chi_tiet_san_pham.dung_luong_id = tbl_dung_luong.id WHERE tbl_don_mua_hang.id = ${orderId};
+    `;
+
+            connect.query(sql, (err, data) => {
+                res.render('user/mau_lai_hang.ejs', {
+                    data: data,
+                    don_mua_hang: don_mua_hang,
+                    user: req.session.user
+                });
+                console.log(data);
+
+            });
+        });
+    }
+
 
 }
 

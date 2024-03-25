@@ -1,0 +1,100 @@
+<%- include('headerUser.ejs') %>
+
+    <div class="container" style=" margin-bottom: 150px">
+        <div>
+            <h3 class="text-start">ĐẶT HÀNG </h3>
+            <p>Địa chỉ: <span id="ho_ten">
+                    <%= user.ho_ten %>
+                </span> - <span id="so_dien_thoai">
+                    <%= user.so_dien_thoai %>
+                </span> - <span id="dia_chi">
+                    <%= user.dia_chi %>
+                </span></p>
+            <textarea id="ghi_chu" style="width: 100%;" placeholder="Ghi chu"></textarea>
+        </div>
+
+        <div>
+            <table style="margin-top: 50px;"
+                class="table table-PW table-striped table-hover table-borderless align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center">Hình ảnh</th>
+                        <th>Sản phẩm</th>
+                        <th>Mau sắc</th>
+                        <th>Dung lượng</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+
+                    <% if (data && data.length> 0) { %>
+                        <% data.forEach(function (item, index) { %>
+                            <tr>
+                                <td id="chi_tiet_id" hidden>
+                                    <%= item.chi_tiet_id %>
+                                </td>
+                                <td class="text-center">
+                                    <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                                        src="/imgUpload/<%= item.hinh_anh %>">
+                                </td>
+                                <td>
+                                    <%= item.ten_san_pham %>
+                                </td>
+                                <td>
+                                    <%= item.ten_mau_sac %>
+                                </td>
+                                <td>
+                                    <%= item.ten_dung_luong %>
+                                </td>
+                                <td>
+                                    <div>
+                                        <span id="so_luong">
+                                            <%= item.so_luong %>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td id="gia_ban">
+                                    <%= item.gia_ban %>
+                                </td>
+                                <td><span id="tong_gia">
+                                        <%= item.gia_ban * item.so_luong %> %>
+                                    </span></td>
+
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">Không có dữ liệu</td>
+                                    </tr>
+                                    <% } %>
+
+
+                </tbody>
+            </table>
+            <div class="row mt-5">
+                <div class="col-lg-4">
+                    <p>PHƯƠNG THỨC THANH TOÁN</p>
+                    <hr>
+                    <select id="hinh_thuc_thanh_toan">
+                        <option value="1">Thanh toán khi nhận hàng</option>
+                        <option value="2">Thanh toán bằng ngân hàng</option>
+                    </select>
+                </div>
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                    <p>TỔNG TIỀN</p>
+                    <hr>
+                    <p>Tổng phụ: ...</p>
+                    <p>Phí vận chuyển: ...</p>
+                    <p>Tổng tiền:</p>
+                    <p id="tong_tien_thanh_toan"></p>
+
+                    <button class="btn btn-primary" onclick="">ĐẶT HÀNG</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('footerUser.ejs') %>

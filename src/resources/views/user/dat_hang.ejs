@@ -65,10 +65,11 @@
                 <div class="col-lg-4">
                     <p>TỔNG TIỀN</p>
                     <hr>
-                    <p>Tổng phụ: ...</p>
                     <p>Phí vận chuyển: ...</p>
                     <p>Tổng tiền:</p>
-                    <p id="tong_tien_thanh_toan"></p>
+                    <p id="tong_tien_thanh_toan">
+                        <%= product_datHang.gia_ban * so_luong + 10 %>
+                    </p>
 
                     <button class="btn btn-primary" onclick="datHang()">ĐẶT HÀNG</button>
                 </div>
@@ -79,12 +80,14 @@
     <script>
         var so_luong_element = document.getElementById("so_luong");
         var tong_gia_element = document.getElementById("tong_gia");
+        var tong_tien_thanh_toan_element = document.getElementById("tong_tien_thanh_toan");
         var gia_ban = '<%= product_datHang.gia_ban %>';
 
         function updateTotalPrice() {
             var so_luong = parseInt(so_luong_element.innerText);
             var tong_gia = gia_ban * so_luong;
             tong_gia_element.innerText = tong_gia;
+            tong_tien_thanh_toan_element.innerText = parseFloat(tong_gia) + 10;
         }
 
         function decreaseQuantity() {
@@ -114,7 +117,8 @@
             var tongGia = parseFloat(document.getElementById("tong_gia").innerText);
             var tong_tien_thanh_toan = parseFloat(document.getElementById("tong_tien_thanh_toan").innerText);
             var san_pham_id = '<%= product_datHang.chi_tiet_id %>'
-            console.log(soDienThoai)
+
+
 
             fetch('/dat_hang2', {
                 method: 'POST',
@@ -143,6 +147,7 @@
                 .then(data => {
                     console.log('Đặt hàng thành công: ', data);
                     alert('Đặt hàng thành công!');
+                    window.location.href = '/order';
                 })
                 .catch(error => {
                     console.error('Đặt hàng thất bại: ', error);

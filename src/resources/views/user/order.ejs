@@ -8,9 +8,9 @@
             <p>Manh</p>
           </div>
           <ul class="">
-            <li class="item_"><a href="#">Dơn mua hàng</a></li>
+            <li class="item_"><a href="/order">Dơn mua hàng</a></li>
             <li class="item_ mt-3"><a>Đơn bảo hành</a></li>
-            <li class="item_ mt-3 pb-3"><a>Lịch sử mua hàng</a></li>
+            <li class="item_ mt-3 pb-3"><a href="/lich_su_mua_hang">Lịch sử mua hàng</a></li>
           </ul>
         </div>
       </div>
@@ -69,8 +69,7 @@
                         <p>
                           <%= order.gia_ban %>
                         </p>
-                        <p>Tổng tiền: <%= order.tong_tien %>
-                        </p>
+
                       </div>
                     </div>
                     <% } }); } if (!hasActiveProducts) { %>
@@ -82,7 +81,8 @@
                           </p>
                         </div>
                         <div class="text-end">
-                          <a href="#" onclick="confirmCancelOrder(`<%= don_mua_hang_item.id %>`)" class="btn btn-outline-danger mx-2 mb-3">Hủy đơn hàng</a>
+                          <a href="#" onclick="confirmCancelOrder(`<%= don_mua_hang_item.id %>`)"
+                            class="btn btn-outline-danger mx-2 mb-3">Hủy đơn hàng</a>
                         </div>
                 </div>
                 <% } }); if (!hasActiveOrder) { %>
@@ -126,8 +126,7 @@
                       <p>
                         <%= order.gia_ban %>
                       </p>
-                      <p>Tổng tiền: <%= order.tong_tien %>
-                      </p>
+
                     </div>
                   </div>
                   <% } }); } if (!hasActiveProducts) { %>
@@ -178,8 +177,7 @@
                       <p>
                         <%= order.gia_ban %>
                       </p>
-                      <p>Tổng tiền: <%= order.tong_tien %>
-                      </p>
+
                     </div>
                   </div>
                   <% } }); } if (!hasActiveProducts) { %>
@@ -228,8 +226,7 @@
                       <p>
                         <%= order.gia_ban %>
                       </p>
-                      <p>Tổng tiền: <%= order.tong_tien %>
-                      </p>
+
                     </div>
                   </div>
                   <% } }); } if (!hasActiveProducts) { %>
@@ -238,7 +235,8 @@
                       <p class="text-end">Tổng tiền thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
                       </p>
                       <div class="text-end">
-                        <button href="#" onclick="" class="btn btn-outline-danger mx-2 mb-3">Đã nhận hàng</button>
+                        <a onclick="da_nhan_hang(`<%= don_mua_hang_item.id %>`)"
+                          class="btn btn-outline-danger mx-2 mb-3">Đã nhận hàng</a>
                       </div>
               </div>
               <% } }); if (!hasActiveOrder) { %>
@@ -272,8 +270,8 @@
                     <div class="col-lg-6">
                       <p>Thông tin sản phẩm</p>
                       <p>
-                        <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%=
-                                order.so_luong %>
+                        <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%= order.so_luong
+                                %>
                       </p>
                     </div>
                     <div class="col-lg-3">
@@ -281,21 +279,20 @@
                       <p>
                         <%= order.gia_ban %>
                       </p>
-                      <p>Tổng tiền: <%= order.tong_tien %>
-                      </p>
+
                     </div>
                   </div>
                   <% } }); } if (!hasActiveProducts) { %>
                     <p>Không có dữ liệu</p>
                     <% } %>
                       <div>
-                        <p class="text-end mx-2">Tổng tiền thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan
-                            %>
+                        <p class="text-end mx-2">Tổng tiền thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
                         </p>
-                        
+
                       </div>
                       <div class="text-end">
-                        <a href="#" class="btn btn-outline-success mx-2 mb-3">Mua lại</a>
+                        <a href="#" onclick="mua_lai_hang(`<%= don_mua_hang_item.id %>`)"
+                          class="btn btn-outline-success mx-2 mb-3">Mua lại</a>
                       </div>
               </div>
               <% } }); if (!hasActiveOrder) { %>
@@ -315,13 +312,26 @@
 
   <script>
     function confirmCancelOrder(orderId) {
-        if (confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?")) {
-            // Nếu người dùng đồng ý, gửi yêu cầu hủy đơn hàng đến máy chủ
-            window.location.href = "/order_huy/" + orderId;
-        } else {
-            // Nếu người dùng không đồng ý, không thực hiện hành động nào
-            return false;
-        }
+      if (confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?")) {
+        // Nếu người dùng đồng ý, gửi yêu cầu hủy đơn hàng đến máy chủ
+        window.location.href = "/order_huy/" + orderId;
+
+      } else {
+        // Nếu người dùng không đồng ý, không thực hiện hành động nào
+        return false;
+      }
     }
-</script>
+    function da_nhan_hang(orderId) {
+      if (confirm("Đã nhận hàng")) {
+        window.location.href = "/da_nhan_hang/" + orderId;
+      } else {
+        // Nếu người dùng không đồng ý, không thực hiện hành động nào
+        return false;
+      }
+    }
+
+    function mua_lai_hang(orderId) {
+      window.location.href = "/mua_lai_hang/" + orderId;
+    }
+  </script>
   <%- include('footerUser.ejs') %>
