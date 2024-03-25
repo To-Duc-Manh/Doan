@@ -171,7 +171,6 @@
                     alert('Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại sau.');
                 }
             };
-
             xhttp.open("POST", "/placeOrder/" + donMuaHangId, true); // Thay đổi đường dẫn API của bạn tương ứng
             xhttp.setRequestHeader("Content-type", "application/json");
             xhttp.send(JSON.stringify({ totalPrice: totalPrice, donMuaHangId: donMuaHangId }));
