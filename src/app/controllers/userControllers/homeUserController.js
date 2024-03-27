@@ -663,17 +663,106 @@ class homeUserController {
         const { totalPrice, donMuaHangId } = req.body;
         console.log(totalPrice, donMuaHangId);
         const sql = 'UPDATE tbl_don_mua_hang SET tong_tien_thanh_toan = ?, trang_thai = 1, ngay_tao = now() WHERE id = ?';
-    
+
         connect.query(sql, [totalPrice, donMuaHangId], (err, result) => {
             if (err) {
                 res.status(500).json({ message: 'Error updating order', error: err });
                 return;
             }
-    
+
             res.status(200).json({ message: 'Order updated successfully', result: result });
         });
     }
-    
+
+    // tai_khoan
+    tai_khoan(req, res) {
+
+        let sql = "SELECT * FROM tbl_khach_hang WHERE id = ?";
+
+        connect.query(sql, [req.session.user.id], (err, khach_hang) => {
+            let thanhPhoSql = "SELECT * FROM tbl_thanh_pho";
+            if (err) {
+                return res.status(500).send('Internal Server Error');
+            }
+            connect.query(thanhPhoSql, (err, thanhPhoList) => {
+                if (err) {
+                    return res.status(500).send('Internal Server Error');
+                }
+                res.render('user/tai_khoan.ejs', {
+                    user: req.session.user,
+                    thanhPhoList: thanhPhoList,
+                    khach_hang: khach_hang[0]
+                });
+            });
+
+        })
+    }
+
+    getHuyenByHuyen(req, res) {
+        let huyenSql = "SELECT * FROM tbl_huyen WHERE thanh_pho_id = ?";
+        connect.query(huyenSql, [req.params.id], (err, huyenList) => {
+            if (err) {
+                return res.status(500).send('Internal Server Error');
+            }
+            res.json(huyenList);
+        });
+    }
+
+    getXaByXa(req, res) {
+        let xaSql = "SELECT * FROM tbl_xa WHERE huyen_id = ?";
+        connect.query(xaSql, [req.params.id], (err, xaList) => {
+            if (err) {
+                return res.status(500).send('Internal Server Error');
+            }
+            res.json(xaList);
+        });
+    }
+
+    update_user(req, res) {
+        let id = req.session.user.id;
+
+        console.log("Request body: ", req.body);
+        const { ho_ten, email, mat_khau, ngay_sinh, gioi_tinh, so_dien_thoai, dia_chi } = req.body;
+
+        const insertUserQuery = "UPDATE tbl_khach_hang SET ? where id = ?";
+        connect.query(insertUserQuery, [{ ho_ten, email, mat_khau, ngay_sinh, gioi_tinh, so_dien_thoai, dia_chi }, id], (err, result) => {
+
+            if (err) {
+                console.log("error: ", err);
+                res.status(500).send("Internal Server Error");
+                return;
+            }
+            res.redirect('/tai_khoan');
+        });
+    }
+
+    doi_mk(req, res) {
+        const { mat_khau_cu, mat_khau_moi } = req.body;
+
+        console.log(req.body)
+        // Lấy thông tin người dùng từ cơ sở dữ liệu
+        connect.query('SELECT * FROM tbl_khach_hang WHERE id = ?', [req.session.user.id], (error, results) => {
+            if (error) {
+                console.error('Lỗi truy vấn:', error);
+                return res.json({ success: false, message: 'Đã xảy ra lỗi. Vui lòng thử lại sau.' });
+            }
+            console.log(results[0])
+            // Kiểm tra mật khẩu cũ
+            if (mat_khau_cu !== results[0].mat_khau) {
+                return res.json({ success: false, message: 'Mật khẩu cũ không chính xác.' });
+            }
+
+            // Cập nhật mật khẩu mới vào cơ sở dữ liệu
+            connect.query('UPDATE tbl_khach_hang SET mat_khau = ?, ngay_cap_nhat = NOW() WHERE id = ?', [mat_khau_moi, req.session.user.id], (error, results) => {
+                if (error) {
+                    console.error('Lỗi cập nhật:', error);
+                    return res.json({ success: false, message: 'Đã xảy ra lỗi. Vui lòng thử lại sau.' });
+                }
+
+                return res.json({ success: true, message: 'Đổi mật khẩu thành công.' });
+            });
+        });
+    }
 }
 
 

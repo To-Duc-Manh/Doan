@@ -1,14 +1,14 @@
 <%- include('headerUser.ejs') %>
-
   <div class="container" style="margin-top: 50px; margin-bottom: 150px">
     <div class="row">
       <div class="col-lg-3">
         <div class="link_order">
           <div class="user_order">
-            <p>Manh</p>
+            <p><%= user.ho_ten %></p>
           </div>
           <ul class="">
-            <li class="item_"><a href="/order">Dơn mua hàng</a></li>
+            <li class="item_"><a href="/tai_khoan">Tài khoản của tôi</a></li>
+            <li class="item_ mt-3"><a href="/order">Dơn mua hàng</a></li>
             <li class="item_ mt-3"><a>Đơn bảo hành</a></li>
             <li class="item_ mt-3 pb-3"><a href="/lich_su_mua_hang">Lịch sử mua hàng</a></li>
           </ul>

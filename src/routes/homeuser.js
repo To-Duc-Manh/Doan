@@ -28,4 +28,12 @@ router.get('/lich_su_mua_hang', authMiddleware.loggedinUser, homeUserController.
 router.get('/mua_lai_hang/:id', authMiddleware.loggedinUser, homeUserController.select_mua_lai_hang);
 router.post('/updateQuantity_mua_lai', authMiddleware.loggedinUser, homeUserController.updateQuantity_mua_lai)
 router.post('/placeOrder/:id', authMiddleware.loggedinUser, homeUserController.xac_nhan_mua_lai_hang);
+
+
+router.get('/tai_khoan', authMiddleware.loggedinUser, homeUserController.tai_khoan);
+router.get('/getHuyenByHuyen/:id', homeUserController.getHuyenByHuyen);
+router.get('/getXaByXa/:id', homeUserController.getXaByXa);
+router.post('/update_user', authMiddleware.loggedinUser, homeUserController.update_user);
+router.post('/doi_mk', authMiddleware.loggedinUser, homeUserController.doi_mk)
+
 module.exports = router;
