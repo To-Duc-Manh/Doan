@@ -17,6 +17,26 @@
                 </div>
             </div>
             <div class="col-lg-9">
+                <div class="col-md-12">
+                    <!-- <label for="validationCustom02" class="form-label"> Mật khẩu </label> -->
+                    <div class="row">
+                        <!-- <div class="col-lg-7">
+                            <div class="d-flex">
+                                <input type="password" name="mat_khau" class="form-control mb-1" id="password"
+                                    value="<%= khach_hang.mat_khau %>" required readonly>
+                                <button type="button" style="border: none; background-color: #fbfbfb;"
+                                    onclick="togglePassword('password')"><i
+                                        class="fa-regular fa-eye-slash"></i></button>
+                            </div>
+                        </div> -->
+                        <div class="text-end">
+                            <button type="button" class="btn btn-outline-primary mx-1" data-bs-toggle="modal"
+                                data-bs-target="#doi_mk">
+                                Đổi mật khẩu
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <form action="/update_user" id="user-form" method="post">
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -29,24 +49,7 @@
                             <input type="email" name="email" class="form-control" id="validationCustom02"
                                 value="<%= khach_hang.email %>" required>
                         </div>
-                        <div class="col-md-6">
-                            <label for="validationCustom02" class="form-label"> Mật khẩu </label>
-                            <div class="row">
-                                <div class="col-lg-7">
-                                    <div class="d-flex">
-                                        <input type="password" name="mat_khau" class="form-control mb-1" id="password"
-                                        value="<%= khach_hang.mat_khau %>" required readonly>                                       
-                                    <button type="button" style="border: none; background-color: #fbfbfb;" onclick="togglePassword('password')"><i class="fa-regular fa-eye-slash"></i></button>
-                                    </div>
-                                </div>
-                                <div class="col-lg-5">
-                                    <button type="button" class="btn btn-outline-primary mx-1" data-bs-toggle="modal"
-                                        data-bs-target="#doi_mk">
-                                        Đổi mật khẩu
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="col-md-6">
                             <label for="validationCustom03" class="form-label">Ngày sinh</label>
                             <input type="date" name="ngay_sinh" class="form-control" id="validationCustom03"
@@ -159,26 +162,32 @@
                                     <div class="">
                                         <label for="mat_khau_cu" class="form-label">Mật khẩu cũ</label>
                                         <div class="d-flex">
-                                        <input type="password" name="mat_khau_cu" class="form-control" id="mat_khau_cu"
-                                            required>
-                                            <button type="button" style="border: none; background-color: #fbfbfb;" onclick="togglePassword('mat_khau_cu')"><i class="fa-regular fa-eye-slash"></i></button>
+                                            <input type="password" name="mat_khau_cu" class="form-control"
+                                                id="mat_khau_cu" required>
+                                            <button type="button" style="border: none; background-color: #fbfbfb;"
+                                                onclick="togglePassword('mat_khau_cu')"><i
+                                                    class="fa-regular fa-eye-slash"></i></button>
                                         </div>
                                     </div>
                                     <div class="">
                                         <label for="mat_khau_moi" class="form-label mt-3">Mật khẩu mới</label>
                                         <div class="d-flex">
-                                        <input type="password" name="mat_khau_moi" class="form-control" id="mat_khau_moi"
-                                            required>
-                                            <button type="button" style="border: none; background-color: #fbfbfb;" onclick="togglePassword('mat_khau_moi')"><i class="fa-regular fa-eye-slash"></i></button>
+                                            <input type="password" name="mat_khau_moi" class="form-control"
+                                                id="mat_khau_moi" required>
+                                            <button type="button" style="border: none; background-color: #fbfbfb;"
+                                                onclick="togglePassword('mat_khau_moi')"><i
+                                                    class="fa-regular fa-eye-slash"></i></button>
                                         </div>
                                     </div>
                                     <div class="">
                                         <label for="xac_nhan_mat_khau_moi" class="form-label mt-3">Xác nhận mật khẩu
                                             mới</label>
-                                            <div class="d-flex"> 
-                                        <input type="password" name="xac_nhan_mat_khau_moi" class="form-control"
-                                            id="xac_nhan_mat_khau_moi" required>
-                                            <button type="button" style="border: none; background-color: #fbfbfb;" onclick="togglePassword('xac_nhan_mat_khau_moi')"><i class="fa-regular fa-eye-slash"></i></button>
+                                        <div class="d-flex">
+                                            <input type="password" name="xac_nhan_mat_khau_moi" class="form-control"
+                                                id="xac_nhan_mat_khau_moi" required>
+                                            <button type="button" style="border: none; background-color: #fbfbfb;"
+                                                onclick="togglePassword('xac_nhan_mat_khau_moi')"><i
+                                                    class="fa-regular fa-eye-slash"></i></button>
                                         </div>
                                     </div>
                                     <button type="button" class="btn btn-primary mt-3" onclick="doiMatKhau()">Đổi mật
@@ -187,7 +196,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            
+
                             </div>
                         </div>
                     </div>
