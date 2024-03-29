@@ -197,19 +197,28 @@ class homeUserController {
         let selectedProductIds = selectedProducts.split(',').map(Number);
 
         let sql = "CALL GetProducts2_datHang(?)";
+        let thanhPhoList = "SELECT * FROM tbl_thanh_pho";
 
-        connect.query(sql, [selectedProductIds.join(',')], (err, results) => {
-            if (err) throw err;
+        connect.query(thanhPhoList, (err, thanhPhoList) => {
+            if (err) {
+                return res.status(500).send('Internal Server Error');
+            }
 
-            let products_datHang = results[0];
+            connect.query(sql, [selectedProductIds.join(',')], (err, results) => {
+                if (err) throw err;
 
-            console.log(products_datHang);
-            res.render('user/dat_hang_cart.ejs', {
-                user: req.session.user,
-                products_datHang: products_datHang,
+                let products_datHang = results[0];
 
+                console.log(products_datHang);
+                
+                res.render('user/dat_hang_cart.ejs', {
+                    user: req.session.user,
+                    products_datHang: products_datHang,
+                    thanhPhoList: thanhPhoList,
+                });
             });
         });
+
 
     }
 
@@ -722,10 +731,10 @@ class homeUserController {
         let id = req.session.user.id;
 
         console.log("Request body: ", req.body);
-        const { ho_ten, email, mat_khau, ngay_sinh, gioi_tinh, so_dien_thoai, dia_chi } = req.body;
+        const { ho_ten, email, ngay_sinh, gioi_tinh, so_dien_thoai, dia_chi } = req.body;
 
         const insertUserQuery = "UPDATE tbl_khach_hang SET ? where id = ?";
-        connect.query(insertUserQuery, [{ ho_ten, email, mat_khau, ngay_sinh, gioi_tinh, so_dien_thoai, dia_chi }, id], (err, result) => {
+        connect.query(insertUserQuery, [{ ho_ten, email, ngay_sinh, gioi_tinh, so_dien_thoai, dia_chi }, id], (err, result) => {
 
             if (err) {
                 console.log("error: ", err);

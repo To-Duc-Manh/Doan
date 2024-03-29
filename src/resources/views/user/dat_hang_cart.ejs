@@ -3,13 +3,88 @@
     <div class="container" style=" margin-bottom: 150px">
         <div>
             <h3 class="text-start">ĐẶT HÀNG </h3>
-            <p>Địa chỉ: <span id="ho_ten">
-                    <%= user.ho_ten %>
-                </span> - <span id="so_dien_thoai">
-                    <%= user.so_dien_thoai %>
-                </span> - <span id="dia_chi">
-                    <%= user.dia_chi %>
-                </span></p>
+            <div class="row">
+                <div class="col-lg-9">
+                    <p>Địa chỉ: <span id="ho_ten">
+                        <%= user.ho_ten %>
+                    </span> - <span id="so_dien_thoai">
+                        <%= user.so_dien_thoai %>
+                    </span> - <span id="dia_chi">
+                        <%= user.dia_chi %>
+                    </span></p>
+                </div>          
+                <div class="col-lg-2">
+                    <button type="button" class="btn btn-outline-primary mx-1" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">
+                        Sửa
+                    </button>
+                </div>
+            </div>
+
+                <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Sửa địa chỉ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="">
+                                <label for="validationCustom01" class="form-label">Tỉnh/Thành
+                                    phố</label>
+                                <select class="form-control" name="ten_thanh_pho" id="">
+                                    <option>Chọn tỉnh/Thành phố</option>
+                                    <% if (thanhPhoList && thanhPhoList.length> 0) { %>
+                                        <% thanhPhoList.forEach(function (thanhPhoList, index) { %>
+                                            <option value="<%- thanhPhoList.thanh_pho_id %>"><%-
+                                                    thanhPhoList.ten_thanh_pho %></option>
+                                            <% }); %>
+                                                <% } else { %>
+
+                                                    <p>Không có dữ liệu</p>
+
+                                                    <% } %>
+                                </select>
+                            </div>
+                            <div class="">
+                                <label for="validationCustom02" class="form-label">Quận/Huyện</label>
+                                <select class="form-control" name="ten_huyen" id="">
+
+
+                                </select>
+                            </div>
+                            <div class="">
+                                <label for="validationCustom02" class="form-label"> Phường/Xã
+                                </label>
+                                <select class="form-control" name="ten_xa" id="">
+
+
+                                </select>
+                            </div>
+                            <div class="">
+                                <label for="validationCustom03" class="form-label">Địa chỉ cụ
+                                    thể</label>
+                                <input type="text" name="dc_cuthe" class="form-control" id="validationCustom03"
+                                    required>
+                            </div>
+
+                            <div class="">
+                                <label for="validationCustom03" class="form-label">Số điện thoại</label>
+                                <input type="text" id="so_dien_thoai_thay_doi" class="form-control"
+                                    required>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" onclick="updateDiaChi()" class="btn btn-primary">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <textarea id="ghi_chu" style="width: 100%;" placeholder="Ghi chu"></textarea>
         </div>
 
@@ -114,6 +189,29 @@
             document.getElementById("tong_tien_thanh_toan").innerText = "Tổng tiền: " + tong_tien_thanh_toan + " đ";
         });
 
+        function updateDiaChi() {
+            const thanhPhoSelect = document.querySelector('select[name="ten_thanh_pho"]');
+            const huyenSelect = document.querySelector('select[name="ten_huyen"]');
+            const xaSelect = document.querySelector('select[name="ten_xa"]');
+            const dc_cuthe = document.querySelector('input[name="dc_cuthe"]');
+            const hoTenSpan = document.getElementById("ho_ten");
+            const soDienThoaiSpan = document.getElementById("so_dien_thoai");
+            const so_dien_thoai_thay_doi = document.getElementById("so_dien_thoai_thay_doi");
+            const diaChiSpan = document.getElementById("dia_chi");
+            const closeButton = document.querySelector('button[data-bs-dismiss="modal"]');
+
+            const selectedThanhPhoText = thanhPhoSelect.options[thanhPhoSelect.selectedIndex].text;
+            const selectedHuyenText = huyenSelect.options[huyenSelect.selectedIndex].text;
+            const selectedXaText = xaSelect.options[xaSelect.selectedIndex].text;
+
+            const diaChiValue = `${dc_cuthe.value} - ${selectedXaText} - ${selectedHuyenText} - ${selectedThanhPhoText}`;
+
+            // Gán giá trị cho các span thay vì các input
+            diaChiSpan.textContent = diaChiValue;
+            soDienThoaiSpan.textContent = so_dien_thoai_thay_doi.value;
+            closeButton.click();
+        }
+
         function datHang() {
             var hoTen = document.getElementById("ho_ten").innerText;
             var soDienThoai = document.getElementById("so_dien_thoai").innerText;
@@ -177,7 +275,51 @@
                 });
         }
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const thanhPhoSelect = document.querySelector('select[name="ten_thanh_pho"]');
+            const huyenSelect = document.querySelector('select[name="ten_huyen"]');
+            const xaSelect = document.querySelector('select[name="ten_xa"]');
 
+            thanhPhoSelect.addEventListener('change', function () {
+                const selectedThanhPhoId = this.value;
+                console.log(selectedThanhPhoId);
+                fetch(`/getHuyenByHuyen/${selectedThanhPhoId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        huyenSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                        if (data.length > 0) {
+                            data.forEach(huyen => {
+                                const option = document.createElement('option');
+                                option.value = huyen.huyen_id;
+                                option.textContent = huyen.ten_huyen;
+                                huyenSelect.appendChild(option);
+                            });
+                        } else {
+                            huyenSelect.innerHTML = '<option value="">Không có dữ liệu</option>';
+                        }
+                    });
+            });
+
+            huyenSelect.addEventListener('change', function () {
+                const selectedHuyenId = this.value;
+
+                fetch(`/getXaByXa/${selectedHuyenId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        xaSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
+                        if (data.length > 0) {
+                            data.forEach(xa => {
+                                const option = document.createElement('option');
+                                option.value = xa.xa_id;
+                                option.textContent = xa.ten_xa;
+                                xaSelect.appendChild(option);
+                            });
+                        } else {
+                            xaSelect.innerHTML = '<option value="">Không có dữ liệu</option>';
+                        }
+                    });
+            });
+        });
     </script>
 
     <%- include('footerUser.ejs') %>
