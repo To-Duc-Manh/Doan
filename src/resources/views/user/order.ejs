@@ -4,12 +4,14 @@
       <div class="col-lg-3">
         <div class="link_order">
           <div class="user_order">
-            <p><%= user.ho_ten %></p>
+            <p>
+              <%= user.ho_ten %>
+            </p>
           </div>
           <ul class="">
             <li class="item_"><a href="/tai_khoan">Tài khoản của tôi</a></li>
             <li class="item_ mt-3"><a href="/order">Dơn mua hàng</a></li>
-            <li class="item_ mt-3"><a>Đơn bảo hành</a></li>
+            <li class="item_ mt-3"><a href="/bao_hanh">Đơn bảo hành</a></li>
             <li class="item_ mt-3 pb-3"><a href="/lich_su_mua_hang">Lịch sử mua hàng</a></li>
           </ul>
         </div>
@@ -282,7 +284,46 @@
                       <p>
                         <%= order.gia_ban %>
                       </p>
+                      <div class="text-end">
+                        <button type="button" class="btn btn-outline-primary mx-1" data-bs-toggle="modal"
+                          data-bs-target="#staticBackdrop<%= order.id %>">
+                          Bảo hành
+                        </button>
 
+                        <div class="modal fade " id="staticBackdrop<%= order.id %>" data-bs-backdrop="static"
+                          data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                          aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Bảo hành sản phẩm</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <form>
+                                  <div class="">
+                                    <label for="" class="form-label">Tên sản phẩm</label>
+                                    <input type="text" class="form-control" id="" name=""
+                                      value="<%= order.ten_san_pham %>" required readonly>
+                                  </div>
+                                  <div class="">
+                                    <label for="validationCustom02" class="form-label">Ghi chú</label>
+                                    <textarea class="form-control" name="ghi_chu_bh"></textarea>
+                                  </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button"
+                                  onclick="luuPhieuBaoHanh('<%= order.id %>', document.querySelector('[name=ghi_chu_bh]').value)"
+                                  class="btn btn-primary">Gửi</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
                     </div>
                   </div>
                   <% } }); } if (!hasActiveProducts) { %>
@@ -290,10 +331,6 @@
                     <% } %>
                       <p class="text-end">Tổng tiền thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
                       </p>
-                      <div class="text-end">
-                        <a onclick=""
-                          class="btn btn-outline-danger mx-2 mb-3">Bảo hành</a>
-                      </div>
               </div>
               <% } }); if (!hasActiveOrder) { %>
                 <p>Không có dữ liệu</p>
@@ -385,9 +422,28 @@
         return false;
       }
     }
-
     function mua_lai_hang(orderId) {
       window.location.href = "/mua_lai_hang/" + orderId;
     }
+
+    function luuPhieuBaoHanh(orderId, ghiChu) {
+      fetch('/luu_phieu_bao_hanh', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderId, ghiChu }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message);
+          window.location.href = '/bao_hanh';
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          alert('Đã có lỗi xảy ra');
+        });
+    }
+
   </script>
   <%- include('footerUser.ejs') %>

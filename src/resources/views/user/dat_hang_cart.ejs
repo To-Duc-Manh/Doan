@@ -6,13 +6,13 @@
             <div class="row">
                 <div class="col-lg-9">
                     <p>Địa chỉ: <span id="ho_ten">
-                        <%= user.ho_ten %>
-                    </span> - <span id="so_dien_thoai">
-                        <%= user.so_dien_thoai %>
-                    </span> - <span id="dia_chi">
-                        <%= user.dia_chi %>
-                    </span></p>
-                </div>          
+                            <%= user.ho_ten %>
+                        </span> - <span id="so_dien_thoai">
+                            <%= user.so_dien_thoai %>
+                        </span> - <span id="dia_chi">
+                            <%= user.dia_chi %>
+                        </span></p>
+                </div>
                 <div class="col-lg-2">
                     <button type="button" class="btn btn-outline-primary mx-1" data-bs-toggle="modal"
                         data-bs-target="#staticBackdrop">
@@ -21,14 +21,13 @@
                 </div>
             </div>
 
-                <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+            <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Sửa địa chỉ</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
 
@@ -73,8 +72,7 @@
 
                             <div class="">
                                 <label for="validationCustom03" class="form-label">Số điện thoại</label>
-                                <input type="text" id="so_dien_thoai_thay_doi" class="form-control"
-                                    required>
+                                <input type="text" id="so_dien_thoai_thay_doi" class="form-control" required>
                             </div>
 
                         </div>
@@ -208,7 +206,9 @@
 
             // Gán giá trị cho các span thay vì các input
             diaChiSpan.textContent = diaChiValue;
-            soDienThoaiSpan.textContent = so_dien_thoai_thay_doi.value;
+            if (so_dien_thoai_thay_doi.value.trim() !== "") {
+                soDienThoaiSpan.textContent = so_dien_thoai_thay_doi.value;
+            }
             closeButton.click();
         }
 

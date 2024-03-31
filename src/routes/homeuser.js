@@ -36,4 +36,9 @@ router.get('/getXaByXa/:id', homeUserController.getXaByXa);
 router.post('/update_user', authMiddleware.loggedinUser, homeUserController.update_user);
 router.post('/doi_mk', authMiddleware.loggedinUser, homeUserController.doi_mk)
 
+
+//bao_hanh
+router.get('/bao_hanh', authMiddleware.loggedinUser, homeUserController.bao_hanh);
+router.post('/luu_phieu_bao_hanh', authMiddleware.loggedinUser, homeUserController.luu_phieu_bao_hanh);
+
 module.exports = router;

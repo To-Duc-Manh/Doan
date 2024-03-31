@@ -210,7 +210,7 @@ class homeUserController {
                 let products_datHang = results[0];
 
                 console.log(products_datHang);
-                
+
                 res.render('user/dat_hang_cart.ejs', {
                     user: req.session.user,
                     products_datHang: products_datHang,
@@ -282,6 +282,7 @@ class homeUserController {
                 return res.status(500).send('Internal Server Error');
             }
             let sql = `SELECT 
+        tbl_chi_tiet_don_mua_hang.id AS id,
         tbl_chi_tiet_don_mua_hang.so_luong AS so_luong,
         tbl_chi_tiet_don_mua_hang.don_mua_hang_id AS don_mua_hang_id,
         tbl_chi_tiet_san_pham.hinh_anh AS hinh_anh,
@@ -770,6 +771,55 @@ class homeUserController {
 
                 return res.json({ success: true, message: 'Đổi mật khẩu thành công.' });
             });
+        });
+    }
+
+
+    //bao_hanh
+
+    bao_hanh(req, res) {
+        const sql = `
+        SELECT 
+        pbh.*, 
+        sp.ten_san_pham, 
+        ctsan.hinh_anh AS hinh_anh_chi_tiet, 
+        ms.ten_mau_sac, 
+        dl.ten_dung_luong,
+        nv.ten_nhan_vien
+    FROM tbl_phieu_bao_hanh AS pbh
+    LEFT JOIN tbl_chi_tiet_don_mua_hang AS ctdmh ON pbh.chi_tiet_don_mua_hang_id = ctdmh.id
+    LEFT JOIN tbl_chi_tiet_san_pham AS ctsan ON ctdmh.chi_tiet_san_pham_id = ctsan.id
+    LEFT JOIN tbl_san_pham AS sp ON ctsan.san_pham_id = sp.id
+    LEFT JOIN tbl_mau_sac AS ms ON ctsan.mau_sac_id = ms.id
+    LEFT JOIN tbl_dung_luong AS dl ON ctsan.dung_luong_id = dl.id
+    LEFT JOIN tbl_nhan_vien AS nv ON pbh.nhan_vien_id = nv.id
+        `;
+
+        connect.query(sql, (err, data) => {
+            res.render('user/bao_hanh.ejs', {
+                user: req.session.user,
+                data: data,
+            });
+        });
+    }
+
+
+
+    luu_phieu_bao_hanh(req, res) {
+        const { orderId, ghiChu } = req.body;
+
+        const query = `
+    INSERT INTO tbl_phieu_bao_hanh (chi_tiet_don_mua_hang_id, ghi_chu, ngay_tao, trang_thai)
+    VALUES (?, ?, NOW(), 1)
+  `;
+
+        connect.query(query, [orderId, ghiChu], (error, results) => {
+            if (error) {
+                console.error(error);
+                return res.status(500).json({ message: 'Lỗi khi lưu dữ liệu' });
+            }
+
+            return res.status(200).json({ message: 'Đã lưu dữ liệu thành công' });
         });
     }
 }

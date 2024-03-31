@@ -1,0 +1,63 @@
+<%- include('headerUser.ejs') %>
+    <div class="container" style="margin-top: 50px; margin-bottom: 150px">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="link_order">
+                    <div class="user_order">
+                        <p>
+                            <%= user.ho_ten %>
+                        </p>
+                    </div>
+                    <ul class="">
+                        <li class="item_"><a href="/tai_khoan">Tài khoản của tôi</a></li>
+                        <li class="item_ mt-3"><a href="/order">Dơn mua hàng</a></li>
+                        <li class="item_ mt-3"><a href="/bao_hanh">Đơn bảo hành</a></li>
+                        <li class="item_ mt-3 pb-3"><a href="/lich_su_mua_hang">Lịch sử mua hàng</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#cho_xac_nhan" data-toggle="tab">Chờ xác nhận</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#da_xac_nhan" data-toggle="tab">Đã xác nhận</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#dang_giao" data-toggle="tab">Thực hiện</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#da_giao" data-toggle="tab">Đã hoàn thành</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#da_huy" data-toggle="tab">Đã hủy</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-1">
+                    <div class="tab-pane active link_order" id="cho_xac_nhan">
+                        <div class="">
+
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="da_xac_nhan">
+
+                    </div>
+                    <div class="tab-pane" id="dang_giao">
+
+                    </div>
+                    <div class="tab-pane" id="da_giao">
+
+                    </div>
+                    <div class="tab-pane" id="thanh_cong">
+
+                    </div>
+                    <div class="tab-pane" id="da_huy">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('footerUser.ejs') %>
