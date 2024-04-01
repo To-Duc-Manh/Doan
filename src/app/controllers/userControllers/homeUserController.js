@@ -803,8 +803,6 @@ class homeUserController {
         });
     }
 
-
-
     luu_phieu_bao_hanh(req, res) {
         const { orderId, ghiChu } = req.body;
 

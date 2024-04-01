@@ -115,7 +115,10 @@ router.get('/search_khach_hang_hd', authMiddleware.loggedin, hoadonController.se
 
 //bao_hanh
 router.get('/baohanh', authMiddleware.loggedin, baohanhController.index);
-
+router.get('/add_baohanh', authMiddleware.loggedin, baohanhController.add_baohanh);
+router.get('/getChiTietSanPhamByDonHang?:id', authMiddleware.loggedin, baohanhController.getChiTietSanPhamByDonHang);
+router.get('/edit_baohanh/:id', authMiddleware.loggedin, baohanhController.edit_baohanh);
+router.post('/update_baohanh/:id', authMiddleware.loggedin, baohanhController.update_baohanh);
 
 router.post('/uploadfile', multipartMiddleware, (req, res) => {
     try {

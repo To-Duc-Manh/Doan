@@ -30,15 +30,61 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="/admin/add_danh_muc" class="row g-3 needs-validation"
-                                    novalidate>
-                                    <div class="col-md-6">
-                                        <label for="validationCustom01" class="form-label">Tên đơn bảo hành</label>
-                                        <input type="text" name="ten_danh_muc" class="form-control"
-                                            id="validationCustom01" required>
-                                        <div class="invalid-feedback">
-                                            Hãy nhập tên đơn bảo hành
-                                        </div>
+                                <form method="POST" action="/admin/add_baohanh" class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="" class="form-label">Hóa đơn</label>
+                                        <select name="hoa_don_bh" id="hoa_don_bh" class="form-control">
+                                            <option> </option>
+                                            <% if (don_mua_hang && don_mua_hang.length> 0) { %>
+                                                <% don_mua_hang.forEach(function (don_mua_hang, index) { %>
+                                                    <option value="<%- don_mua_hang.id %>"><%- don_mua_hang.id %>
+                                                    </option>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <p>Không có dữ liệu</p>
+                                                            <% } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="" class="form-label"> Thông tin chi tiết sản phẩm </label>
+                                        <select name="chi_tiet_san_pham" id="chi_tiet_san_pham"
+                                            class="form-control"></select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="validationCustom03" class="form-label">Bảo hành</label>
+                                        <select class="form-control" name="loai_bao_hanh" id="">
+                                            <option value="Bảo hành"> Bảo hành </option>
+                                            <option value="Sửa chữa"> Sửa chữa </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="" class="form-label">Tiêu đề</label>
+                                        <input type="text" name="tieu_de" class="form-control" id="" value="">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="validationCustom03" class="form-label">Ngày bắt đầu</label>
+                                        <input type="date" name="ngay_bat_dau" class="form-control"
+                                            id="validationCustom03" value="">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="validationCustom03" class="form-label">Ngày kết thúc</label>
+                                        <input type="date" name="ngay_ket_thuc" class="form-control"
+                                            id="validationCustom03" value="">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="validationCustom03" class="form-label">Ghi chú</label>
+                                        <textarea type="text" name="ghi_chu" class="form-control"
+                                            id="validationCustom03" value=""></textarea>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="validationCustom03" class="form-label">Trạng thái</label>
+                                        <select class="form-control" name="trang_thai" id="">
+                                            <option value="1"> Chờ xác nhận </option>
+                                            <option value="2"> Đã xác nhận </option>
+                                            <option value="3"> Đã bảo hành </option>
+                                            <option value="4"> Đã hoàn thành </option>
+                                            <option value="5"> Hủy </option>
+                                        </select>
                                     </div>
                                     <div class="col-12">
                                         <button class="btn btn-primary" type="submit">Submit form</button>
@@ -86,10 +132,22 @@
                                     <%= bao_hanh.tieu_de %>
                                 </td>
                                 <td>
-                                    <%= bao_hanh.ngay_bat_dau %>
+                                    <% if (bao_hanh.ngay_bat_dau && bao_hanh.ngay_bat_dau !=='0000-00-00 00:00:00' ) {
+                                        %>
+                                        <%= new Intl.DateTimeFormat('vi-VN').format(new Date(bao_hanh.ngay_bat_dau)) %>
+                                            <% } else { %>
+
+                                                <% } %>
+
                                 </td>
                                 <td>
-                                    <%= bao_hanh.ngay_ket_thuc %>
+                                    <% if (bao_hanh.ngay_ket_thuc && bao_hanh.ngay_ket_thuc !=='0000-00-00 00:00:00' ) {
+                                        %>
+                                        <%= new Intl.DateTimeFormat('vi-VN').format(new Date(bao_hanh.ngay_ket_thuc)) %>
+                                            <% } else { %>
+
+                                                <% } %>
+
                                 </td>
                                 <td>
                                     <%= bao_hanh.chi_phi %>
@@ -107,12 +165,10 @@
                                 </td>
                                 <td>
                                     <div class="d-flex ">
-                                        <a href=""
+                                        <a href="/admin/edit_baohanh/<%= bao_hanh.id %>"
                                             class="btn btn-outline-success btn-sm mx-1">Sửa</a>
-                                            <a href=""
-                                            class="btn btn-outline-success btn-sm mx-1">CT</a>
-                                        <a href=""
-                                            class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
+                                        <a href="" class="btn btn-outline-success btn-sm mx-1">CT</a>
+                                        <a href="" class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
                                     </div>
                                 </td>
                             </tr>
@@ -126,5 +182,33 @@
                 </tbody>
             </table>
         </div>
+
+        <script>
+            document.getElementById('hoa_don_bh').addEventListener('change', function () {
+                let selectedId = this.value;
+                fetch(`/admin/getChiTietSanPhamByDonHang?id=${selectedId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let chiTietSanPhamSelect = document.getElementById('chi_tiet_san_pham');
+                        chiTietSanPhamSelect.innerHTML = ''; // Clear previous options
+
+                        if (data && data.length > 0) {
+                            data.forEach(chiTietSanPham => {
+                                let option = document.createElement('option');
+                                option.value = chiTietSanPham.id;
+                                option.innerText = chiTietSanPham.id;
+                                chiTietSanPhamSelect.appendChild(option);
+                            });
+                        } else {
+                            let option = document.createElement('option');
+                            option.innerText = 'Không có chi tiết sản phẩm';
+                            chiTietSanPhamSelect.appendChild(option);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        </script>
         <!-- /.content-wrapper -->
         <%- include('../footer.ejs') %>
