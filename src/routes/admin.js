@@ -30,6 +30,7 @@ const khachhangController = require('../app/controllers/adminControllers/khachha
 const productController = require('../app/controllers/adminControllers/productController');
 const danhmucController = require('../app/controllers/adminControllers/danhmucController');
 const hoadonController = require('../app/controllers/adminControllers/hoadonController');
+const baohanhController = require('../app/controllers/adminControllers/baohanhController');
 
 router.get('/', authMiddleware.loggedin, (req, res) => {
     res.render('admin/admin.ejs');
@@ -111,6 +112,9 @@ router.post('/hoan_thanh_gh/:id', upload.single("hinh_anh5"), hoadonController.h
 router.post('/them_don_mua_hang_get', authMiddleware.loggedin, hoadonController.them_don_mua_hang_get);
 router.get('/search_sp_hd', authMiddleware.loggedin, hoadonController.search_sp_hd);
 router.get('/search_khach_hang_hd', authMiddleware.loggedin, hoadonController.search_khach_hang_hd);
+
+//bao_hanh
+router.get('/baohanh', authMiddleware.loggedin, baohanhController.index);
 
 
 router.post('/uploadfile', multipartMiddleware, (req, res) => {

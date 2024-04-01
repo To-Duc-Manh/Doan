@@ -111,9 +111,10 @@ class hoadonController {
         });
     }
     
-     them_don_mua_hang_get(req, res) {
-        const { khach_hang_id, ten_nguoi_mua, sdt, san_pham_id, dia_chi_mua_hang, ghi_chu } = req.body;
+    them_don_mua_hang_get(req, res) {
+        const { khach_hang_id, ten_nguoi_mua, sdt, san_pham, dia_chi_mua_hang, ghi_chu } = req.body;
         const user = req.session.user.id;
+        console.log(req.body)
         const donHangQuery = `INSERT INTO tbl_don_mua_hang (nhan_vien_id, khach_hang_id, ten_nguoi_mua, so_dien_thoai, dia_chi_mua_hang, ghi_chu, tong_tien, tong_tien_thanh_toan, hinh_thuc_thanh_toan, trang_thai, ngay_tao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
         const donHangValues = [user, khach_hang_id, ten_nguoi_mua, sdt, dia_chi_mua_hang, ghi_chu, 0, 0, 1, 1];
     
@@ -126,23 +127,23 @@ class hoadonController {
     
             const donMuaHangId = results.insertId;
     
-            if (san_pham_id && Array.isArray(san_pham_id)) {
-                san_pham_id.forEach((sp_id, index) => {
+            if (san_pham && Array.isArray(san_pham)) {
+                san_pham.forEach((sp, index) => {
                     const chiTietQuery = `INSERT INTO tbl_chi_tiet_don_mua_hang (don_mua_hang_id, chi_tiet_san_pham_id, so_luong, gia, ngay_tao) VALUES (?, ?, ?, ?, NOW())`;
-                    const chiTietValues = [donMuaHangId, sp_id, 1, 100]; // Định nghĩa số lượng và giá tạm thời
+                    const chiTietValues = [donMuaHangId, sp.id, sp.so_luong, sp.gia];
     
                     connect.query(chiTietQuery, chiTietValues, (error, results, fields) => {
                         if (error) {
                             console.error('Lỗi khi thêm chi tiết đơn hàng: ' + error);
                             // Nếu có lỗi, gửi phản hồi lỗi
-                            if (index === san_pham_id.length - 1) {
+                            if (index === san_pham.length - 1) {
                                 res.status(500).json({ message: 'Đã xảy ra lỗi khi thêm chi tiết đơn hàng.' });
                             }
                             return;
                         }
     
                         // Nếu không có lỗi và là lần cuối cùng trong vòng lặp, gửi phản hồi thành công
-                        if (index === san_pham_id.length - 1) {
+                        if (index === san_pham.length - 1) {
                             res.json({ message: 'Đặt đơn hàng thành công.' });
                         }
                     });
@@ -153,6 +154,7 @@ class hoadonController {
             }
         });
     }
+    
     
 
     async chuyen_trang_thai(req, res) {

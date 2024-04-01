@@ -4,7 +4,8 @@
         <div class="content-wrapper">
             <form id="searchForm" class="sidebar-form_1 mx-2">
                 <div class="input-group mb-3" style="width: 80%;">
-                    <input type="text" class="form-control" placeholder="Nhập tên bạn muốn tìm kiếm" id="searchProduct">
+                    <input type="text" class="form-control" placeholder="Nhập tên sản phẩm bạn muốn tìm kiếm"
+                        id="searchProduct">
                     <button type="button" class="btn btn-outline-secondary" onclick="searchProducts()"><i
                             class="fa fa-search"></i></button>
                 </div>
@@ -22,33 +23,33 @@
 
             <div id="searchCustomerResult"></div>
 
-            <button type="button" class="btn btn-outline-primary mt-2 mx-2" data-bs-toggle="collapse" data-bs-target="#demo">Khách hàng không có trong hệ thống</button>
+            <button type="button" class="btn btn-outline-primary mt-2 mx-2" data-bs-toggle="collapse"
+                data-bs-target="#demo">Khách hàng không có trong hệ thống</button>
             <div id="demo" class="collapse">
                 <div class="col-md-6">
                     <label for="validationCustom01" class="form-label">Tên khách hàng</label>
-                    <input type="text" name="ten_khach_hang_f" class="form-control" id="ten_khach_hang_f"
-                        value="" required>
+                    <input type="text" name="ten_khach_hang_f" class="form-control" id="ten_khach_hang_f" value=""
+                        required>
                     <div class="invalid-feedback">
                         Hãy nhập Họ và Tên
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="validationCustom01" class="form-label">Số điện thoại</label>
-                    <input type="text" name="so_dien_thoai_f" class="form-control" id="so_dien_thoai_f"
-                        value="" required>
+                    <input type="text" name="so_dien_thoai_f" class="form-control" id="so_dien_thoai_f" value=""
+                        required>
                     <div class="invalid-feedback">
                         Hãy nhập Họ và Tên
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="validationCustom01" class="form-label">Địa chỉ</label>
-                    <input type="text" name="dia_chi_f" class="form-control" id="dia_chi_f" value=""
-                        required>
+                    <input type="text" name="dia_chi_f" class="form-control" id="dia_chi_f" value="" required>
                     <div class="invalid-feedback">
                         Hãy nhập Họ và Tên
                     </div>
                 </div>
-            </div>           
+            </div>
 
             <textarea id="ghi_chu_id" name="ghi_chu"></textarea>
 
@@ -59,18 +60,20 @@
 
         <script>
             let selectedProducts = []; // Danh sách sản phẩm đã chọn
+        
             function submitOrderForm(event) {
                 event.preventDefault(); // Ngăn chặn hành động mặc định của form
-
+        
                 let khachHangId, ten_khach_hang_id, sdt, dia_chi, ghi_chu;
-
+        
                 const selectedRadioButton = document.querySelector('input[name="khach_hang_id"]:checked');
                 if (selectedRadioButton) {
-                    const khachHangId = document.getElementById('khachHangId').value;
-                    const ten_khach_hang_id = document.getElementById('ten_khach_hang_id').value;
-                    const sdt = document.getElementById('sdt_id').value;
-                    const dia_chi = document.getElementById('dia_chi_mau_hang_id').value;
-                    const ghi_chu = document.getElementById('ghi_chu_id').value;
+                    khachHangId = selectedRadioButton.value; // Lấy giá trị từ radio button được chọn
+                    const parentDiv = selectedRadioButton.parentElement;
+                    ten_khach_hang_id = parentDiv.querySelector('.ten_khach_hang').innerText;
+                    sdt = parentDiv.querySelector('.sdt').innerText;
+                    dia_chi = parentDiv.querySelector('.dia_chi').innerText;
+                    ghi_chu = document.getElementById('ghi_chu_id').value;
                 } else {
                     khachHangId = null;
                     ten_khach_hang_id = document.getElementById('ten_khach_hang_f').value;
@@ -78,35 +81,42 @@
                     dia_chi = document.getElementById('dia_chi_f').value;
                     ghi_chu = document.getElementById('ghi_chu_id').value;
                 }
-
-                const selectedProducts = []; // Danh sách sản phẩm đã chọn
-                const checkboxes = document.querySelectorAll('input[name="san_pham_id"]:checked');
-                checkboxes.forEach(checkbox => {
-                    selectedProducts.push(checkbox.value);
-                });
-
+        
+                const selectedProductsData = selectedProducts.map(product => ({
+                    id: product.id,
+                    so_luong: product.so_luong,
+                    gia: product.gia
+                }));
+        
                 fetch('/admin/them_don_mua_hang_get', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ khach_hang_id: khachHangId, ten_nguoi_mua: ten_khach_hang_id, sdt: sdt, dia_chi_mua_hang: dia_chi, ghi_chu: ghi_chu, san_pham_id: selectedProducts })
+                    body: JSON.stringify({
+                        khach_hang_id: khachHangId,
+                        ten_nguoi_mua: ten_khach_hang_id,
+                        sdt: sdt,
+                        dia_chi_mua_hang: dia_chi,
+                        ghi_chu: ghi_chu,
+                        san_pham: selectedProductsData
+                    })
                 })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                        throw new Error('Đã xảy ra lỗi khi thêm hóa đơn.');
-                    })
-                    .then(data => {
-                        alert('Đã thêm hóa đơn thành công!');
-                        window.location.href = '/admin/hoadon';
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi thêm hóa đơn:', error);
-                    });
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Đã xảy ra lỗi khi thêm hóa đơn.');
+                })
+                .then(data => {
+                    alert('Đã thêm hóa đơn thành công!');
+                    window.location.href = '/admin/hoadon';
+                })
+                .catch(error => {
+                    console.error('Lỗi khi thêm hóa đơn:', error);
+                });
             }
-
+        
             function searchCustomers() {
                 const keyword = document.getElementById('searchCustomer').value;
                 fetch(`/admin/search_khach_hang_hd?ten_khach_hang=${keyword}`)
@@ -114,23 +124,21 @@
                     .then(data => displaySearchCustomersResults(data))
                     .catch(error => console.error('Lỗi khi tìm kiếm khách hàng:', error));
             }
-
+        
             function displaySearchCustomersResults(results) {
                 const searchResultDiv = document.getElementById('searchCustomerResult');
                 searchResultDiv.innerHTML = '';
                 results.forEach(customer => {
                     const customerId = `<input type="radio" name="khach_hang_id" value="${customer.id}" id="khachHangId">`;
-                    const customernameip = `<input hidden type="text" name="ten_khach_hang" value="${customer.ho_ten}" id="ten_khach_hang_id">`;
-                    const sdt = `<input hidden type="text" name="sdt" value="${customer.so_dien_thoai}" id="sdt_id">`;
-                    const dia_chi = `<input hidden type="text" name="dia_chi" value="${customer.dia_chi}" id="dia_chi_mau_hang_id">`;
+                    const customerName = `<span class="ten_khach_hang">${customer.ho_ten}</span>`;
+                    const sdt = `<span class="sdt">${customer.so_dien_thoai}</span>`;
+                    const dia_chi = `<span class="dia_chi">${customer.dia_chi}</span>`;
                     const lb_diachi = `<label>${customer.dia_chi}</label>`;
-                    const customerName = `<label>${customer.ho_ten}</label>`;
                     const br = '<br>';
-                    // Thêm chuỗi HTML vào div hiển thị kết quả
-                    searchResultDiv.innerHTML += customerId + customerName + ' - ' + lb_diachi + customernameip + sdt + dia_chi + br;
+                    searchResultDiv.innerHTML += `<div>${customerId + customerName + ' - ' + lb_diachi + sdt + dia_chi + br}</div>`;
                 });
             }
-            // Hàm tìm kiếm sản phẩm
+        
             function searchProducts() {
                 const keyword = document.getElementById('searchProduct').value;
                 fetch(`/admin/search_sp_hd?name=${keyword}`)
@@ -138,33 +146,51 @@
                     .then(data => displaySearchResults(data))
                     .catch(error => console.error('Lỗi khi tìm kiếm sản phẩm:', error));
             }
-
-            // Hàm hiển thị kết quả tìm kiếm sản phẩm
+        
             function displaySearchResults(results) {
                 const searchResultDiv = document.getElementById('searchResult');
                 searchResultDiv.innerHTML = '';
                 results.forEach(product => {
-                    const checkbox = ` <input type="checkbox" name="san_pham_id" value="${product.id}" ${selectedProducts.includes(product.id) ? 'checked' : ''} onclick="toggleCheckbox(${product.id})">`;
+                    const checkbox = `<input type="checkbox" name="san_pham_id" value="${product.id}" ${selectedProducts.some(item => item.id === product.id) ? 'checked' : ''} onclick="toggleCheckbox(${product.id}, ${product.gia_ban})">`;
                     const image = `<img src="${product.hinh_anh}">`;
                     const productName = `<span>${product.ten_san_pham}</span>`;
                     const price = `<span>Giá: ${product.gia_ban}đ</span>`;
                     const color = `<span>Màu sắc: ${product.ten_mau_sac}</span>`;
                     const capacity = `<span>Dung lượng: ${product.ten_dung_luong}</span>`;
                     const br = '<br>';
-                    // Thêm chuỗi HTML vào div hiển thị kết quả
-                    searchResultDiv.innerHTML += checkbox + image + productName + price + color + capacity + br;
+                    const quantityInput = `<input type="number" name="so_luong" value="1" min="1" max="100" onchange="updateQuantity(${product.id}, this.value)">`;
+                    const priceInput = `<input hidden type="number" name="gia" value="${product.gia_ban}" readonly>`;
+                    searchResultDiv.innerHTML += `<div>${checkbox + image + productName + price + color + capacity + quantityInput + priceInput + br}</div>`;
                 });
             }
-
-            // Hàm thay đổi trạng thái của checkbox
-            function toggleCheckbox(id) {
-                const index = selectedProducts.indexOf(id);
-                if (index === -1) {
-                    selectedProducts.push(id);
-                } else {
-                    selectedProducts.splice(index, 1);
+        
+            function toggleCheckbox(id, price) {
+                const checkbox = document.querySelector(`input[name="san_pham_id"][value="${id}"]:checked`);
+                if (checkbox) {
+                    const quantityInput = checkbox.parentElement.querySelector('input[name="so_luong"]');
+                    
+                    const product = {
+                        id: id,
+                        so_luong: quantityInput.value,
+                        gia: price
+                    };
+                    
+                    const index = selectedProducts.findIndex(item => item.id === id);
+                    if (index === -1) {
+                        selectedProducts.push(product);
+                    } else {
+                        selectedProducts[index] = product;
+                    }
+                }
+            }
+        
+            function updateQuantity(id, quantity) {
+                const index = selectedProducts.findIndex(item => item.id === id);
+                if (index !== -1) {
+                    selectedProducts[index].so_luong = quantity;
                 }
             }
         </script>
+        
 
-<%- include('../footer.ejs') %>
+        <%- include('../footer.ejs') %>
