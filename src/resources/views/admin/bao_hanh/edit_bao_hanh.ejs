@@ -24,22 +24,22 @@
                         </div>
                         <div class="col-md-4">
                             <label for="" class="form-label">Tiêu đề</label>
-                            <input type="text" name="tieu_de" class="form-control" id="" value="">
+                            <input type="text" name="tieu_de" class="form-control" id="" value="<%= data.tieu_de %>">
                         </div>
                         <div class="col-md-4">
                             <label for="validationCustom03" class="form-label">Ngày bắt đầu</label>
                             <input type="date" name="ngay_bat_dau" class="form-control" id="validationCustom03"
-                                value="">
+                                value="<%= data.ngay_bat_dau instanceof Date ? data.ngay_bat_dau.toISOString().split('T')[0] : '' %>">
                         </div>
                         <div class="col-md-4">
                             <label for="validationCustom03" class="form-label">Ngày kết thúc</label>
                             <input type="date" name="ngay_ket_thuc" class="form-control" id="validationCustom03"
-                                value="">
+                                value="<%= data.ngay_ket_thuc instanceof Date ? data.ngay_ket_thuc.toISOString().split('T')[0] : '' %>">
                         </div>
                         <div class="col-md-4">
-                            <label for="validationCustom03" class="form-label">Ghi chú</label>
-                            <textarea type="text" name="ghi_chu" class="form-control" id="validationCustom03"
-                                value=""></textarea>
+                            <label for="validationCustom03" class="form-label">Chi phí</label>
+                            <input type="text" name="chi_phi" class="form-control" id="validationCustom03"
+                                value="<%= data.chi_phi %>"></input>
                         </div>
                         <div class="col-md-4">
                             <label for="validationCustom03" class="form-label">Trạng thái</label>
@@ -51,6 +51,12 @@
                                 <option value="5"> Hủy </option>
                             </select>
                         </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom03" class="form-label">Ghi chú</label>
+                            <textarea type="text" name="ghi_chu" class="form-control" id="validationCustom03"
+                                value=""><%= data.ghi_chu %></textarea>
+                        </div>
+                        
                         <div class="col-12">
                             <button class="btn btn-primary" type="submit">Submit form</button>
                         </div>

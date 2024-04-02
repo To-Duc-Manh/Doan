@@ -155,8 +155,6 @@ class hoadonController {
         });
     }
     
-    
-
     async chuyen_trang_thai(req, res) {
         try {
             // Lấy id của đơn hàng từ request
@@ -234,45 +232,40 @@ class hoadonController {
         });
     }
 
-    
-    // app.post('/admin/them_hoa_don', (req, res) => {
-    //     // Lấy dữ liệu từ request body
-    //     const { khach_hang_id, san_pham_id } = req.body;
-    
-    //     // Thực hiện chèn dữ liệu vào bảng "tbl_don_mua_hang"
-    //     const donHangQuery = `INSERT INTO tbl_don_mua_hang (khach_hang_id, ten_nguoi_mua, so_dien_thoai, dia_chi_mua_hang, ghi_chu, tong_tien, tong_tien_thanh_toan, hinh_thuc_thanh_toan, trang_thai, ngay_tao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
-    //     const donHangValues = [khach_hang_id, 'Tên người mua', '0123456789', 'Địa chỉ mua hàng', 'Ghi chú', 0, 0, 1, 1];
-    
-    //     // Thực hiện truy vấn vào cơ sở dữ liệu
-    //     connection.query(donHangQuery, donHangValues, (error, results, fields) => {
-    //         if (error) {
-    //             console.error('Lỗi khi thêm đơn hàng: ' + error);
-    //             res.status(500).json({ message: 'Đã xảy ra lỗi khi thêm đơn hàng.' });
-    //             return;
-    //         }
-    
-    //         const donMuaHangId = results.insertId;
-    
-    //         // Thực hiện chèn dữ liệu vào bảng "tbl_chi_tiet_don_mua_hang" cho mỗi sản phẩm được chọn
-    //         if (san_pham_id && Array.isArray(san_pham_id)) {
-    //             san_pham_id.forEach((sp_id) => {
-    //                 const chiTietQuery = `INSERT INTO tbl_chi_tiet_don_mua_hang (don_mua_hang_id, chi_tiet_san_pham_id, so_luong, gia, ngay_tao) VALUES (?, ?, ?, ?, NOW())`;
-    //                 const chiTietValues = [donMuaHangId, sp_id, 1, 100]; // Định nghĩa số lượng và giá tạm thời
-    
-    //                 // Thực hiện truy vấn vào cơ sở dữ liệu
-    //                 connection.query(chiTietQuery, chiTietValues, (error, results, fields) => {
-    //                     if (error) {
-    //                         console.error('Lỗi khi thêm chi tiết đơn hàng: ' + error);
-    //                         res.status(500).json({ message: 'Đã xảy ra lỗi khi thêm chi tiết đơn hàng.' });
-    //                         return;
-    //                     }
-    //                 });
-    //             });
-    //         }
-    
-    //         res.json({ message: 'Thêm đơn mua hàng thành công.' });
-    //     });
-    // });
+    edit_hoa_don(req, res) {
+        let id = req.params.id;
+        connect.query(`SELECT * FROM tbl_don_mua_hang WHERE id = ${id}`,
+            (err, data) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send(err);
+                }
+                let sql = "SELECT * FROM tbl_chi_tiet_don_mua_hang WHERE don_mua_hang_id = ?";
+
+                connect.query(sql, [id], (err, chi_tiet_hoa_don) => {
+                    if (err) {
+                        console.error(err);
+                        return res.status(500).send(err);
+                    }
+                    res.render('admin/hoa_don/edit_hoa_don.ejs', {
+                        data: data[0],
+                        chi_tiet_hoa_don: chi_tiet_hoa_don
+                    });
+                })
+            });
+    }
+
+    xoa_hoa_don(req, res) {
+        let id = req.params.id;
+        connect.query(`DELETE FROM tbl_don_mua_hang WHERE id = ${id}`,
+            (err, data) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send(err);
+                }
+                res.redirect('/admin/hoadon');
+            });
+        }
 }
 
 

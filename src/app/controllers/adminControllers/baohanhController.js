@@ -37,18 +37,19 @@ class baohanhController {
     }
 
     add_baohanh(req, res) {
-        const { hoa_don_bh, tt_sp, loai_bao_hanh, tieu_de, ngay_bat_dau, ngay_ket_thuc, ghi_chu, trang_thai } = req.body;
+        const { chi_tiet_don_mua_hang_id, loai_bao_hanh, tieu_de, ngay_bat_dau, ngay_ket_thuc, ghi_chu, chi_phi, trang_thai } = req.body;
 
-        if (hoa_don_bh && tt_sp && loai_bao_hanh && tieu_de && ngay_bat_dau && ngay_ket_thuc && trang_thai) {
+        if (chi_tiet_don_mua_hang_id && loai_bao_hanh && tieu_de && ngay_bat_dau && ngay_ket_thuc && trang_thai) {
 
             const newUser = {
-                hoa_don_bh: hoa_don_bh,
-                tt_sp: tt_sp,
+                chi_tiet_don_mua_hang_id: chi_tiet_don_mua_hang_id,
+                nhan_vien_id: req.session.user.id,
                 loai_bao_hanh: loai_bao_hanh, // Note: In a production environment, you should hash or encrypt the password
                 tieu_de: tieu_de,
                 ngay_bat_dau: ngay_bat_dau,
                 ngay_ket_thuc: ngay_ket_thuc,
                 ghi_chu: ghi_chu,
+                chi_phi: chi_phi,
                 trang_thai: trang_thai
             };
             const insertUserQuery = "INSERT INTO tbl_phieu_bao_hanh SET ?";
@@ -71,8 +72,15 @@ class baohanhController {
 
         let sql = `
         SELECT 
-        ctdmh.id
+            ctdmh.id,
+            sp.ten_san_pham AS TenSanPham,
+            ms.ten_mau_sac AS MauSac,
+            dl.ten_dung_luong AS DungLuong
         FROM tbl_chi_tiet_don_mua_hang AS ctdmh
+        INNER JOIN tbl_chi_tiet_san_pham AS ctps ON ctdmh.chi_tiet_san_pham_id = ctps.id
+        INNER JOIN tbl_san_pham AS sp ON ctps.san_pham_id = sp.id
+        INNER JOIN tbl_mau_sac AS ms ON ctps.mau_sac_id = ms.id
+        INNER JOIN tbl_dung_luong AS dl ON ctps.dung_luong_id = dl.id
         WHERE ctdmh.don_mua_hang_id = ?
     `;
 
@@ -88,8 +96,6 @@ class baohanhController {
     }
     edit_baohanh(req, res) {
         let id = req.params.id;
-
-
         connect.query(`
             SELECT 
                 pbh.id ,
@@ -131,8 +137,6 @@ class baohanhController {
                     console.error(err);
                     return res.status(500).send(err);
                 }
-                console.log(data);
-
                 res.render('admin/bao_hanh/edit_bao_hanh.ejs', {
                     data: data[0]
                 });
@@ -142,11 +146,11 @@ class baohanhController {
     update_baohanh(req, res) {
         let id = req.params.id;
         console.log(id)
-        const { loai_bao_hanh, tieu_de, ngay_bat_dau, ngay_ket_thuc, ghi_chu, trang_thai } = req.body;
+        const { loai_bao_hanh, tieu_de, ngay_bat_dau, ngay_ket_thuc, ghi_chu, chi_phi, trang_thai } = req.body;
         console.log(loai_bao_hanh);
         // Create a User
         const sql = "UPDATE tbl_phieu_bao_hanh SET ? where id = ?";
-        connect.query(sql, [{ loai_bao_hanh, tieu_de, ngay_bat_dau, ngay_ket_thuc, ghi_chu, trang_thai }, id], (err, result) => {
+        connect.query(sql, [{ loai_bao_hanh, tieu_de, ngay_bat_dau, ngay_ket_thuc, ghi_chu, chi_phi, trang_thai }, id], (err, result) => {
 
             if (err) {
                 console.log("error: ", err);
@@ -156,7 +160,20 @@ class baohanhController {
             res.redirect('/admin/baohanh');
         });
     }
+    chi_tiet_bao_hanh(req, res) {
+        let id = req.params.id;
 
+        let sql_ = "SELECT * FROM tbl_phieu_bao_hanh WHERE id = ?";
+
+        connect.query(sql_, [id], (err, don_bao_hanh) => {
+
+                res.render('admin/bao_hanh/chi_tiet_bao_hanh.ejs', {
+                    user: req.session.user,
+                    don_bao_hanh: don_bao_hanh[0], // Truyền phần tử đầu tiên của mảng
+                });
+                console.log(don_bao_hanh)
+            });
+    }
 
 
 }

@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label for="" class="form-label"> Thông tin chi tiết sản phẩm </label>
-                                        <select name="chi_tiet_san_pham" id="chi_tiet_san_pham"
+                                        <select name="chi_tiet_don_mua_hang_id" id="chi_tiet_san_pham"
                                             class="form-control"></select>
                                     </div>
                                     <div class="col-md-4">
@@ -75,6 +75,11 @@
                                         <label for="validationCustom03" class="form-label">Ghi chú</label>
                                         <textarea type="text" name="ghi_chu" class="form-control"
                                             id="validationCustom03" value=""></textarea>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="validationCustom03" class="form-label">Chi phí</label>
+                                        <input type="text" name="chi_phi" class="form-control"
+                                            id="validationCustom03" value=""></input>
                                     </div>
                                     <div class="col-md-4">
                                         <label for="validationCustom03" class="form-label">Trạng thái</label>
@@ -110,8 +115,8 @@
                         <th>Tiêu đề</th>
                         <th>Ngày bắt đầu</th>
                         <th>Ngày hoàn thành</th>
-                        <th>Ngày chi phí</th>
-                        <th>Ngày trạng thái</th>
+                        <th>Chi phí</th>
+                        <th>Trạng thái</th>
                         <th>Tác vụ</th>
                     </tr>
                 </thead>
@@ -167,7 +172,7 @@
                                     <div class="d-flex ">
                                         <a href="/admin/edit_baohanh/<%= bao_hanh.id %>"
                                             class="btn btn-outline-success btn-sm mx-1">Sửa</a>
-                                        <a href="" class="btn btn-outline-success btn-sm mx-1">CT</a>
+                                        <a href="/admin/chi_tiet_bao_hanh/<%= bao_hanh.id %>" class="btn btn-outline-success btn-sm mx-1">CT</a>
                                         <a href="" class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
                                     </div>
                                 </td>
@@ -196,7 +201,7 @@
                             data.forEach(chiTietSanPham => {
                                 let option = document.createElement('option');
                                 option.value = chiTietSanPham.id;
-                                option.innerText = chiTietSanPham.id;
+                                option.innerText = chiTietSanPham.id + '_' + chiTietSanPham.TenSanPham + '_' + chiTietSanPham.MauSac + '_' + chiTietSanPham.DungLuong;
                                 chiTietSanPhamSelect.appendChild(option);
                             });
                         } else {

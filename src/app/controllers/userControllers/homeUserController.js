@@ -785,9 +785,11 @@ class homeUserController {
         ctsan.hinh_anh AS hinh_anh_chi_tiet, 
         ms.ten_mau_sac, 
         dl.ten_dung_luong,
-        nv.ten_nhan_vien
+        nv.ten_nhan_vien,
+        dmh.khach_hang_id
     FROM tbl_phieu_bao_hanh AS pbh
     LEFT JOIN tbl_chi_tiet_don_mua_hang AS ctdmh ON pbh.chi_tiet_don_mua_hang_id = ctdmh.id
+    LEFT JOIN tbl_don_mua_hang AS dmh ON ctdmh.don_mua_hang_id = dmh.id
     LEFT JOIN tbl_chi_tiet_san_pham AS ctsan ON ctdmh.chi_tiet_san_pham_id = ctsan.id
     LEFT JOIN tbl_san_pham AS sp ON ctsan.san_pham_id = sp.id
     LEFT JOIN tbl_mau_sac AS ms ON ctsan.mau_sac_id = ms.id
@@ -800,12 +802,13 @@ class homeUserController {
                 user: req.session.user,
                 data: data,
             });
+            console.log(data);
         });
     }
 
     luu_phieu_bao_hanh(req, res) {
         const { orderId, ghiChu } = req.body;
-
+        console.log(orderId, ghiChu);
         const query = `
     INSERT INTO tbl_phieu_bao_hanh (chi_tiet_don_mua_hang_id, ghi_chu, ngay_tao, trang_thai)
     VALUES (?, ?, NOW(), 1)

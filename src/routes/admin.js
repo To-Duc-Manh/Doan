@@ -112,13 +112,16 @@ router.post('/hoan_thanh_gh/:id', upload.single("hinh_anh5"), hoadonController.h
 router.post('/them_don_mua_hang_get', authMiddleware.loggedin, hoadonController.them_don_mua_hang_get);
 router.get('/search_sp_hd', authMiddleware.loggedin, hoadonController.search_sp_hd);
 router.get('/search_khach_hang_hd', authMiddleware.loggedin, hoadonController.search_khach_hang_hd);
+router.get('/edit_hoa_don/:id', authMiddleware.loggedin, hoadonController.edit_hoa_don);
+router.get('/xoa_hoa_don/:id', authMiddleware.loggedin, hoadonController.xoa_hoa_don);
 
 //bao_hanh
 router.get('/baohanh', authMiddleware.loggedin, baohanhController.index);
-router.get('/add_baohanh', authMiddleware.loggedin, baohanhController.add_baohanh);
+router.post('/add_baohanh', authMiddleware.loggedin, baohanhController.add_baohanh);
 router.get('/getChiTietSanPhamByDonHang?:id', authMiddleware.loggedin, baohanhController.getChiTietSanPhamByDonHang);
 router.get('/edit_baohanh/:id', authMiddleware.loggedin, baohanhController.edit_baohanh);
 router.post('/update_baohanh/:id', authMiddleware.loggedin, baohanhController.update_baohanh);
+router.get('/chi_tiet_bao_hanh/:id', authMiddleware.loggedin, baohanhController.chi_tiet_bao_hanh);
 
 router.post('/uploadfile', multipartMiddleware, (req, res) => {
     try {
