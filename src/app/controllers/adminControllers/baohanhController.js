@@ -83,7 +83,6 @@ class baohanhController {
         INNER JOIN tbl_dung_luong AS dl ON ctps.dung_luong_id = dl.id
         WHERE ctdmh.don_mua_hang_id = ?
     `;
-
         connect.query(sql, [donHangId], (err, data) => {
             if (err) {
                 console.error('Error:', err);
@@ -167,12 +166,12 @@ class baohanhController {
 
         connect.query(sql_, [id], (err, don_bao_hanh) => {
 
-                res.render('admin/bao_hanh/chi_tiet_bao_hanh.ejs', {
-                    user: req.session.user,
-                    don_bao_hanh: don_bao_hanh[0], // Truyền phần tử đầu tiên của mảng
-                });
-                console.log(don_bao_hanh)
+            res.render('admin/bao_hanh/chi_tiet_bao_hanh.ejs', {
+                user: req.session.user,
+                don_bao_hanh: don_bao_hanh[0], // Truyền phần tử đầu tiên của mảng
             });
+            console.log(don_bao_hanh)
+        });
     }
 
 

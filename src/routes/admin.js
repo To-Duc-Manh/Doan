@@ -31,6 +31,7 @@ const productController = require('../app/controllers/adminControllers/productCo
 const danhmucController = require('../app/controllers/adminControllers/danhmucController');
 const hoadonController = require('../app/controllers/adminControllers/hoadonController');
 const baohanhController = require('../app/controllers/adminControllers/baohanhController');
+const nhapkhoController = require('../app/controllers/adminControllers/nhapkhoController');
 
 router.get('/', authMiddleware.loggedin, (req, res) => {
     res.render('admin/admin.ejs');
@@ -122,6 +123,17 @@ router.get('/getChiTietSanPhamByDonHang?:id', authMiddleware.loggedin, baohanhCo
 router.get('/edit_baohanh/:id', authMiddleware.loggedin, baohanhController.edit_baohanh);
 router.post('/update_baohanh/:id', authMiddleware.loggedin, baohanhController.update_baohanh);
 router.get('/chi_tiet_bao_hanh/:id', authMiddleware.loggedin, baohanhController.chi_tiet_bao_hanh);
+
+
+//nhap_kho
+router.get('/nhapkho', authMiddleware.loggedin, nhapkhoController.index);
+router.get('/nhap_kho', authMiddleware.loggedin, nhapkhoController.nhap_kho);
+router.post('/them_nhap_kho', authMiddleware.loggedin, nhapkhoController.them_nhap_kho);
+router.get('/chi_tiet_nhap_kho/:id', authMiddleware.loggedin, nhapkhoController.chi_tiet_nhap_kho);
+
+
+
+
 
 router.post('/uploadfile', multipartMiddleware, (req, res) => {
     try {

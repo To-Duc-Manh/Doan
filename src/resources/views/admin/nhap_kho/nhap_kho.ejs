@@ -1,0 +1,107 @@
+<%- include('../header.ejs') %>
+    <%- include('../aside.ejs') %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="row">
+                <!-- Button trigger modal -->
+                <div class="col-md-6">
+                    <a href="/admin/nhap_kho" class="btn btn-outline-primary mt-2 mx-2">
+                        Thêm phiếu nhập kho
+                    </a>
+                </div>
+                <div class="col-md-6 mt-2 ">
+                    <form action="" id="combined-form" method="get" class="sidebar-form_1 mx-2">
+                        <div class="input-group mb-3" style="width: 80%;">
+                            <input type="text" name="name" class="form-control" placeholder="Nhập tên bạn muốn tìm kiếm"
+                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
+                                    class="fa fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table style="margin-top: 50px;"
+                class="table table-PW table-striped table-hover table-borderless align-middle">
+                <thead class="table-light">
+                    <caption>Danh sách phiếu nhập kho</caption>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên nhân viên tạo</th>
+                        <th>nhà cung cấp</th>
+                        <th>Tổng tiền</th>
+                        <th>Ghi chú</th>
+                        <th>Ngày tạo</th>
+                        <th>Ngày cập nhật</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <% if (phieunhapkho && phieunhapkho.length> 0) { %>
+                        <% phieunhapkho.forEach(function (phieunhapkho, index) { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td>
+                                    <%= phieunhapkho.nhan_vien_tao_id %>
+                                </td>
+                                <td>
+                                    <%= phieunhapkho.nha_cung_cap_id %>
+                                </td>
+                                <td>
+                                    <%= phieunhapkho.tong_tien %>
+                                </td>
+                                <td>
+                                    <%= phieunhapkho.ghi_chu %>
+                                </td>
+                                <td>
+                                    <%= new Intl.DateTimeFormat('vi-VN').format(new Date(phieunhapkho.ngay_tao)) %>
+                                </td>
+                                <td>
+                                    <%= new Intl.DateTimeFormat('vi-VN').format(new Date(phieunhapkho.ngay_cap_nhat)) %>
+                                </td>
+                                <td>
+                                    <% if (phieunhapkho.trang_thai===1) { %>
+                                        <button class="btn btn-outline-secondary btn-sm"> Chờ thanh toán </button>
+                                        <% } else if (phieunhapkho.trang_thai===2) { %>
+                                            <button class="btn btn-outline-primary btn-sm">Đã hoàn thành </button>
+                                            <% } else if (phieunhapkho.trang_thai===3) { %>
+                                                <button class="btn btn-outline-warning btn-sm">Hủy</button>
+                                                <% } %>
+
+                                </td>
+                                <td>
+                                    <div class="d-flex ">
+                                        <a href="/admin/edit_hoa_don/"
+                                            class="btn btn-outline-success btn-sm mx-1">Sửa</a>
+                                        <a href="#" onclick="confirmDelete(``)"
+                                            class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
+                                        <a href="/admin/chi_tiet_nhap_kho/<%= phieunhapkho.id %>"
+                                            class="btn btn-outline-danger btn-sm mx-1">Chi tiết</a>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">Không có dữ liệu</td>
+                                    </tr>
+                                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            function confirmDelete(id) {
+                if (confirm("Bạn có chắc chắn muốn xóa hóa đơn này?")) {
+                    window.location.href = "/admin/xoa_hoa_don/" + id;
+                } else {
+                    // Không làm gì cả
+                }
+            }
+
+        </script>
+
+        <%- include('../footer.ejs') %>

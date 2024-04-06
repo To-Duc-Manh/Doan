@@ -1,0 +1,160 @@
+<%- include('../header.ejs') %>
+    <%- include('../aside.ejs') %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-6">
+                    <form id="searchForm" class="sidebar-form_1 mx-2 mt-3">
+                        <div class="input-group mb-3" style="width: 80%;">
+                            <input type="text" class="form-control" placeholder="Nhập tên sản phẩm bạn muốn tìm kiếm"
+                                id="searchProduct">
+                            <button type="button" class="btn btn-outline-secondary" onclick="searchProducts()"><i
+                                    class="fa fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div id="searchResult"></div>
+            </div>
+
+            <div id="" class="row">
+                <div class="col-md-6">
+                    <label for="validationCustom01" class="form-label"> Nhà cung cấp </label>
+                    <select class="form-control" name="nhacungcap_id" id="nhacungcap_id">
+                        <% if (nhacungcap && nhacungcap.length> 0) { %>
+                            <% nhacungcap.forEach(function (nhacungcap, index) { %>
+                                <option value="<%- nhacungcap.id %>"><%- nhacungcap.ten_nha_cung_cap%></option>
+                                <% }); %>
+                                    <% } else { %>
+                                        <p>Không có dữ liệu</p>
+
+                                        <% } %>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="validationCustom01" class="form-label">Tổng tiền thanh toán</label>
+                    <input type="number" name="tong_tien" class="form-control" id="tong_tien" value="" required>
+                    <div class="invalid-feedback">
+                        Hãy nhập tổng tiền thanh toán
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="validationCustom01" class="form-label">Ghi chú</label>
+                    <textarea name="ghi_chu" class="form-control" id="ghi_chu_id"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label for="validationCustom03" class="form-label">Trạng thái</label>
+                    <select class="form-control" name="trang_thai" id="trang_thai">
+                        <option value="1"> Chờ thanh toán </option>
+                        <option value="2"> Đã hoàn thành </option>
+                        <option value="3"> Hủy </option>
+                    </select>
+                </div>
+            </div>
+            <form class="mt-5" id="addOrderForm" onsubmit="submitOrderForm(event)">
+                <button class="btn btn-primary" type="submit">Thêm phiếu nhập kho </button>
+            </form>
+        </div>
+
+        <script>
+            let selectedProducts = []; // Danh sách sản phẩm đã chọn
+
+            function submitOrderForm(event) {
+                event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+                let nhacungcap_id, tong_tien, trang_thai, ghi_chu;
+
+                nhacungcap_id = document.getElementById('nhacungcap_id').value;
+                tong_tien = document.getElementById('tong_tien').value;
+                ghi_chu = document.getElementById('ghi_chu_id').value;
+                trang_thai = document.getElementById('trang_thai').value;
+
+                const selectedProductsData = selectedProducts.map(product => ({
+                    id: product.id,
+                    so_luong: product.so_luong,
+                    gia: product.gia
+                }));
+
+                fetch('/admin/them_nhap_kho', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nhacungcap_id: nhacungcap_id,
+                        tong_tien: tong_tien,
+                        trang_thai: trang_thai,
+                        ghi_chu: ghi_chu,
+                        san_pham: selectedProductsData
+                    })
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Đã xảy ra lỗi khi thêm phiếu nhập kho thành công.');
+                    })
+                    .then(data => {
+                        alert('Đã thêm phiếu nhập kho thành công!');
+                        window.location.href = '/admin/nhapkho';
+                    })
+                    .catch(error => {
+                        console.error('Lỗi khi thêm phiếu nhập kho thành công:', error);
+                    });
+            }
+
+
+
+            function searchProducts() {
+                const keyword = document.getElementById('searchProduct').value;
+                fetch(`/admin/search_sp_hd?name=${keyword}`)
+                    .then(response => response.json())
+                    .then(data => displaySearchResults(data))
+                    .catch(error => console.error('Lỗi khi tìm kiếm sản phẩm:', error));
+            }
+
+            function displaySearchResults(results) {
+                const searchResultDiv = document.getElementById('searchResult');
+                searchResultDiv.innerHTML = '';
+                results.forEach(product => {
+                    const checkbox = `<input type="checkbox" name="san_pham_id" value="${product.id}" ${selectedProducts.some(item => item.id === product.id) ? 'checked' : ''} onclick="toggleCheckbox(${product.id}, ${product.gia_ban})">`;
+                    const image = `<img src="${product.hinh_anh}">`;
+                    const productName = `<span>${product.ten_san_pham}</span>`;
+                    const color = `<span>Màu sắc: ${product.ten_mau_sac}</span>`;
+                    const capacity = `<span>Dung lượng: ${product.ten_dung_luong}</span>`;
+                    const br = '<br>';
+                    const quantityInput = `<input type="number" name="so_luong" onchange="updateQuantity(${product.id}, this.value)">`;
+                    const priceInput = `<input type="number" name="gia" value="">`;
+                    searchResultDiv.innerHTML += `<div>${checkbox + image + productName + color + capacity + 'Số lượng:' + quantityInput + 'Giá:' + priceInput + br}</div>`;
+                });
+            }
+
+            function toggleCheckbox(id, price) {
+                const checkbox = document.querySelector(`input[name="san_pham_id"][value="${id}"]:checked`);
+                if (checkbox) {
+                    const quantityInput = checkbox.parentElement.querySelector('input[name="so_luong"]');
+
+                    const product = {
+                        id: id,
+                        so_luong: quantityInput.value,
+                        gia: price
+                    };
+
+                    const index = selectedProducts.findIndex(item => item.id === id);
+                    if (index === -1) {
+                        selectedProducts.push(product);
+                    } else {
+                        selectedProducts[index] = product;
+                    }
+                }
+            }
+
+            function updateQuantity(id, quantity) {
+                const index = selectedProducts.findIndex(item => item.id === id);
+                if (index !== -1) {
+                    selectedProducts[index].so_luong = quantity;
+                }
+            }
+        </script>
+
+
+        <%- include('../footer.ejs') %>
