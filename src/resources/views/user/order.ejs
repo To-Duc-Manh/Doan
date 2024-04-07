@@ -19,22 +19,22 @@
       <div class="col-lg-9">
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link active" href="#cho_xac_nhan" data-toggle="tab">Chờ xác nhận</a>
+            <a class="nav-link active font-weight" href="#cho_xac_nhan" data-toggle="tab">Chờ xác nhận</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#da_xac_nhan" data-toggle="tab">Đã xác nhận</a>
+            <a class="nav-link font-weight" href="#da_xac_nhan" data-toggle="tab">Đã xác nhận</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#dang_giao" data-toggle="tab">Đang giao hàng</a>
+            <a class="nav-link font-weight" href="#dang_giao" data-toggle="tab">Đang giao hàng</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#da_giao" data-toggle="tab">Đã giao</a>
+            <a class="nav-link font-weight" href="#da_giao" data-toggle="tab">Đã giao</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#thanh_cong" data-toggle="tab">Thành công</a>
+            <a class="nav-link font-weight" href="#thanh_cong" data-toggle="tab">Thành công</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#da_huy" data-toggle="tab">Đã hủy</a>
+            <a class="nav-link font-weight" href="#da_huy" data-toggle="tab">Đã hủy</a>
           </li>
         </ul>
 
@@ -63,14 +63,14 @@
                           src="/imgUpload/<%= order.hinh_anh %>">
                       </div>
                       <div class="col-lg-6">
-                        <p>Thông tin sản phẩm</p>
+                        <p class="font-weight">Thông tin sản phẩm</p>
                         <p>
                           <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%=
                                   order.so_luong %>
                         </p>
                       </div>
                       <div class="col-lg-3">
-                        <p>Giá</p>
+                        <p class="font-weight">Giá</p>
                         <p>
                           <%= order.gia_ban %>
                         </p>
@@ -78,11 +78,11 @@
                       </div>
                     </div>
                     <% } }); } if (!hasActiveProducts) { %>
-                      <p>Không có dữ liệu</p>
+                      <p>Không có đơn hàng</p>
                       <% } %>
                         <div>
-                          <p class="text-end mx-2">Tổng tiền phải thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan
-                              %>
+                          <p class="text-end mx-2"><span class="font-weight">Tổng tiền thanh toán:</span>
+                            <%= don_mua_hang_item.tong_tien_thanh_toan %>
                           </p>
                         </div>
                         <div class="text-end">
@@ -91,9 +91,9 @@
                         </div>
                 </div>
                 <% } }); if (!hasActiveOrder) { %>
-                  <p>Không có dữ liệu</p>
+                  <p>Không có đơn hàng</p>
                   <% } } else { %>
-                    <p>Không có dữ liệu</p>
+                    <p>Không có đơn hàng</p>
                     <% } %>
             </div>
           </div>
@@ -120,14 +120,14 @@
                         src="/imgUpload/<%= order.hinh_anh %>">
                     </div>
                     <div class="col-lg-6">
-                      <p>Thông tin sản phẩm</p>
+                      <p class="font-weight">Thông tin sản phẩm</p>
                       <p>
                         <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%= order.so_luong
                                 %>
                       </p>
                     </div>
                     <div class="col-lg-3">
-                      <p>Giá</p>
+                      <p class="font-weight">Giá</p>
                       <p>
                         <%= order.gia_ban %>
                       </p>
@@ -135,15 +135,15 @@
                     </div>
                   </div>
                   <% } }); } if (!hasActiveProducts) { %>
-                    <p>Không có dữ liệu</p>
+                    <p>Không có đơn hàng</p>
                     <% } %>
                       <p class="text-end">Tổng tiền phải thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
                       </p>
               </div>
               <% } }); if (!hasActiveOrder) { %>
-                <p>Không có dữ liệu</p>
+                <p>Không có đơn hàng</p>
                 <% } } else { %>
-                  <p>Không có dữ liệu</p>
+                  <p>Không có đơn hàng</p>
                   <% } %>
 
 
@@ -171,14 +171,14 @@
                         src="/imgUpload/<%= order.hinh_anh %>">
                     </div>
                     <div class="col-lg-6">
-                      <p>Thông tin sản phẩm</p>
+                      <p class="font-weight">Thông tin sản phẩm</p>
                       <p>
                         <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%= order.so_luong
                                 %>
                       </p>
                     </div>
                     <div class="col-lg-3">
-                      <p>Giá</p>
+                      <p class="font-weight">Giá</p>
                       <p>
                         <%= order.gia_ban %>
                       </p>
@@ -186,15 +186,15 @@
                     </div>
                   </div>
                   <% } }); } if (!hasActiveProducts) { %>
-                    <p>Không có dữ liệu</p>
+                    <p>Không có đơn hàng</p>
                     <% } %>
                       <p class="text-end">Tổng tiền phải thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
                       </p>
               </div>
               <% } }); if (!hasActiveOrder) { %>
-                <p>Không có dữ liệu</p>
+                <p>Không có đơn hàng</p>
                 <% } } else { %>
-                  <p>Không có dữ liệu</p>
+                  <p>Không có đơn hàng</p>
                   <% } %>
           </div>
           <div class="tab-pane" id="da_giao">
@@ -220,14 +220,14 @@
                         src="/imgUpload/<%= order.hinh_anh %>">
                     </div>
                     <div class="col-lg-6">
-                      <p>Thông tin sản phẩm</p>
+                      <p class="font-weight">Thông tin sản phẩm</p>
                       <p>
                         <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%= order.so_luong
                                 %>
                       </p>
                     </div>
                     <div class="col-lg-3">
-                      <p>Giá</p>
+                      <p class="font-weight">Giá</p>
                       <p>
                         <%= order.gia_ban %>
                       </p>
@@ -235,7 +235,7 @@
                     </div>
                   </div>
                   <% } }); } if (!hasActiveProducts) { %>
-                    <p>Không có dữ liệu</p>
+                    <p>Không có đơn hàng</p>
                     <% } %>
                       <p class="text-end">Tổng tiền thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
                       </p>
@@ -245,9 +245,9 @@
                       </div>
               </div>
               <% } }); if (!hasActiveOrder) { %>
-                <p>Không có dữ liệu</p>
+                <p>Không có đơn hàng</p>
                 <% } } else { %>
-                  <p>Không có dữ liệu</p>
+                  <p>Không có đơn hàng</p>
                   <% } %>
           </div>
           <div class="tab-pane" id="thanh_cong">
@@ -273,14 +273,14 @@
                         src="/imgUpload/<%= order.hinh_anh %>">
                     </div>
                     <div class="col-lg-6">
-                      <p>Thông tin sản phẩm</p>
+                      <p class="font-weight">Thông tin sản phẩm</p>
                       <p>
                         <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%= order.so_luong
                                 %>
                       </p>
                     </div>
                     <div class="col-lg-3">
-                      <p>Giá</p>
+                      <p class="font-weight">Giá</p>
                       <p>
                         <%= order.gia_ban %>
                       </p>
@@ -309,7 +309,8 @@
                                   </div>
                                   <div class="">
                                     <label for="validationCustom02" class="form-label">Ghi chú</label>
-                                    <textarea class="form-control" name="ghi_chu_bh<%= order.ten_san_pham %>"></textarea>
+                                    <textarea class="form-control"
+                                      name="ghi_chu_bh<%= order.ten_san_pham %>"></textarea>
                                   </div>
                                 </form>
                               </div>
@@ -327,15 +328,15 @@
                     </div>
                   </div>
                   <% } }); } if (!hasActiveProducts) { %>
-                    <p>Không có dữ liệu</p>
+                    <p>Không có đơn hàng</p>
                     <% } %>
                       <p class="text-end">Tổng tiền thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
                       </p>
               </div>
               <% } }); if (!hasActiveOrder) { %>
-                <p>Không có dữ liệu</p>
+                <p>Không có đơn hàng</p>
                 <% } } else { %>
-                  <p>Không có dữ liệu</p>
+                  <p>Không có đơn hàng</p>
                   <% } %>
           </div>
           <div class="tab-pane" id="da_huy">
@@ -361,14 +362,14 @@
                         src="/imgUpload/<%= order.hinh_anh %>">
                     </div>
                     <div class="col-lg-6">
-                      <p>Thông tin sản phẩm</p>
+                      <p class="font-weight">Thông tin sản phẩm</p>
                       <p>
                         <%= order.ten_san_pham %> - <%= order.mau_sac %> - <%= order.dung_luong %> - x<%= order.so_luong
                                 %>
                       </p>
                     </div>
                     <div class="col-lg-3">
-                      <p>Giá</p>
+                      <p class="font-weight">Giá</p>
                       <p>
                         <%= order.gia_ban %>
                       </p>
@@ -376,7 +377,7 @@
                     </div>
                   </div>
                   <% } }); } if (!hasActiveProducts) { %>
-                    <p>Không có dữ liệu</p>
+                    <p>Không có đơn hàng</p>
                     <% } %>
                       <div>
                         <p class="text-end mx-2">Tổng tiền thanh toán: <%= don_mua_hang_item.tong_tien_thanh_toan %>
@@ -389,9 +390,9 @@
                       </div>
               </div>
               <% } }); if (!hasActiveOrder) { %>
-                <p>Không có dữ liệu</p>
+                <p>Không có đơn hàng</p>
                 <% } } else { %>
-                  <p>Không có dữ liệu</p>
+                  <p>Không có đơn hàng</p>
                   <% } %>
           </div>
         </div>

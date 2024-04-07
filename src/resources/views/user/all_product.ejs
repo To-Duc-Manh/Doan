@@ -59,28 +59,29 @@
                 <div class="row">
                     <% if (data && data.length> 0) { %>
                         <% data.forEach(function (product, index) { %>
-                            <div class="col-md-3 mt-5">
+                            <div class="col-md-5 col-lg-3 mt-5">
                                 <div class="card">
-                                    <a href="/chi_tiet_sp/<%= product.id %>">
+                                    <a href="/chi_tiet_sp/<%= product.chi_tiet_id %>">
                                         <img src="imgUpload/<%= product.hinh_anh %>" class="card-img-top" alt="...">
                                     </a>
                                     <div class="card-body">
-                                        <h5 class="card-title">
-                                            <%= product.ten_san_pham %> màu <%= product.ten_mau_sac %>
+                                        <h5 class="card-title" style="font-weight: 600;">
+                                            <%= product.ten_san_pham %>
                                         </h5>
                                         <div class="card-body d-flex p-0">
-
-                                            <p class="card-link">SSD <%= product.ten_dung_luong %>
+                                            <p class="card-link m-0">Dung lượng: <%= product.ten_dung_luong %>
                                             </p>
                                         </div>
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">Giá: <%= product.gia_ban %> vnd</li>
-                                        </ul>
+                                        <p class="m-0">Màu: <%= product.ten_mau_sac %>
+                                        </p>
+                                        <p class="m0">Giá: <%= product.gia_ban %> vnd</p>
+
                                         <div class="text-center d-flex">
                                             <a href="/add_to_cart/<%= product.chi_tiet_id %>"
-                                                class="btn btn-primary">Thêm
-                                                với giỏ hàng</a>
-                                            <a href="/dat_hang/<%= product.chi_tiet_id %>" class="btn btn-success">Mua
+                                                class="btn btn-primary ms-4"><i
+                                                    class="fa-solid fa-cart-shopping"></i></a>
+                                            <a href="/dat_hang/<%= product.chi_tiet_id %>"
+                                                class="btn btn-success ms-5">Mua
                                                 ngay</a>
                                         </div>
                                     </div>

@@ -31,64 +31,55 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%; z-index: 11; padding-top: 0px">
-    <div class="container-fluid" style="background-color: rgba(224, 224, 224);">
+  <div class="d-flex mt-2 justify-content-end" style="">
+    <% if (user) { %>
+
+      <p class="" style="color: black; z-index: 11;margin-top: 3px; margin-bottom: 0; margin-right: 30px;">
+        <span style="color: black; font-weight: 600;">Chào mừng: </span>
+        <%= user.ho_ten %>
+      </p>
+      <% } %>
+
+        <% if (user) { %>
+          <a class="btn btn-outline-secondary btn-sm" style="margin-right: 30px; margin-bottom: 5px;"
+            href="/auth/logoutUser">
+            Đăng xuất
+          </a>
+          <% } else { %>
+
+            <% } %>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light"
+    style="width: 100%; z-index: 11; padding-top: 0px; background-color: #027b9a !important; ">
+    <div class="container-fluid" style="">
       <a href="/"> <img class="logo_img" src="/img/logo.png" alt=""></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent" style="background-color: none;">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <% if (user) { %>
-              <p class="" style="color: black; z-index: 11;">
-                <%= user.ho_ten %>
-              </p class="">
-              <% } %>
-
-                <% if (user) { %>
-                  <a class="btn btn-outline-secondary btn-sm mx-3" href="/auth/logoutUser">
-                    Đăng xuất
-                  </a>
-                  <% } else { %>
-                    <a class="btn btn-outline-secondary btn-sm mx-3" href="/auth/loginUser">
-                      Đăng
-                      nhập
-                    </a>
-                    <% } %>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Dropdown
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="/all_product">Sản
-                  phẩm</a></li>
-          </li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-        </li>
-        <li class="nav-item">
-          <a href="/cart" class="btn btn-secondary cart">gio hang</a>
-
-        </li>
-        <li class="nav-item">
-          <a href="/order" class="btn btn-outline-primary cart">Đơn hàng</a>
-        </li>
-        </ul>
-        <form action="/search_product_all_user" method="get" class="d-flex">
-          <input class="form-control me-2" type="search" name="name" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+        <a class="text_content_header active" aria-current="page" href="/">Trang chủ</a>
+        <a class="text_content_header" href="/all_product">Sản
+          phẩm</a></li>
+        <form action="/search_product_all_user" method="get" class="d-flex search_form">
+          <input class="search_input" type="search" name="name" placeholder="Search" aria-label="Search">
+          <button class="search_btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
         </form>
+
+        <% if (user) { %>
+          <div style="margin-left: 250px;" class="d-flex">
+            <a href="/cart" class=" cart"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="/order" class="btn btn-outline-light order">Đơn hàng</a>
+          </div>
+          <% } else { %>
+            <div style="margin-left: 180px;" class="d-flex">
+              <a href="/cart" class=" cart"><i class="fa-solid fa-cart-shopping"></i></a>
+              <a href="/order" class="btn btn-outline-light order">Đơn hàng</a>
+            </div>
+            <a class="btn btn-outline-light" style="margin-left: 20px;" href="/auth/loginUser">
+              Đăng nhập
+            </a>
+            <% } %>
       </div>
     </div>
   </nav>

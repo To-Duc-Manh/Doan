@@ -2,22 +2,22 @@
 
     <div class="container" style=" margin-bottom: 150px">
         <div>
-            <h3 class="text-start">ĐẶT HÀNG </h3>
-            <p>Địa chỉ: <span id="ho_ten">
+            <h3 class="text-start mt-3 title2">ĐẶT HÀNG </h3>
+            <p> <span class="font-weight">Khách hàng: </span> <span id="ho_ten">
                     <%= user.ho_ten %>
-                </span> - <span id="so_dien_thoai">
+                </span> - sdt: <span id="so_dien_thoai">
                     <%= user.so_dien_thoai %>
-                </span> - <span id="dia_chi">
+                </span></p>
+            <p> <span class="font-weight"> Địa chỉ: </span> <span id="dia_chi">
                     <%= user.dia_chi %>
                 </span></p>
-            <textarea id="ghi_chu" style="width: 100%;" placeholder="Ghi chu"></textarea>
+            <textarea id="ghi_chu" class="form-control" style="width: 100%;" placeholder="Ghi chu"></textarea>
         </div>
 
         <div>
-            <table style="margin-top: 50px;"
-                class="table table-PW table-striped table-hover table-borderless align-middle">
-                <thead class="table-light">
-                    <tr>
+            <table style="margin-top: 50px;" class="table table-PW table-hover table-borderless align-middle">
+                <thead class="">
+                    <tr style="background-color: #e9e9e9;">
                         <th class="text-center">Hình ảnh</th>
                         <th>Sản phẩm</th>
                         <th>Mau sắc</th>
@@ -50,21 +50,23 @@
                                 </td>
                                 <td>
                                     <div>
-                                        <button onclick="decreaseQuantity('<%= item.id %>')">-</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            onclick="decreaseQuantity('<%= item.id %>')">-</button>
                                         <span id="so_luong_<%= item.id %>">
                                             <%= item.so_luong %>
                                         </span>
-                                        <button onclick="increaseQuantity('<%= item.id %>')">+</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            onclick="increaseQuantity('<%= item.id %>')">+</button>
                                     </div>
                                 </td>
                                 <td id="gia_ban_<%= item.id %>">
-                                    <%= item.gia_ban %>
+                                    <%= item.gia_ban %> <span>đ</span>
                                 </td>
                                 <td><span id="tong_gia_<%= item.id %>">
-                                        <%= item.gia_ban * item.so_luong %>
+                                        <%= item.gia_ban * item.so_luong %> <span>đ</span>
                                     </span>
                                 </td>
-                                <td id="don_mua_hang_id_<%= index + 1 %>">
+                                <td hidden id="don_mua_hang_id_<%= index + 1 %>">
                                     <%= item.don_mua_hang_id %>
                                 </td>
 
@@ -81,16 +83,16 @@
             </table>
             <div class="row mt-5">
                 <div class="col-lg-4">
-                    <p>PHƯƠNG THỨC THANH TOÁN</p>
+                    <p class="font-weight">PHƯƠNG THỨC THANH TOÁN</p>
                     <hr>
-                    <select id="hinh_thuc_thanh_toan">
+                    <select id="hinh_thuc_thanh_toan" class="form-control">
                         <option value="1">Thanh toán khi nhận hàng</option>
                         <option value="2">Thanh toán bằng ngân hàng</option>
                     </select>
                 </div>
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4">
-                    <p>TỔNG TIỀN</p>
+                    <p class="font-weight">TỔNG TIỀN</p>
                     <hr>
                     <p>Phí vận chuyển: ...</p>
                     <p id="tong_tien_thanh_toan"></p>
@@ -152,7 +154,7 @@
                 total += parseFloat(element.innerText);
             });
 
-            document.getElementById('tong_tien_thanh_toan').innerText ="Tổng tiền: " + total.toFixed(0);
+            document.getElementById('tong_tien_thanh_toan').innerText = "Tổng tiền: " + total.toFixed(0);
         }
 
         function placeOrder() {

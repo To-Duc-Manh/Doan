@@ -1,9 +1,9 @@
 <%- include('headerUser.ejs') %>
     <div class="container" style="margin-bottom: 150px">
-        <table style="margin-top: 50px;" class="table table-PW table-striped table-hover table-borderless align-middle">
+        <table style="margin-top: 50px;" class="table table-PW table-hover table-borderless align-middle">
             <thead class="table-light">
                 <caption>Danh sách sản phẩm có trong giỏ hàng </caption>
-                <tr>
+                <tr style="background-color: #e9e9e9;">
                     <th class="text-center">STT</th>
                     <th class="text-center">Hình ảnh</th>
                     <th>Sản phẩm</th>
@@ -12,6 +12,7 @@
                     <th>Số lượng</th>
                     <th>Giá</th>
                     <th>Chọn</th>
+                    <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -36,16 +37,18 @@
                             </td>
                             <td>
                                 <div>
-                                    <button onclick="decreaseQuantity('<%= item.id %>')">-</button>
+                                    <button class="btn btn-outline-secondary btn-sm"
+                                        onclick="decreaseQuantity('<%= item.id %>')">-</button>
                                     <span id="so_luong_<%= item.id %>">
                                         <%= item.so_luong %>
                                     </span>
-                                    <button onclick="increaseQuantity('<%= item.id %>')">+</button>
+                                    <button class="btn btn-outline-secondary btn-sm"
+                                        onclick="increaseQuantity('<%= item.id %>')">+</button>
                                 </div>
 
                             </td>
                             <td>
-                                <%= item.gia_ban %>
+                                <%= item.gia_ban %> <span>đ</span>
                             </td>
 
                             <td>

@@ -2,15 +2,16 @@
 
     <div class="container" style=" margin-bottom: 150px">
         <div>
-            <h3 class="text-start">ĐẶT HÀNG </h3>
-            <p>Địa chỉ: <span id="ho_ten">
+            <h3 class="text-start mt-3 title2">ĐẶT HÀNG </h3>
+            <p> <span class="font-weight">Khách hàng: </span> <span id="ho_ten">
                     <%= user.ho_ten %>
-                </span> - <span id="so_dien_thoai">
-                    <%= user.so_dien_thoai %>
-                </span> - <span id="dia_chi">
+                </span> <span id="so_dien_thoai">
+                    - sdt: <%= user.so_dien_thoai %>
+                </span></p>
+            <p> <span class="font-weight"> Địa chỉ: </span> <span id="dia_chi">
                     <%= user.dia_chi %>
                 </span></p>
-            <textarea id="ghi_chu" style="width: 100%;" placeholder="Ghi chu"></textarea>
+            <textarea class="form-control" id="ghi_chu" style="width: 100%;" placeholder="Ghi chu"></textarea>
         </div>
 
         <div>
@@ -35,40 +36,40 @@
                             <%= product_datHang.ten_san_pham %>
                         </td>
                         <td id="gia_ban">
-                            <%= product_datHang.gia_ban %>
+                            <%= product_datHang.gia_ban %> <span>đ</span>
                         </td>
                         <td>
                             <div>
-                                <button onclick="decreaseQuantity()">-</button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="decreaseQuantity()">-</button>
                                 <span id="so_luong">
                                     <%= so_luong %>
                                 </span>
-                                <button onclick="increaseQuantity()">+</button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="increaseQuantity()">+</button>
                             </div>
                         </td>
                         <td><span id="tong_gia">
-                                <%= product_datHang.gia_ban * so_luong %>
+                                <%= product_datHang.gia_ban * so_luong %> <span>đ</span>
                             </span></td>
                     </tr>
                 </tbody>
             </table>
             <div class="row mt-5">
                 <div class="col-lg-4">
-                    <p>PHƯƠNG THỨC THANH TOÁN</p>
+                    <p class="font-weight">PHƯƠNG THỨC THANH TOÁN</p>
                     <hr>
-                    <select id="hinh_thuc_thanh_toan">
+                    <select id="hinh_thuc_thanh_toan" class="form-control">
                         <option value="1">Thanh toán khi nhận hàng</option>
                         <option value="2">Thanh toán bằng ngân hàng</option>
                     </select>
                 </div>
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4">
-                    <p>TỔNG TIỀN</p>
+                    <p class="font-weight">TỔNG TIỀN</p>
                     <hr>
                     <p>Phí vận chuyển: ...</p>
-                    <p>Tổng tiền:</p>
                     <p id="tong_tien_thanh_toan">
-                        <%= product_datHang.gia_ban * so_luong + 10 %>
+                        <span>Tổng tiền thanh toán: </span>
+                        <%= product_datHang.gia_ban * so_luong + 10 %> <span>đ</span>
                     </p>
 
                     <button class="btn btn-primary" onclick="datHang()">ĐẶT HÀNG</button>
