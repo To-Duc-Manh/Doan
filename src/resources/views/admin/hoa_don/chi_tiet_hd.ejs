@@ -2,26 +2,26 @@
     <%- include('../aside.ejs') %>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <h2 class="text-center"> Đơn bán hàng</h2>
-            <h4 class="text-center"><%= don_mua_hang.ngay_dat %></h4>
+            <h2 class="text-center font-weight"> Đơn bán hàng</h2>
+            <a href="/admin/xuat-hoa-don/<%= don_mua_hang.id %>" class="btn btn-primary">Export</a>
             <hr>
             
             <div class="row">
                 <div class="col-md-6">
-                    <p><span>Tên khách hàng:</span><%= don_mua_hang.ten_nguoi_mua %></p>
-                    <p><span>Số điện thoại:</span><%= don_mua_hang.so_dien_thoai %></p>
+                    <p><span class="font-weight">Tên khách hàng:</span> <%= don_mua_hang.ten_nguoi_mua %></p>
+                    <p><span class="font-weight">Số điện thoại:</span> <%= don_mua_hang.so_dien_thoai %></p>
                 </div>
                 <div class="col-md-6">
-                    <p><span>Địa chỉ:</span><%= don_mua_hang.dia_chi_mua_hang %></p>
-                    <p><span>Ghi chú:</span><%= don_mua_hang.ghi_chu %></p>
+                    <p><span class="font-weight">Địa chỉ:</span> <%= don_mua_hang.dia_chi_mua_hang %></p>
+                    <p><span class="font-weight">Ghi chú:</span> <%= don_mua_hang.ghi_chu %></p>
                 </div>
             </div>
 
             <table style="margin-top: 50px;"
-                class="table table-PW table-striped table-hover table-borderless align-middle">
+                class="table table-PW table-hover table-borderless align-middle">
                 <thead class="table-light">
-                    <caption>Danh sách khách hàng</caption>
-                    <tr>
+                    <caption>Danh sách sàn phẩm</caption>
+                    <tr style="background-color: #d2d2d2;">
                         <th>Tên sản phẩm</th>
                         <th>Số lượng</th>
                         <th>Giá</th>
@@ -65,9 +65,9 @@
                 </div>
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4">
-                    <p>Thành tiền: ...</p>
-                    <p>Phí vận chuyển: ...</p>
-                    <p>Tổng tiền:</p>
+                    <p class="font-weight">Thành tiền: ...</p>
+                    <p class="font-weight">Phí vận chuyển: ...</p>
+                    <p class="font-weight">Tổng tiền: <%= don_mua_hang.tong_tien_thanh_toan %> đ</p>
                 </div>
             </div>
             

@@ -377,6 +377,7 @@ class homeUserController {
         SELECT 
             sp.ten_san_pham, 
             ctsanpham.hinh_anh AS hinh_anh_chi_tiet, 
+            ctsanpham.id AS chi_tiet_id,
             mausac.ten_mau_sac, 
             dungluong.ten_dung_luong, 
             ctsanpham.gia_ban, 

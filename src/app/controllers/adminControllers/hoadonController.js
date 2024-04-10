@@ -46,6 +46,94 @@ class hoadonController {
         });
     }
 
+
+    xuatHoaDonPDF(req, res) {
+        // Lấy dữ liệu từ req hoặc truy vấn từ CSDL nếu cần
+        const pdf = require('html-pdf');
+        const path = require('path');
+
+        let html = `
+<div class="content-wrapper">
+    <h2 class="text-center font-weight"> Đơn bán hàng</h2>
+    <a href="" class="btn btn-primary">Export</a>
+    <hr>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <p><span class="font-weight">Tên khách hàng:</span> <%= don_mua_hang.ten_nguoi_mua %></p>
+            <p><span class="font-weight">Số điện thoại:</span> <%= don_mua_hang.so_dien_thoai %></p>
+        </div>
+        <div class="col-md-6">
+            <p><span class="font-weight">Địa chỉ:</span> <%= don_mua_hang.dia_chi_mua_hang %></p>
+            <p><span class="font-weight">Ghi chú:</span> <%= don_mua_hang.ghi_chu %></p>
+        </div>
+    </div>
+
+    <table style="margin-top: 50px;"
+        class="table table-PW table-hover table-borderless align-middle">
+        <thead class="table-light">
+            <caption>Danh sách sản phẩm</caption>
+            <tr style="background-color: #d2d2d2;">
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Giá</th>
+                <th>Tổng tiền</th>
+                <th>Thời gian bảo hành</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            <% if (chi_tiet_hoa_don && chi_tiet_hoa_don.length > 0) { %>
+                <% chi_tiet_hoa_don.forEach(function (hoadon, index) { %>
+                    <tr>
+                        <td><%= hoadon.chi_tiet_san_pham_id %></td>
+                        <td><%= hoadon.so_luong %></td>
+                        <td><%= hoadon.gia %></td>
+                        <td><%= hoadon.so_luong * hoadon.gia %></td>
+                        <td><%= hoadon.chi_tiet_san_pham_id %></td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="5">Không có dữ liệu</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <div class="row mt-5">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <p class="font-weight">Thành tiền: ...</p>
+            <p class="font-weight">Phí vận chuyển: ...</p>
+            <p class="font-weight">Tổng tiền: <%= don_mua_hang.tong_tien_thanh_toan %> đ</p>
+        </div>
+    </div>
+</div>
+`;
+
+        let options = {
+            format: 'A4',
+            border: {
+                top: '0.5in',
+                right: '0.5in',
+                bottom: '0.5in',
+                left: '0.5in'
+            }
+        };
+
+        const outputPath = 'C:\\Users\\MBC\\Downloads\\hoadon.pdf';
+
+        pdf.create(html, options).toFile(outputPath, (err, result) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+
+            // Trả về file PDF đã tạo
+            res.sendFile(outputPath);
+        });
+    };
+
     get_sp_don_mua_hang(req, res) {
         let sql = "SELECT * FROM tbl_chi_tiet_san_pham";
         connect.query(sql, (err, san_pham) => {
@@ -72,7 +160,7 @@ class hoadonController {
             }
             res.json(khach_hang);
         })
-        
+
     }
     search_sp_hd(req, res) {
         const keyword = req.query.name;
@@ -81,7 +169,7 @@ class hoadonController {
             res.status(400).json({ error: 'Vui lòng nhập từ khóa tìm kiếm.' });
             return;
         }
-    
+
         const sql = `
             SELECT 
                 sp.*,
@@ -110,28 +198,28 @@ class hoadonController {
             res.json(san_pham);
         });
     }
-    
+
     them_don_mua_hang_get(req, res) {
         const { khach_hang_id, ten_nguoi_mua, sdt, san_pham, dia_chi_mua_hang, ghi_chu } = req.body;
         const user = req.session.user.id;
         console.log(req.body)
         const donHangQuery = `INSERT INTO tbl_don_mua_hang (nhan_vien_id, khach_hang_id, ten_nguoi_mua, so_dien_thoai, dia_chi_mua_hang, ghi_chu, tong_tien, tong_tien_thanh_toan, hinh_thuc_thanh_toan, trang_thai, ngay_tao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
         const donHangValues = [user, khach_hang_id, ten_nguoi_mua, sdt, dia_chi_mua_hang, ghi_chu, 0, 0, 1, 1];
-    
+
         connect.query(donHangQuery, donHangValues, (error, results, fields) => {
             if (error) {
                 console.error('Lỗi khi thêm đơn hàng: ' + error);
                 res.status(500).json({ message: 'Đã xảy ra lỗi khi thêm đơn hàng.' });
                 return;
             }
-    
+
             const donMuaHangId = results.insertId;
-    
+
             if (san_pham && Array.isArray(san_pham)) {
                 san_pham.forEach((sp, index) => {
                     const chiTietQuery = `INSERT INTO tbl_chi_tiet_don_mua_hang (don_mua_hang_id, chi_tiet_san_pham_id, so_luong, gia, ngay_tao) VALUES (?, ?, ?, ?, NOW())`;
                     const chiTietValues = [donMuaHangId, sp.id, sp.so_luong, sp.gia];
-    
+
                     connect.query(chiTietQuery, chiTietValues, (error, results, fields) => {
                         if (error) {
                             console.error('Lỗi khi thêm chi tiết đơn hàng: ' + error);
@@ -141,7 +229,7 @@ class hoadonController {
                             }
                             return;
                         }
-    
+
                         // Nếu không có lỗi và là lần cuối cùng trong vòng lặp, gửi phản hồi thành công
                         if (index === san_pham.length - 1) {
                             res.json({ message: 'Đặt đơn hàng thành công.' });
@@ -154,7 +242,7 @@ class hoadonController {
             }
         });
     }
-    
+
     async chuyen_trang_thai(req, res) {
         try {
             // Lấy id của đơn hàng từ request
@@ -265,7 +353,7 @@ class hoadonController {
                 }
                 res.redirect('/admin/hoadon');
             });
-        }
+    }
 }
 
 

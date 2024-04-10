@@ -49,30 +49,33 @@
 
             <% } %>
   </div>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light"
-    style="width: 100%; z-index: 11; padding-top: 0px; background-color: #027b9a !important; ">
-    <div class="container-fluid" style="">
+ 
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%; z-index: 11; padding-top: 0px; background-color: #027b9a !important; ">
+    <div class="container-fluid">
       <a href="/"> <img class="logo_img" src="/img/logo.png" alt=""></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent" style="background-color: none;">
-        <a class="text_content_header active" aria-current="page" href="/">Trang chủ</a>
-        <a class="text_content_header" href="/all_product">Sản
-          phẩm</a></li>
-        <form action="/search_product_all_user" method="get" class="d-flex search_form">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="  text_content_header" aria-current="page" href="/">Trang chủ</a>
+          </li>
+          <li class="nav-item">
+            <a class=" text_content_header" href="/all_product">Sản phẩm</a>
+          </li>
+        </ul>
+        <form action="/search_product_all_user" method="get" class="d-flex search_form mt-2">
           <input class="search_input" type="search" name="name" placeholder="Search" aria-label="Search">
           <button class="search_btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
         </form>
-
         <% if (user) { %>
-          <div style="margin-left: 250px;" class="d-flex">
+          <div style="margin-left: 80px;" class="d-flex">
             <a href="/cart" class=" cart"><i class="fa-solid fa-cart-shopping"></i></a>
             <a href="/order" class="btn btn-outline-light order">Đơn hàng</a>
           </div>
           <% } else { %>
-            <div style="margin-left: 180px;" class="d-flex">
+            <div style="margin-left: 80px;" class="d-flex">
               <a href="/cart" class=" cart"><i class="fa-solid fa-cart-shopping"></i></a>
               <a href="/order" class="btn btn-outline-light order">Đơn hàng</a>
             </div>
@@ -86,3 +89,5 @@
   <!-- <div class="logo">
         <a href="/"> <img class="logo_img" src="/img/logo.png" alt=""></a>
     </div> -->
+
+

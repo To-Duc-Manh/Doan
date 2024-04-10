@@ -2,10 +2,8 @@
 
     <div class="container" style=" margin-bottom: 150px">
         <div class="row">
-            <p class="title">
-                <%= productDetail.ten_san_pham %>
-                    <%= productDetail.gia_ban %>
-                        <%= productDetail.chi_tiet_id %>
+            <p class="title mt-3">
+                <%= productDetail.ten_san_pham %> 
             </p>
             <div class="col-md-6">
                 <div class="text-center">
@@ -13,17 +11,17 @@
                         class="" alt="...">
                 </div>
                 <div class="text-center">
-                    <a href="/add_to_cart/<%= productDetail.chi_tiet_id %>" class="btn btn-primary">Thêm với giỏ
-                        hàng</a>
-                    <button class="btn btn-success">Mua ngay</button>
+                    <a href="/add_to_cart/<%= productDetail.chi_tiet_id %>" class="btn btn-primary mx-4"><i class="fa-solid fa-cart-shopping"></i></a>
+                    <a href="/dat_hang/<%= productDetail.chi_tiet_id %>" class="btn btn-success">Mua ngay</a>
                 </div>
             </div>
             <div class="col-md-6">
+                <p style="font-size: 20px; font-weight: 600;">Tùy chọn các phiên bản</p>
                 <div class="row">
                     <% if (relatedDetails && relatedDetails.length> 0) { %>
                         <% relatedDetails.forEach(function (item, index) { %>
                             <a href="/chi_tiet_sp/<%= item.related_chi_tiet_id %>"
-                                class="col-md-3 ds-sp <%= productDetail.chi_tiet_id === item.related_chi_tiet_id ? 'active' : '' %>">
+                                class="col-md-3 ds-sp <%= productDetail.chi_tiet_id === item.related_chi_tiet_id ? 'active_' : '' %>">
                                 <!-- <%= item.related_chi_tiet_id %> -->
                                 <p style="margin-bottom: 0;">
                                     <%= item.ten_mau_sac %>
@@ -32,7 +30,7 @@
                                     <%= item.ten_dung_luong %>
                                 </p>
                                 <p style="margin-bottom: 0;">
-                                    <%= item.gia_ban %>
+                                    <%= item.gia_ban %> đ 
                                 </p>
                             </a>
                             <% }); %>

@@ -6,6 +6,7 @@ const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
 const fs = require('fs');
 const path = require('path');
+const pdf = require('html-pdf');
 
 const multer = require('multer');
 const fsExtra = require('fs-extra');
@@ -115,6 +116,8 @@ router.get('/search_sp_hd', authMiddleware.loggedin, hoadonController.search_sp_
 router.get('/search_khach_hang_hd', authMiddleware.loggedin, hoadonController.search_khach_hang_hd);
 router.get('/edit_hoa_don/:id', authMiddleware.loggedin, hoadonController.edit_hoa_don);
 router.get('/xoa_hoa_don/:id', authMiddleware.loggedin, hoadonController.xoa_hoa_don);
+router.get('/xuat-hoa-don/:id', authMiddleware.loggedin, hoadonController.xuatHoaDonPDF);
+
 
 //bao_hanh
 router.get('/baohanh', authMiddleware.loggedin, baohanhController.index);
