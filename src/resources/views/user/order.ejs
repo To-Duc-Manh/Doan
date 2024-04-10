@@ -309,15 +309,15 @@
                                   </div>
                                   <div class="">
                                     <label for="validationCustom02" class="form-label">Ghi chú</label>
-                                    <textarea class="form-control"
-                                      name="ghi_chu_bh<%= order.ten_san_pham %>"></textarea>
+                                    <textarea class="form-control" name="ghi_chu_bh<%= order.ten_san_pham %>"
+                                      id="ghi_chu_bh_<%= order.ten_san_pham %>"></textarea>
                                   </div>
                                 </form>
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="button"
-                                  onclick="luuPhieuBaoHanh('<%= order.id %>', document.querySelector('[name=ghi_chu_bh<%= order.ten_san_pham %>]').value)"
+                                  onclick="luuPhieuBaoHanh('<%= order.id %>', document.getElementById('ghi_chu_bh_<%= order.ten_san_pham %>').value)"
                                   class="btn btn-primary">Gửi</button>
                               </div>
                             </div>
