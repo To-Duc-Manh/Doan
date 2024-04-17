@@ -133,6 +133,8 @@ router.get('/nhapkho', authMiddleware.loggedin, nhapkhoController.index);
 router.get('/nhap_kho', authMiddleware.loggedin, nhapkhoController.nhap_kho);
 router.post('/them_nhap_kho', authMiddleware.loggedin, nhapkhoController.them_nhap_kho);
 router.get('/chi_tiet_nhap_kho/:id', authMiddleware.loggedin, nhapkhoController.chi_tiet_nhap_kho);
+router.get('/xuatHoaDonPDF_nhapkho/:id', authMiddleware.loggedin, nhapkhoController.xuatHoaDonPDF_nhapkho);
+router.get('/xoa_nhapkho/:id', authMiddleware.loggedin, nhapkhoController.xoa_nhapkho);
 
 
 

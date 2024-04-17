@@ -19,9 +19,9 @@ class hoadonController {
     chi_tiet_hoa_don(req, res) {
         let id = req.params.id;
 
-        let sql_ = "SELECT * FROM tbl_don_mua_hang WHERE id = ?";
+        let sqlDonHang = "SELECT * FROM tbl_don_mua_hang WHERE id = ?";
 
-        connect.query(sql_, [id], (err, don_mua_hang) => {
+        connect.query(sqlDonHang, [id], (err, don_mua_hang) => {
             if (err) throw err;
 
             if (don_mua_hang.length === 0) {
@@ -32,9 +32,27 @@ class hoadonController {
                 return;
             }
 
-            let sql = "SELECT * FROM tbl_chi_tiet_don_mua_hang WHERE don_mua_hang_id = ?";
+            let sqlChiTietDonHang = `
+                SELECT 
+                    c.*,
+                    s.ten_san_pham,
+                    m.ten_mau_sac,
+                    d.ten_dung_luong
+                FROM 
+                    tbl_chi_tiet_don_mua_hang c
+                JOIN 
+                    tbl_chi_tiet_san_pham t ON c.chi_tiet_san_pham_id = t.id
+                JOIN
+                    tbl_san_pham s ON t.san_pham_id = s.id
+                JOIN
+                    tbl_mau_sac m ON t.mau_sac_id = m.id
+                JOIN
+                    tbl_dung_luong d ON t.dung_luong_id = d.id
+                WHERE 
+                    c.don_mua_hang_id = ?
+            `;
 
-            connect.query(sql, [id], (err, chi_tiet_hoa_don) => {
+            connect.query(sqlChiTietDonHang, [id], (err, chi_tiet_hoa_don) => {
                 if (err) throw err;
 
                 res.render('admin/hoa_don/chi_tiet_hd.ejs', {
@@ -55,30 +73,46 @@ class hoadonController {
         let id = req.params.id;
 
         let sql_ = "SELECT * FROM tbl_don_mua_hang WHERE id = ?";
-    
+
         connect.query(sql_, [id], (err, don_mua_hang) => {
             if (err) {
                 return res.status(500).send(err);
             }
-    
+
             if (don_mua_hang.length === 0) {
                 console.log("Không tìm thấy đơn mua hàng với id là " + id);
                 return res.status(404).send("Không tìm thấy đơn mua hàng với id là " + id);
             }
-    
-            let sql = "SELECT * FROM tbl_chi_tiet_don_mua_hang WHERE don_mua_hang_id = ?";
-    
+
+            let sql = `SELECT 
+            c.*,
+            s.ten_san_pham,
+            m.ten_mau_sac,
+            d.ten_dung_luong
+        FROM 
+            tbl_chi_tiet_don_mua_hang c
+        JOIN 
+            tbl_chi_tiet_san_pham t ON c.chi_tiet_san_pham_id = t.id
+        JOIN
+            tbl_san_pham s ON t.san_pham_id = s.id
+        JOIN
+            tbl_mau_sac m ON t.mau_sac_id = m.id
+        JOIN
+            tbl_dung_luong d ON t.dung_luong_id = d.id
+        WHERE 
+            c.don_mua_hang_id = ?`;
+
             connect.query(sql, [id], (err, chi_tiet_hoa_don) => {
                 if (err) {
                     return res.status(500).send(err);
                 }
-    
+
                 // Tạo HTML động
                 let html = `
                 <div class="content-wrapper">
                     <h2 class="text-center font-weight"> Đơn bán hàng</h2>
                     <hr>
-                    
+    
                     <div class="row">
                         <div class="col-md-6">
                             <p><span class="font-weight">Tên khách hàng:</span> ${don_mua_hang[0].ten_nguoi_mua}</p>
@@ -90,12 +124,13 @@ class hoadonController {
                         </div>
                     </div>
     
-                    <table style="margin-top: 50px;"
-                        class="table table-PW table-hover table-borderless align-middle">
+                    <table style="margin-top: 50px;" class="table table-PW table-hover table-borderless align-middle">
                         <thead class="table-light">
                             <caption>Danh sách sản phẩm</caption>
                             <tr style="background-color: #d2d2d2;">
                                 <th>Tên sản phẩm</th>
+                                <th>Màu sắc</th>
+                                <th>Dung lượng</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
                                 <th>Tổng tiền</th>
@@ -103,25 +138,29 @@ class hoadonController {
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
-                            ${chi_tiet_hoa_don && chi_tiet_hoa_don.length > 0 ? 
-                                chi_tiet_hoa_don.map(hoadon => `
+                            ${chi_tiet_hoa_don && chi_tiet_hoa_don.length > 0 ?
+                        chi_tiet_hoa_don.map(hoadon => `
                                     <tr>
                                         <td>${hoadon.ten_san_pham}</td>
+                                        <td>${hoadon.ten_mau_sac}</td>
+                                        <td>${hoadon.ten_dung_luong}</td>
                                         <td>${hoadon.so_luong}</td>
                                         <td>${hoadon.gia}</td>
                                         <td>${hoadon.so_luong * hoadon.gia}</td>
-                                        <td>${hoadon.thoi_gian_bao_hanh}</td>
+                                        <td>${hoadon.chi_tiet_san_pham_id}</td>
                                     </tr>
-                                `).join('') : 
-                                `<tr>
-                                    <td colspan="5">Không có dữ liệu</td>
+                                `).join('') :
+                        `<tr>
+                                    <td colspan="7">Không có dữ liệu</td>
                                 </tr>`
-                            }
+                    }
                         </tbody>
                     </table>
     
                     <div class="row mt-5">
-                        <div class="col-lg-4"></div>
+                        <div class="col-lg-4">
+    
+                        </div>
                         <div class="col-lg-4"></div>
                         <div class="col-lg-4">
                             <p class="font-weight">Thành tiền: ...</p>
@@ -129,9 +168,10 @@ class hoadonController {
                             <p class="font-weight">Tổng tiền: ${don_mua_hang[0].tong_tien_thanh_toan} đ</p>
                         </div>
                     </div>
+    
                 </div>
                 `;
-    
+
                 let options = {
                     format: 'A4',
                     border: {
@@ -141,20 +181,21 @@ class hoadonController {
                         left: '0.5in'
                     }
                 };
-    
-                const outputPath = 'C:\\Users\\MBC\\Downloads\\hoadon.pdf';
-    
+
+                const outputPath = 'C:\\Users\\Admin\\Downloads\\hoadon.pdf';
+
                 pdf.create(html, options).toFile(outputPath, (err, result) => {
                     if (err) {
                         return res.status(500).send(err);
                     }
-    
+
                     // Trả về file PDF đã tạo
                     res.sendFile(outputPath);
                 });
             });
         });
     };
+
 
     get_sp_don_mua_hang(req, res) {
         let sql = "SELECT * FROM tbl_chi_tiet_san_pham";

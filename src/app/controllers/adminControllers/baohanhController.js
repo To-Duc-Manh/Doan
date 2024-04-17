@@ -162,17 +162,85 @@ class baohanhController {
     chi_tiet_bao_hanh(req, res) {
         let id = req.params.id;
 
-        let sql_ = "SELECT * FROM tbl_phieu_bao_hanh WHERE id = ?";
+        let sql_ = `
+        SELECT 
+            pbh.id,
+            pbh.serial AS phieu_bao_hanh_serial,
+            pbh.nhan_vien_id,
+            CASE
+                WHEN nv.id IS NOT NULL THEN nv.ten_nhan_vien
+                ELSE NULL
+            END AS ten_nhan_vien,
+            pbh.tieu_de,
+            pbh.loai_bao_hanh,
+            pbh.ghi_chu,
+            pbh.chi_phi,
+            pbh.ngay_bat_dau,
+            pbh.ngay_ket_thuc,
+            pbh.ly_do_huy,
+            pbh.trang_thai AS phieu_bao_hanh_trang_thai,
+            ctdonmua.id AS chi_tiet_don_mua_hang_id,
+            ctsanpham.id AS chi_tiet_san_pham_id,
+            ctsanpham.hinh_anh,
+            sp.ten_san_pham,
+            sp.so_thang_bao_hanh,
+            ms.ten_mau_sac,
+            dl.ten_dung_luong,
+            ctsanpham.gia_ban,
+            ctsanpham.serial AS chi_tiet_san_pham_serial,
+            ctsanpham.ngay_tao AS chi_tiet_san_pham_ngay_tao,
+            ctsanpham.ngay_cap_nhat AS chi_tiet_san_pham_ngay_cap_nhat,
+            dmh.id AS don_mua_hang_id,
+            dmh.ten_nguoi_mua,
+            dmh.so_dien_thoai,
+            dmh.dia_chi_mua_hang,
+            dmh.ghi_chu AS don_mua_hang_ghi_chu,
+            dmh.tong_tien,
+            dmh.phi_van_chuyen,
+            dmh.tong_tien_thanh_toan,
+            dmh.hinh_thuc_thanh_toan,
+            dmh.trang_thai AS don_mua_hang_trang_thai,
+            dmh.ngay_huy,
+            dmh.ly_do_huy AS don_mua_hang_ly_do_huy,
+            dmh.hinh_anh_giao_hang
+        FROM 
+            tbl_phieu_bao_hanh AS pbh
+        JOIN 
+            tbl_chi_tiet_don_mua_hang AS ctdonmua ON pbh.chi_tiet_don_mua_hang_id = ctdonmua.id
+        JOIN 
+            tbl_chi_tiet_san_pham AS ctsanpham ON ctdonmua.chi_tiet_san_pham_id = ctsanpham.id
+        JOIN 
+            tbl_san_pham AS sp ON ctsanpham.san_pham_id = sp.id
+        JOIN 
+            tbl_mau_sac AS ms ON ctsanpham.mau_sac_id = ms.id
+        JOIN 
+            tbl_dung_luong AS dl ON ctsanpham.dung_luong_id = dl.id
+        JOIN 
+            tbl_don_mua_hang AS dmh ON ctdonmua.don_mua_hang_id = dmh.id
+        LEFT JOIN 
+            tbl_nhan_vien AS nv ON pbh.nhan_vien_id = nv.id
+        WHERE pbh.id = ?`;
 
         connect.query(sql_, [id], (err, don_bao_hanh) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send(err);
+            }
+
+            if (don_bao_hanh.length === 0) {
+                console.log("Không tìm thấy đơn bảo hành với id là " + id);
+                return res.status(404).send("Không tìm thấy đơn bảo hành với id là " + id);
+            }
 
             res.render('admin/bao_hanh/chi_tiet_bao_hanh.ejs', {
                 user: req.session.user,
                 don_bao_hanh: don_bao_hanh[0], // Truyền phần tử đầu tiên của mảng
             });
-            console.log(don_bao_hanh)
+            console.log(don_bao_hanh);
         });
     }
+
+
 
 
 }

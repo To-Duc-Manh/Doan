@@ -121,14 +121,16 @@
                                 </td>
                                 <td>
                                     <div class="d-flex ">
-                                        <button class="btn btn-outline-info btn-sm mx-1 chuyenBtn"
+                                        <button class="btn btn-outline-secondary btn-sm mx-1 chuyenBtn"
                                             data-order-id="<%= hoadon.id %>">Chuyển</button>
                                         <a href="/admin/edit_hoa_don/<%= hoadon.id %>"
-                                            class="btn btn-outline-success btn-sm mx-1">Sửa</a>
+                                            class="btn btn-outline-success btn-sm mx-1"><i
+                                                class="fa-solid fa-pen-to-square"></i></a>
                                         <a href="#" onclick="confirmDelete(`<%= hoadon.id %>`)"
-                                            class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
+                                            class="btn btn-outline-danger btn-sm mx-1"><i
+                                                class="fa-solid fa-trash"></i></a>
                                         <a href="/admin/chi_tiet_hoa_don/<%= hoadon.id %>"
-                                            class="btn btn-outline-danger btn-sm mx-1">Chi tiết</a>
+                                            class="btn btn-outline-info btn-sm mx-1"><i class="fa-solid fa-eye"></i></a>
                                     </div>
 
                                 </td>

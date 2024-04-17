@@ -78,8 +78,8 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label for="validationCustom03" class="form-label">Chi phí</label>
-                                        <input type="text" name="chi_phi" class="form-control"
-                                            id="validationCustom03" value=""></input>
+                                        <input type="text" name="chi_phi" class="form-control" id="validationCustom03"
+                                            value=""></input>
                                     </div>
                                     <div class="col-md-4">
                                         <label for="validationCustom03" class="form-label">Trạng thái</label>
@@ -171,9 +171,12 @@
                                 <td>
                                     <div class="d-flex ">
                                         <a href="/admin/edit_baohanh/<%= bao_hanh.id %>"
-                                            class="btn btn-outline-success btn-sm mx-1">Sửa</a>
-                                        <a href="/admin/chi_tiet_bao_hanh/<%= bao_hanh.id %>" class="btn btn-outline-success btn-sm mx-1">CT</a>
-                                        <a href="" class="btn btn-outline-danger btn-sm mx-1">Xóa</a>
+                                            class="btn btn-outline-success btn-sm mx-1"><i
+                                                class="fa-solid fa-pen-to-square"></i></a>
+                                        <a href="" class="btn btn-outline-danger btn-sm mx-1"><i
+                                                class="fa-solid fa-trash"></i></a>
+                                        <a href="/admin/chi_tiet_bao_hanh/<%= bao_hanh.id %>"
+                                            class="btn btn-outline-info btn-sm mx-1"><i class="fa-solid fa-eye"></i></a>
                                     </div>
                                 </td>
                             </tr>

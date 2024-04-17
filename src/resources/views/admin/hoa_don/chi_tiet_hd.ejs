@@ -3,28 +3,38 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <h2 class="text-center font-weight"> Đơn bán hàng</h2>
-            <div class="text-end">
-                <a href="/admin/xuat-hoa-don/<%= don_mua_hang.id %>" class="btn btn-primary">Export</a>
+            <div class="text-end ">
+                <a href="/admin/xuat-hoa-don/<%= don_mua_hang.id %>" class="btn btn-outline-success mx-5">Xuất hóa
+                    đơn</a>
             </div>
             <hr>
-            
+
             <div class="row">
                 <div class="col-md-6">
-                    <p><span class="font-weight">Tên khách hàng:</span> <%= don_mua_hang.ten_nguoi_mua %></p>
-                    <p><span class="font-weight">Số điện thoại:</span> <%= don_mua_hang.so_dien_thoai %></p>
+                    <p><span class="font-weight">Tên khách hàng:</span>
+                        <%= don_mua_hang.ten_nguoi_mua %>
+                    </p>
+                    <p><span class="font-weight">Số điện thoại:</span>
+                        <%= don_mua_hang.so_dien_thoai %>
+                    </p>
                 </div>
                 <div class="col-md-6">
-                    <p><span class="font-weight">Địa chỉ:</span> <%= don_mua_hang.dia_chi_mua_hang %></p>
-                    <p><span class="font-weight">Ghi chú:</span> <%= don_mua_hang.ghi_chu %></p>
+                    <p><span class="font-weight">Địa chỉ:</span>
+                        <%= don_mua_hang.dia_chi_mua_hang %>
+                    </p>
+                    <p><span class="font-weight">Ghi chú:</span>
+                        <%= don_mua_hang.ghi_chu %>
+                    </p>
                 </div>
             </div>
 
-            <table style="margin-top: 50px;"
-                class="table table-PW table-hover table-borderless align-middle">
+            <table style="margin-top: 50px;" class="table table-PW table-hover table-borderless align-middle">
                 <thead class="table-light">
-                    <caption>Danh sách sàn phẩm</caption>
+                    <caption>Danh sách sản phẩm</caption>
                     <tr style="background-color: #d2d2d2;">
                         <th>Tên sản phẩm</th>
+                        <th>Màu sắc</th>
+                        <th>Dung lượng</th>
                         <th>Số lượng</th>
                         <th>Giá</th>
                         <th>Tong tien</th>
@@ -36,7 +46,13 @@
                         <% chi_tiet_hoa_don.forEach(function (hoadon, index) { %>
                             <tr>
                                 <td>
-                                    <%= hoadon.chi_tiet_san_pham_id %>
+                                    <%= hoadon.ten_san_pham %>
+                                </td>
+                                <td>
+                                    <%= hoadon.ten_mau_sac %>
+                                </td>
+                                <td>
+                                    <%= hoadon.ten_dung_luong %>
                                 </td>
                                 <td>
                                     <%= hoadon.so_luong %>
@@ -45,12 +61,12 @@
                                     <%= hoadon.gia %>
                                 </td>
                                 <td>
-                                    <%= hoadon.so_luong  * hoadon.gia %>
+                                    <%= hoadon.so_luong * hoadon.gia %>
                                 </td>
                                 <td>
                                     <%= hoadon.chi_tiet_san_pham_id %>
                                 </td>
-        
+
                             </tr>
                             <% }); %>
                                 <% } else { %>
@@ -63,7 +79,7 @@
 
             <div class="row mt-5">
                 <div class="col-lg-4">
-                    
+
                 </div>
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4">
@@ -72,9 +88,9 @@
                     <p class="font-weight">Tổng tiền: <%= don_mua_hang.tong_tien_thanh_toan %> đ</p>
                 </div>
             </div>
-            
+
         </div>
 
-       
+
         <!-- /.content-wrapper -->
         <%- include('../footer.ejs') %>
