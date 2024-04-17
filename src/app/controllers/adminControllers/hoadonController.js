@@ -52,85 +52,107 @@ class hoadonController {
         const pdf = require('html-pdf');
         const path = require('path');
 
-        let html = `
-<div class="content-wrapper">
-    <h2 class="text-center font-weight"> Đơn bán hàng</h2>
-    <a href="" class="btn btn-primary">Export</a>
-    <hr>
+        let id = req.params.id;
+
+        let sql_ = "SELECT * FROM tbl_don_mua_hang WHERE id = ?";
     
-    <div class="row">
-        <div class="col-md-6">
-            <p><span class="font-weight">Tên khách hàng:</span> <%= don_mua_hang.ten_nguoi_mua %></p>
-            <p><span class="font-weight">Số điện thoại:</span> <%= don_mua_hang.so_dien_thoai %></p>
-        </div>
-        <div class="col-md-6">
-            <p><span class="font-weight">Địa chỉ:</span> <%= don_mua_hang.dia_chi_mua_hang %></p>
-            <p><span class="font-weight">Ghi chú:</span> <%= don_mua_hang.ghi_chu %></p>
-        </div>
-    </div>
-
-    <table style="margin-top: 50px;"
-        class="table table-PW table-hover table-borderless align-middle">
-        <thead class="table-light">
-            <caption>Danh sách sản phẩm</caption>
-            <tr style="background-color: #d2d2d2;">
-                <th>Tên sản phẩm</th>
-                <th>Số lượng</th>
-                <th>Giá</th>
-                <th>Tổng tiền</th>
-                <th>Thời gian bảo hành</th>
-            </tr>
-        </thead>
-        <tbody class="table-group-divider">
-            <% if (chi_tiet_hoa_don && chi_tiet_hoa_don.length > 0) { %>
-                <% chi_tiet_hoa_don.forEach(function (hoadon, index) { %>
-                    <tr>
-                        <td><%= hoadon.chi_tiet_san_pham_id %></td>
-                        <td><%= hoadon.so_luong %></td>
-                        <td><%= hoadon.gia %></td>
-                        <td><%= hoadon.so_luong * hoadon.gia %></td>
-                        <td><%= hoadon.chi_tiet_san_pham_id %></td>
-                    </tr>
-                <% }); %>
-            <% } else { %>
-                <tr>
-                    <td colspan="5">Không có dữ liệu</td>
-                </tr>
-            <% } %>
-        </tbody>
-    </table>
-
-    <div class="row mt-5">
-        <div class="col-lg-4"></div>
-        <div class="col-lg-4"></div>
-        <div class="col-lg-4">
-            <p class="font-weight">Thành tiền: ...</p>
-            <p class="font-weight">Phí vận chuyển: ...</p>
-            <p class="font-weight">Tổng tiền: <%= don_mua_hang.tong_tien_thanh_toan %> đ</p>
-        </div>
-    </div>
-</div>
-`;
-
-        let options = {
-            format: 'A4',
-            border: {
-                top: '0.5in',
-                right: '0.5in',
-                bottom: '0.5in',
-                left: '0.5in'
-            }
-        };
-
-        const outputPath = 'C:\\Users\\MBC\\Downloads\\hoadon.pdf';
-
-        pdf.create(html, options).toFile(outputPath, (err, result) => {
+        connect.query(sql_, [id], (err, don_mua_hang) => {
             if (err) {
                 return res.status(500).send(err);
             }
-
-            // Trả về file PDF đã tạo
-            res.sendFile(outputPath);
+    
+            if (don_mua_hang.length === 0) {
+                console.log("Không tìm thấy đơn mua hàng với id là " + id);
+                return res.status(404).send("Không tìm thấy đơn mua hàng với id là " + id);
+            }
+    
+            let sql = "SELECT * FROM tbl_chi_tiet_don_mua_hang WHERE don_mua_hang_id = ?";
+    
+            connect.query(sql, [id], (err, chi_tiet_hoa_don) => {
+                if (err) {
+                    return res.status(500).send(err);
+                }
+    
+                // Tạo HTML động
+                let html = `
+                <div class="content-wrapper">
+                    <h2 class="text-center font-weight"> Đơn bán hàng</h2>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><span class="font-weight">Tên khách hàng:</span> ${don_mua_hang[0].ten_nguoi_mua}</p>
+                            <p><span class="font-weight">Số điện thoại:</span> ${don_mua_hang[0].so_dien_thoai}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><span class="font-weight">Địa chỉ:</span> ${don_mua_hang[0].dia_chi_mua_hang}</p>
+                            <p><span class="font-weight">Ghi chú:</span> ${don_mua_hang[0].ghi_chu}</p>
+                        </div>
+                    </div>
+    
+                    <table style="margin-top: 50px;"
+                        class="table table-PW table-hover table-borderless align-middle">
+                        <thead class="table-light">
+                            <caption>Danh sách sản phẩm</caption>
+                            <tr style="background-color: #d2d2d2;">
+                                <th>Tên sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Giá</th>
+                                <th>Tổng tiền</th>
+                                <th>Thời gian bảo hành</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            ${chi_tiet_hoa_don && chi_tiet_hoa_don.length > 0 ? 
+                                chi_tiet_hoa_don.map(hoadon => `
+                                    <tr>
+                                        <td>${hoadon.ten_san_pham}</td>
+                                        <td>${hoadon.so_luong}</td>
+                                        <td>${hoadon.gia}</td>
+                                        <td>${hoadon.so_luong * hoadon.gia}</td>
+                                        <td>${hoadon.thoi_gian_bao_hanh}</td>
+                                    </tr>
+                                `).join('') : 
+                                `<tr>
+                                    <td colspan="5">Không có dữ liệu</td>
+                                </tr>`
+                            }
+                        </tbody>
+                    </table>
+    
+                    <div class="row mt-5">
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-4">
+                            <p class="font-weight">Thành tiền: ...</p>
+                            <p class="font-weight">Phí vận chuyển: ...</p>
+                            <p class="font-weight">Tổng tiền: ${don_mua_hang[0].tong_tien_thanh_toan} đ</p>
+                        </div>
+                    </div>
+                </div>
+                `;
+    
+                let options = {
+                    format: 'A4',
+                    border: {
+                        top: '0.5in',
+                        right: '0.5in',
+                        bottom: '0.5in',
+                        left: '0.5in'
+                    }
+                };
+    
+                const outputPath = 'C:\\Users\\MBC\\Downloads\\hoadon.pdf';
+    
+                pdf.create(html, options).toFile(outputPath, (err, result) => {
+                    if (err) {
+                        return res.status(500).send(err);
+                    }
+    
+                    // Trả về file PDF đã tạo
+                    res.sendFile(outputPath);
+                });
+            });
         });
     };
 
