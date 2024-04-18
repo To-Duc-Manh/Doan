@@ -27,9 +27,7 @@
                     <tr>
                         <th>STT</th>
                         <th>Tên nhân viên tạo</th>
-                        <th>nhà cung cấp</th>
                         <th>Tổng tiền</th>
-                        <th>Ghi chú</th>
                         <th>Ngày tạo</th>
                         <th>Ngày cập nhật</th>
                         <th>Trạng thái</th>
@@ -47,19 +45,19 @@
                                     <%= phieunhapkho.nhan_vien_tao_id %>
                                 </td>
                                 <td>
-                                    <%= phieunhapkho.nha_cung_cap_id %>
-                                </td>
-                                <td>
                                     <%= phieunhapkho.tong_tien %>
-                                </td>
-                                <td>
-                                    <%= phieunhapkho.ghi_chu %>
                                 </td>
                                 <td>
                                     <%= new Intl.DateTimeFormat('vi-VN').format(new Date(phieunhapkho.ngay_tao)) %>
                                 </td>
                                 <td>
-                                    <%= new Intl.DateTimeFormat('vi-VN').format(new Date(phieunhapkho.ngay_cap_nhat)) %>
+                                    <% if (phieunhapkho.ngay_ket_thuc && phieunhapkho.ngay_ket_thuc
+                                        !=='0000-00-00 00:00:00' ) { %>
+                                        <%= new Intl.DateTimeFormat('vi-VN').format(new
+                                            Date(phieunhapkho.ngay_ket_thuc)) %>
+                                            <% } else { %>
+
+                                                <% } %>
                                 </td>
                                 <td>
                                     <% if (phieunhapkho.trang_thai===1) { %>

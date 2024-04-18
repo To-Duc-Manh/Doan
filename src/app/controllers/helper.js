@@ -89,6 +89,7 @@ function searchInTable(req, res, tableName, searchField, redirectPath1, redirect
             res.status(500).send('Internal Server Error');
             return;
         }
+        console.log(params);
 
         res.render(`admin/${redirectPath1}/${redirectPath2}.ejs`, {
             data: data

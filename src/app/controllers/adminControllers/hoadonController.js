@@ -265,9 +265,13 @@ class hoadonController {
     them_don_mua_hang_get(req, res) {
         const { khach_hang_id, ten_nguoi_mua, sdt, san_pham, dia_chi_mua_hang, ghi_chu } = req.body;
         const user = req.session.user.id;
-        console.log(req.body)
+        console.log(req.body);
+
+        // Tính tổng tiền từ sản phẩm đã chọn
+        const tong_tien = san_pham.reduce((acc, sp) => acc + sp.so_luong * sp.gia, 0);
+
         const donHangQuery = `INSERT INTO tbl_don_mua_hang (nhan_vien_id, khach_hang_id, ten_nguoi_mua, so_dien_thoai, dia_chi_mua_hang, ghi_chu, tong_tien, tong_tien_thanh_toan, hinh_thuc_thanh_toan, trang_thai, ngay_tao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
-        const donHangValues = [user, khach_hang_id, ten_nguoi_mua, sdt, dia_chi_mua_hang, ghi_chu, 0, 0, 1, 1];
+        const donHangValues = [user, khach_hang_id, ten_nguoi_mua, sdt, dia_chi_mua_hang, ghi_chu, tong_tien, 0, 1, 1];
 
         connect.query(donHangQuery, donHangValues, (error, results, fields) => {
             if (error) {
@@ -305,6 +309,7 @@ class hoadonController {
             }
         });
     }
+
 
     async chuyen_trang_thai(req, res) {
         try {
@@ -406,6 +411,23 @@ class hoadonController {
             });
     }
 
+    update_hoa_don(req, res) {
+        let id = req.params.id;
+        const { hinh_thuc_thanh_toan, trang_thai } = req.body;
+        console.log(hinh_thuc_thanh_toan, trang_thai)
+        let ngay_cap_nhat = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        let sql = `UPDATE tbl_don_mua_hang SET ? WHERE id = ?`
+        connect.query(sql, [{ hinh_thuc_thanh_toan, ngay_cap_nhat, trang_thai }, id], (err, data) => {
+            if (err) {
+                console.log("error: ", err);
+                res.status(500).send("Internal Server Error");
+                return;
+            }
+            res.redirect('/admin/hoadon');
+        })
+    }
+
+
     xoa_hoa_don(req, res) {
         let id = req.params.id;
         connect.query(`DELETE FROM tbl_don_mua_hang WHERE id = ${id}`,
@@ -417,6 +439,17 @@ class hoadonController {
                 res.redirect('/admin/hoadon');
             });
     }
+
+    search_don_mua_hang(req, res) {
+        const tableName = 'tbl_don_mua_hang';
+        const searchField = 'ten_nguoi_mua'; // Tên trường bạn muốn tìm kiếm, ví dụ: id, hinh_thuc_thanh_toan, trang_thai
+        const redirectPath1 = 'hoa_don';
+        const redirectPath2 = 'hoa_don';
+        const queryParams = req.query.name; // Đổi 'name' thành 'query' tương ứng với query parameter bạn sử dụng trong URL
+
+        helper.searchInTable(req, res, tableName, searchField, redirectPath1, redirectPath2, queryParams);
+    }
+
 }
 
 

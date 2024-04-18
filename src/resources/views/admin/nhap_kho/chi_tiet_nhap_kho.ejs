@@ -40,7 +40,6 @@
                         <th>Số lượng</th>
                         <th>Giá</th>
                         <th>Tong tien</th>
-                        <th>Thời gian bảo hành </th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
@@ -65,9 +64,6 @@
                                 <td>
                                     <%= hoadon.so_luong * hoadon.gia %>
                                 </td>
-                                <td>
-                                    <%= hoadon.chi_tiet_san_pham_id %>
-                                </td>
 
                             </tr>
                             <% }); %>
@@ -85,8 +81,6 @@
                 </div>
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4">
-                    <p class="font-weight">Thành tiền: ...</p>
-                    <p class="font-weight">Phí vận chuyển: ...</p>
                     <p class="font-weight">Tổng tiền thanh toán: <%= phieu_nhap_kho.tong_tien%> đ</p>
                 </div>
             </div>

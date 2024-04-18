@@ -10,10 +10,11 @@
                     </a>
                 </div>
                 <div class="col-md-6 mt-2 ">
-                    <form action="/admin/search_khachhang" id="combined-form" method="get" class="sidebar-form_1 mx-2">
+                    <form action="/admin/search_hoa_don" id="combined-form" method="get" class="sidebar-form_1 mx-2">
                         <div class="input-group mb-3" style="width: 80%;">
-                            <input type="text" name="name" class="form-control" placeholder="Nhập tên bạn muốn tìm kiếm"
-                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <input type="text" name="name" class="form-control"
+                                placeholder="Nhập tên khách hàng bạn muốn tìm kiếm" aria-label="Recipient's username"
+                                aria-describedby="button-addon2">
                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
                                     class="fa fa-search"></i></button>
                         </div>
@@ -45,15 +46,11 @@
                                             Hãy thiêm hình ảnh giao hàng
                                         </div>
                                     </div>
-
-                                    <div class="col-12">
-                                        <button class="btn btn-primary" type="submit">Submit form</button>
-                                    </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Understood</button>
+                                <button type="button" onclick="submitForm()" class="btn btn-primary">Thêm</button>
                             </div>
                         </div>
                     </div>
@@ -69,7 +66,6 @@
                         <th>Tên khách hàng</th>
                         <th>Ngày mua</th>
                         <th>Thanh toán</th>
-                        <th>Phí ship</th>
                         <th>Tong tien</th>
                         <th>Trạng Thái</th>
                         <th>Thao tác</th>
@@ -102,12 +98,9 @@
 
                                 </td>
                                 <td>
-                                    <%= hoadon.phi_van_chuyen %>
-                                </td>
-                                <td>
                                     <%= hoadon.tong_tien %>
                                 </td>
-                                <td>
+                                <td id="trang_thai_<%= hoadon.id %>">
                                     <% if (hoadon.trang_thai===1) { %>
                                         <button class="btn btn-outline-secondary btn-sm"> Chờ xác nhận</button>
                                         <% } else if (hoadon.trang_thai===2) { %>
@@ -115,8 +108,11 @@
                                             <% } else if (hoadon.trang_thai===3) { %>
                                                 <button class="btn btn-outline-warning btn-sm">Đang giao</button>
                                                 <% } else if (hoadon.trang_thai===4) { %>
-                                                    <button class="btn btn-outline-success btn-sm">Đã giao</button>
-                                                    <% } %>
+                                                    <button class="btn btn-outline-info btn-sm">Đã giao</button>
+                                                    <% } else if (hoadon.trang_thai===6) { %>
+                                                        <button class="btn btn-outline-success btn-sm">Thành
+                                                            công</button>
+                                                        <% } %>
 
                                 </td>
                                 <td>
@@ -154,9 +150,10 @@
                             const orderId = btn.dataset.orderId; // Lấy id của đơn hàng từ thuộc tính data
                             document.getElementById("submitForm").action = `/admin/hoan_thanh_gh/${orderId}`;
                             // Lấy trạng thái hiện tại của đơn hàng từ giao diện người dùng
-                            const statusElement = document.querySelector(`[data-order-id="${orderId}"]`).closest('tr').querySelector('td:nth-child(8)');
-                            const currentStatus = statusElement.textContent.trim();
+                            const statusElement = document.getElementById(`trang_thai_${orderId}`);
+                            const currentStatus = statusElement.querySelector('button').textContent.trim();
                             console.log(currentStatus);
+
 
                             // Kiểm tra nếu trạng thái hiện tại là 'Đang giao' và nút đã được nhấn
                             if (currentStatus.includes('Đang giao') && btn.classList.contains('chuyenBtn')) {
@@ -188,7 +185,9 @@
                                     } else if (newStatus === '3') {
                                         statusElement.innerHTML = '<button class="btn btn-outline-warning btn-sm">Đang giao</button>';
                                     } else if (newStatus === '4') {
-                                        statusElement.innerHTML = '<button class="btn btn-outline-success btn-sm">Đã giao</button>';
+                                        statusElement.innerHTML = '<button class="btn btn-outline-info btn-sm">Đã giao</button>';
+                                    } else if (newStatus === '6') {
+                                        statusElement.innerHTML = '<button class="btn btn-outline-success btn-sm">Thành công</button>';
                                     }
                                     console.log('Cập nhật trạng thái thành công');
                                 } else {
@@ -212,6 +211,9 @@
                 } else {
                     // Không làm gì cả
                 }
+            }
+            function submitForm() {
+                document.getElementById("submitForm").submit();
             }
 
         </script>

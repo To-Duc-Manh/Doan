@@ -474,6 +474,7 @@ a {
   text-align: center;
 }
 .item_ {
+  color: #000;
 }
 
 .nav_order {
@@ -492,7 +493,6 @@ a {
 }
 
 .search_form {
-
 }
 
 .cart {
@@ -502,6 +502,10 @@ a {
 }
 
 .order {
+}
+
+.active_order {
+  color: #009fff;
 }
 
 .search_input {
@@ -554,4 +558,26 @@ a {
 
 .font-weight {
   font-weight: 600;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper select {
+  padding-right: 30px;
+  /* Khoảng cách để icon không bị che khuất */
+}
+
+.select-wrapper::after {
+  content: "\f0d7";
+  /* Unicode của icon caret-down */
+  font-family: "FontAwesome";
+  /* Font chứa icon */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  /* Để click vào icon không ảnh hưởng đến thẻ select */
 }

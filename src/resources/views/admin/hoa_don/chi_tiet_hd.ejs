@@ -2,7 +2,7 @@
     <%- include('../aside.ejs') %>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <h2 class="text-center font-weight"> Đơn bán hàng</h2>
+            <h2 class="text-center font-weight mt-2"> Đơn bán hàng</h2>
             <div class="text-end ">
                 <a href="/admin/xuat-hoa-don/<%= don_mua_hang.id %>" class="btn btn-outline-success mx-5">Xuất hóa
                     đơn</a>
@@ -79,13 +79,12 @@
 
             <div class="row mt-5">
                 <div class="col-lg-4">
-
+                    <h6 class="font-weight mx-5"> Hình ảnh giao hàng</h6>
+                    <img class="mx-5" src="/imgUpload/<%= don_mua_hang.hinh_anh_giao_hang %>" width="150" alt="">
                 </div>
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4">
-                    <p class="font-weight">Thành tiền: ...</p>
-                    <p class="font-weight">Phí vận chuyển: ...</p>
-                    <p class="font-weight">Tổng tiền: <%= don_mua_hang.tong_tien_thanh_toan %> đ</p>
+                    <h4 class="font-weight">Tổng tiền: <%= don_mua_hang.tong_tien%> đ</h4>
                 </div>
             </div>
 

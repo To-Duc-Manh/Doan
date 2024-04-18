@@ -2,6 +2,7 @@
     <%- include('../aside.ejs') %>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            <h3 class="text-center font-weight mt-2"> Thêm đơn bán hàng</h3>
             <div class="row">
                 <div class="col-md-6">
                     <form id="searchForm" class="sidebar-form_1 mx-2 mt-3">
@@ -12,7 +13,7 @@
                                     class="fa fa-search"></i></button>
                         </div>
                     </form>
-                    
+
                 </div>
                 <div id="searchResult"></div>
             </div>
@@ -30,7 +31,7 @@
                 </div>
                 <div id="searchCustomerResult"></div>
             </div>
-        
+
 
             <button type="button" class="btn btn-outline-primary mt-2 mx-2" data-bs-toggle="collapse"
                 data-bs-target="#demo">Khách hàng không có trong hệ thống</button>
@@ -60,7 +61,8 @@
                 </div>
             </div>
             <div class="text-center">
-                <textarea id="ghi_chu_id" name="ghi_chu" placeholder="Ghi chú" class="form-control mx-2 mt-3" style="width: 90%;"></textarea>
+                <textarea id="ghi_chu_id" name="ghi_chu" placeholder="Ghi chú" class="form-control mx-2 mt-3"
+                    style="width: 90%;"></textarea>
             </div>
 
             <div class="">
@@ -68,7 +70,7 @@
                     <button class="btn btn-primary mt-3 mx-2" type="submit">Thêm hoá đơn</button>
                 </form>
             </div>
-            
+
         </div>
 
         <script>
@@ -80,6 +82,7 @@
                 let khachHangId, ten_khach_hang_id, sdt, dia_chi, ghi_chu;
 
                 const selectedRadioButton = document.querySelector('input[name="khach_hang_id"]:checked');
+                console.log(selectedRadioButton.value);
                 if (selectedRadioButton) {
                     khachHangId = selectedRadioButton.value; // Lấy giá trị từ radio button được chọn
                     const parentDiv = selectedRadioButton.parentElement;
@@ -145,8 +148,8 @@
                     const customerId = `<input type="radio" name="khach_hang_id" value="${customer.id}" id="khachHangId">`;
                     const customerName = `<span class="ten_khach_hang mx-2 font-weight">${customer.ho_ten}</span>`;
                     const sdt = `<span class="sdt">${customer.so_dien_thoai}</span>`;
-                    const dia_chi = `<span class="dia_chi">${customer.dia_chi}</span>`;
-                    const lb_diachi = `<span>${customer.dia_chi}</span>`;
+                    // const dia_chi = `<span class="dia_chi">${customer.dia_chi}</span>`;
+                    const lb_diachi = `<span class="dia_chi">${customer.dia_chi}</span>`;
                     const br = '<br>';
                     searchResultDiv.innerHTML += `<div class = "mt-2 mb-2 mx-4">${customerId + customerName + ' ( Địa chỉ: ' + lb_diachi + ' ) ' + ' - ' + sdt + br}</div>`;
                 });

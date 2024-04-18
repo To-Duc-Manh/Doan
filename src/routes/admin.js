@@ -115,7 +115,9 @@ router.post('/them_don_mua_hang_get', authMiddleware.loggedin, hoadonController.
 router.get('/search_sp_hd', authMiddleware.loggedin, hoadonController.search_sp_hd);
 router.get('/search_khach_hang_hd', authMiddleware.loggedin, hoadonController.search_khach_hang_hd);
 router.get('/edit_hoa_don/:id', authMiddleware.loggedin, hoadonController.edit_hoa_don);
+router.post('/update_hoa_don/:id', authMiddleware.loggedin, hoadonController.update_hoa_don);
 router.get('/xoa_hoa_don/:id', authMiddleware.loggedin, hoadonController.xoa_hoa_don);
+router.get('/search_hoa_don', authMiddleware.loggedin, hoadonController.search_don_mua_hang);
 router.get('/xuat-hoa-don/:id', authMiddleware.loggedin, hoadonController.xuatHoaDonPDF);
 
 
