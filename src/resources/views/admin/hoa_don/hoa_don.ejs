@@ -59,7 +59,7 @@
             <table style="margin-top: 50px;"
                 class="table table-PW table-striped table-hover table-borderless align-middle">
                 <thead class="table-light">
-                    <caption>Danh sách khách hàng</caption>
+                    <caption>Danh sách hóa đơn</caption>
                     <tr>
                         <th>STT</th>
                         <th>Mã hóa đơn</th>
@@ -79,7 +79,7 @@
                                     <%= index + 1 %>
                                 </td>
                                 <td>
-
+                                    <%= hoadon.id %>
                                 </td>
                                 <td>
                                     <%= hoadon.ten_nguoi_mua %>
@@ -112,7 +112,10 @@
                                                     <% } else if (hoadon.trang_thai===6) { %>
                                                         <button class="btn btn-outline-success btn-sm">Thành
                                                             công</button>
-                                                        <% } %>
+                                                        <% } else if (hoadon.trang_thai===5) { %>
+                                                            <button class="btn btn-outline-danger btn-sm">Đã
+                                                                hủy</button>
+                                                            <% } %>
 
                                 </td>
                                 <td>
@@ -188,6 +191,8 @@
                                         statusElement.innerHTML = '<button class="btn btn-outline-info btn-sm">Đã giao</button>';
                                     } else if (newStatus === '6') {
                                         statusElement.innerHTML = '<button class="btn btn-outline-success btn-sm">Thành công</button>';
+                                    } else if (newStatus === '5') {
+                                        statusElement.innerHTML = '<button class="btn btn-outline-danger btn-sm">Đã hủy</button>';
                                     }
                                     console.log('Cập nhật trạng thái thành công');
                                 } else {

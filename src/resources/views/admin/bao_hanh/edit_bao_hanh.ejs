@@ -17,10 +17,13 @@
                         </div>
                         <div class="col-md-4">
                             <label for="validationCustom03" class="form-label">Bảo hành</label>
-                            <select class="form-control" name="loai_bao_hanh" id="">
-                                <option value="Bảo hành"> Bảo hành </option>
-                                <option value="Sửa chữa"> Sửa chữa </option>
-                            </select>
+                            <div class="select-wrapper">
+                                <select class="form-control" name="loai_bao_hanh" id="">
+                                    <option value="">Hình thức</option>
+                                    <option value="Bảo hành"> Bảo hành </option>
+                                    <option value="Sửa chữa"> Sửa chữa </option>
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <label for="" class="form-label">Tiêu đề</label>
@@ -56,7 +59,7 @@
                             <textarea type="text" name="ghi_chu" class="form-control" id="validationCustom03"
                                 value=""><%= data.ghi_chu %></textarea>
                         </div>
-                        
+
                         <div class="col-12">
                             <button class="btn btn-primary" type="submit">Submit form</button>
                         </div>

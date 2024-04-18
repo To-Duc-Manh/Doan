@@ -66,10 +66,11 @@
                 <div class="col-lg-4">
                     <p class="font-weight">TỔNG TIỀN</p>
                     <hr>
-                    <p>Phí vận chuyển: ...</p>
-                    <p id="tong_tien_thanh_toan">
+                    <p>
                         <span>Tổng tiền thanh toán: </span>
-                        <%= product_datHang.gia_ban * so_luong + 10 %> <span>đ</span>
+                        <span id="tong_tien_thanh_toan">
+                            <%= product_datHang.gia_ban * so_luong %>
+                        </span> <span>đ</span>
                     </p>
 
                     <button class="btn btn-primary" onclick="datHang()">ĐẶT HÀNG</button>
@@ -88,7 +89,7 @@
             var so_luong = parseInt(so_luong_element.innerText);
             var tong_gia = gia_ban * so_luong;
             tong_gia_element.innerText = tong_gia;
-            tong_tien_thanh_toan_element.innerText = parseFloat(tong_gia) + 10;
+            tong_tien_thanh_toan_element.innerText = parseFloat(tong_gia);
         }
 
         function decreaseQuantity() {

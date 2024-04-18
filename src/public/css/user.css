@@ -438,7 +438,7 @@ a {
   }
 
   .footer-content-column {
-    width: 24.99%;
+    width: 30.99%;
   }
 }
 @media (min-width: 568px) {
@@ -500,7 +500,11 @@ a {
   font-size: 25px;
   color: white;
 }
-
+.hangmaytinh {
+  height: 30px;
+  border: #000 solid 1px;
+  border-radius: 20px;
+}
 .order {
 }
 

@@ -6,16 +6,20 @@ const con = require('../../../config/db');
 class nhapkhoController {
 
     index(req, res) {
-        let sql = 'select * from tbl_phieu_nhap_kho'
+        let sql = `
+            SELECT p.*, nv.ten_nhan_vien AS ten_nhan_vien_tao
+            FROM tbl_phieu_nhap_kho p
+            JOIN tbl_nhan_vien nv ON p.nhan_vien_tao_id = nv.id
+        `;
 
         connect.query(sql, (err, phieunhapkho) => {
             res.render('admin/nhap_kho/nhap_kho.ejs', {
                 user: req.session.user,
                 phieunhapkho: phieunhapkho
             });
-        })
-
+        });
     }
+
 
     nhap_kho(req, res) {
         let sql = "SELECT * FROM tbl_nha_cung_cap;";

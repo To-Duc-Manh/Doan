@@ -14,31 +14,37 @@
                         <div class="input-group mb-3" style="width: 80%;">
                             <input type="text" name="name" class="form-control" placeholder="Nhập tên"
                                 aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <select class="form-control" name="danh_muc_id" id="">
-                                <option> </option>
-                                <% if (danhMucList && danhMucList.length> 0) { %>
-                                    <% danhMucList.forEach(function (danhMucList, index) { %>
-                                        <option value="<%- danhMucList.id %>"><%- danhMucList.ten_danh_muc %></option>
-                                        <% }); %>
-                                            <% } else { %>
+                            <div class="select-wrapper">
+                                <select class="form-control" name="danh_muc_id" id="">
+                                    <option value=" ">Chọn danh mục </option>
+                                    <% if (danhMucList && danhMucList.length> 0) { %>
+                                        <% danhMucList.forEach(function (danhMucList, index) { %>
+                                            <option value="<%- danhMucList.id %>"><%- danhMucList.ten_danh_muc %>
+                                            </option>
+                                            <% }); %>
+                                                <% } else { %>
 
-                                                <p>Không có dữ liệu</p>
+                                                    <p>Không có dữ liệu</p>
 
-                                                <% } %>
-                            </select>
-                            <select class="form-control" name="nha_san_xuat_id" id="">
-                                <option> </option>
-                                <% if (nhaSanXuatList && nhaSanXuatList.length> 0) { %>
-                                    <% nhaSanXuatList.forEach(function (nhaSanXuatList, index) { %>
-                                        <option value="<%- nhaSanXuatList.id %>"><%- nhaSanXuatList.ten_nha_san_xuat %>
-                                        </option>
-                                        <% }); %>
-                                            <% } else { %>
+                                                    <% } %>
+                                </select>
+                            </div>
+                            <div class="select-wrapper">
+                                <select class="form-control" name="nha_san_xuat_id" id="">
+                                    <option value=""> Chọn hãng </option>
+                                    <% if (nhaSanXuatList && nhaSanXuatList.length> 0) { %>
+                                        <% nhaSanXuatList.forEach(function (nhaSanXuatList, index) { %>
+                                            <option value="<%- nhaSanXuatList.id %>"><%- nhaSanXuatList.ten_nha_san_xuat
+                                                    %>
+                                            </option>
+                                            <% }); %>
+                                                <% } else { %>
 
-                                                <p>Không có dữ liệu</p>
+                                                    <p>Không có dữ liệu</p>
 
-                                                <% } %>
-                            </select>
+                                                    <% } %>
+                                </select>
+                            </div>
                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
                                     class="fa fa-search"></i></button>
                         </div>
@@ -59,18 +65,21 @@
                                     enctype="multipart/form-data">
                                     <div class="col-md-6">
                                         <label for="validationCustom01" class="form-label">Danh mục sản phẩm </label>
-                                        <select class="form-control" name="danh_muc_id" id="">
-                                            <% if (danhMucList && danhMucList.length> 0) { %>
-                                                <% danhMucList.forEach(function (danhMucList, index) { %>
-                                                    <option value="<%- danhMucList.id %>"><%- danhMucList.ten_danh_muc
-                                                            %></option>
-                                                    <% }); %>
-                                                        <% } else { %>
+                                        <div class="select-wrapper">
+                                            <select class="form-control" name="danh_muc_id" id="">
+                                                <option></option>
+                                                <% if (danhMucList && danhMucList.length> 0) { %>
+                                                    <% danhMucList.forEach(function (danhMucList, index) { %>
+                                                        <option value="<%- danhMucList.id %>"><%-
+                                                                danhMucList.ten_danh_muc %></option>
+                                                        <% }); %>
+                                                            <% } else { %>
 
-                                                            <p>Không có dữ liệu</p>
+                                                                <p>Không có dữ liệu</p>
 
-                                                            <% } %>
-                                        </select>
+                                                                <% } %>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="validationCustom02" class="form-label">Hình ảnh</label>
@@ -82,18 +91,21 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="validationCustom03" class="form-label">Nhà sản xuất</label>
-                                        <select class="form-control" name="nha_san_xuat_id" id="">
-                                            <% if (nhaSanXuatList && nhaSanXuatList.length> 0) { %>
-                                                <% nhaSanXuatList.forEach(function (nhaSanXuatList, index) { %>
-                                                    <option value="<%- nhaSanXuatList.id %>"><%-
-                                                            nhaSanXuatList.ten_nha_san_xuat %></option>
-                                                    <% }); %>
-                                                        <% } else { %>
+                                        <div class="select-wrapper">
+                                            <select class="form-control" name="nha_san_xuat_id" id="">
+                                                <option></option>
+                                                <% if (nhaSanXuatList && nhaSanXuatList.length> 0) { %>
+                                                    <% nhaSanXuatList.forEach(function (nhaSanXuatList, index) { %>
+                                                        <option value="<%- nhaSanXuatList.id %>"><%-
+                                                                nhaSanXuatList.ten_nha_san_xuat %></option>
+                                                        <% }); %>
+                                                            <% } else { %>
 
-                                                            <p>Không có dữ liệu</p>
+                                                                <p>Không có dữ liệu</p>
 
-                                                            <% } %>
-                                        </select>
+                                                                <% } %>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="validationCustom03" class="form-label">Tên dòng sản phẩm</label>

@@ -15,32 +15,36 @@
                         <div class="input-group mb-3" style="width: 80%;">
                             <input type="text" name="name" class="form-control" placeholder="Nhập tên"
                                 aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <select class="form-control" name="mau_sac_id" id="">
-                                <option> </option>
-                                <% if (mau_sac && mau_sac.length> 0) { %>
-                                    <% mau_sac.forEach(function (mau_sac, index) { %>
-                                        <option value="<%- mau_sac.id %>"><%- mau_sac.ten_mau_sac %>
-                                        </option>
-                                        <% }); %>
-                                            <% } else { %>
+                            <div class="select-wrapper">
+                                <select class="form-control" name="mau_sac_id" id="">
+                                    <option value="">Chọn màu</option>
+                                    <% if (mau_sac && mau_sac.length> 0) { %>
+                                        <% mau_sac.forEach(function (mau_sac, index) { %>
+                                            <option value="<%- mau_sac.id %>"><%- mau_sac.ten_mau_sac %>
+                                            </option>
+                                            <% }); %>
+                                                <% } else { %>
 
-                                                <p>Không có dữ liệu</p>
+                                                    <p>Không có dữ liệu</p>
 
-                                                <% } %>
-                            </select>
-                            <select class="form-control" name="dung_luong_id" id="">
-                                <option> </option>
-                                <% if (dung_luong && dung_luong.length> 0) { %>
-                                    <% dung_luong.forEach(function (dung_luong, index) { %>
-                                        <option value="<%- dung_luong.id %>"><%- dung_luong.ten_dung_luong %>
-                                        </option>
-                                        <% }); %>
-                                            <% } else { %>
+                                                    <% } %>
+                                </select>
+                            </div>
+                            <div class="select-wrapper">
+                                <select class="form-control" name="dung_luong_id" id="">
+                                    <option value=""> Chọn dung lượng </option>
+                                    <% if (dung_luong && dung_luong.length> 0) { %>
+                                        <% dung_luong.forEach(function (dung_luong, index) { %>
+                                            <option value="<%- dung_luong.id %>"><%- dung_luong.ten_dung_luong %>
+                                            </option>
+                                            <% }); %>
+                                                <% } else { %>
 
-                                                <p>Không có dữ liệu</p>
+                                                    <p>Không có dữ liệu</p>
 
-                                                <% } %>
-                            </select>
+                                                    <% } %>
+                                </select>
+                            </div>
                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
                                     class="fa fa-search"></i></button>
                         </div>
@@ -79,52 +83,59 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="validationCustom03" class="form-label">Dòng sản phẩm </label>
-                                        <select class="form-control" name="san_pham_id" id="">
-                                            <option></option>
-                                            <% if (product && product.length> 0) { %>
-                                                <% product.forEach(function (product, index) { %>
-                                                    <option value="<%- product.id %>"><%- product.ten_san_pham %>
-                                                    </option>
-                                                    <% }); %>
-                                                        <% } else { %>
+                                        <div class="select-wrapper">
+                                            <select class="form-control" name="san_pham_id" id="">
+                                                <option></option>
+                                                <% if (product && product.length> 0) { %>
+                                                    <% product.forEach(function (product, index) { %>
+                                                        <option value="<%- product.id %>"><%- product.ten_san_pham %>
+                                                        </option>
+                                                        <% }); %>
+                                                            <% } else { %>
 
-                                                            <p>Không có dữ liệu</p>
+                                                                <p>Không có dữ liệu</p>
 
-                                                            <% } %>
-                                        </select>
+                                                                <% } %>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="validationCustom03" class="form-label">Màu sắc </label>
-                                        <select class="form-control" name="mau_sac_id" id="">
-                                            <option></option>
-                                            <% if (mau_sac && mau_sac.length> 0) { %>
-                                                <% mau_sac.forEach(function (mau_sac, index) { %>
-                                                    <option value="<%- mau_sac.id %>"><%- mau_sac.ten_mau_sac %>
-                                                    </option>
-                                                    <% }); %>
-                                                        <% } else { %>
+                                        <div class="select-wrapper">
 
-                                                            <p>Không có dữ liệu</p>
+                                            <select class="form-control" name="mau_sac_id" id="">
+                                                <option></option>
+                                                <% if (mau_sac && mau_sac.length> 0) { %>
+                                                    <% mau_sac.forEach(function (mau_sac, index) { %>
+                                                        <option value="<%- mau_sac.id %>"><%- mau_sac.ten_mau_sac %>
+                                                        </option>
+                                                        <% }); %>
+                                                            <% } else { %>
 
-                                                            <% } %>
-                                        </select>
+                                                                <p>Không có dữ liệu</p>
+
+                                                                <% } %>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="validationCustom02" class="form-label"> Dung lượng </label>
-                                        <select class="form-control" name="dung_luong_id" id="">
-                                            <option></option>
-                                            <% if (dung_luong && dung_luong.length> 0) { %>
-                                                <% dung_luong.forEach(function (dung_luong, index) { %>
-                                                    <option value="<%- dung_luong.id %>"><%- dung_luong.ten_dung_luong
-                                                            %>
-                                                    </option>
-                                                    <% }); %>
-                                                        <% } else { %>
+                                        <div class="select-wrapper">
+                                            <select class="form-control" name="dung_luong_id" id="">
+                                                <option></option>
+                                                <% if (dung_luong && dung_luong.length> 0) { %>
+                                                    <% dung_luong.forEach(function (dung_luong, index) { %>
+                                                        <option value="<%- dung_luong.id %>"><%-
+                                                                dung_luong.ten_dung_luong %>
+                                                        </option>
+                                                        <% }); %>
+                                                            <% } else { %>
 
-                                                            <p>Không có dữ liệu</p>
+                                                                <p>Không có dữ liệu</p>
 
-                                                            <% } %>
-                                        </select>
+                                                                <% } %>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="validationCustom03" class="form-label">Giá</label>
