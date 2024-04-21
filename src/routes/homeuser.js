@@ -20,7 +20,7 @@ router.get('/order', authMiddleware.loggedinUser, homeUserController.order);
 router.get('/order_huy/:id', authMiddleware.loggedinUser, homeUserController.order_huy);
 router.get('/da_nhan_hang/:id', authMiddleware.loggedinUser, homeUserController.da_nhan_hang);
 
-router.get('/all_product', authMiddleware.loggedinUser, homeUserController.all_product);
+router.get('/all_product', homeUserController.all_product);
 router.get('/search_product_all_user', homeUserController.search_product_all_user);
 router.get('/searchPrice_product_all_user', homeUserController.searchPrice_product_all_user);
 

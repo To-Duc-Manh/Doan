@@ -40,30 +40,57 @@ class homeUserController {
     }
 
     cart(req, res) {
-
         let khach_hang_id = req.session.user.id;
 
-        const query = `SELECT 
-        sp.ten_san_pham AS ten_san_pham,
-        ms.ten_mau_sac AS mau_sac,
-        dl.ten_dung_luong AS dung_luong,
-        cts.hinh_anh AS hinh_anh,
-        cts.gia_ban,
-        gh.so_luong,
-        gh.id
-    FROM 
-        tbl_gio_hang gh
-    JOIN 
-        tbl_chi_tiet_san_pham cts ON gh.chi_tiet_san_pham_id = cts.id
-    JOIN 
-        tbl_san_pham sp ON cts.san_pham_id = sp.id
-    JOIN 
-        tbl_mau_sac ms ON cts.mau_sac_id = ms.id
-    JOIN 
-        tbl_dung_luong dl ON cts.dung_luong_id = dl.id
-    WHERE 
-        gh.khach_hang_id = ?;
-    `;
+        const query = `
+        SELECT 
+            sp.ten_san_pham AS ten_san_pham,
+            ms.ten_mau_sac AS mau_sac,
+            dl.ten_dung_luong AS dung_luong,
+            cts.hinh_anh AS hinh_anh,
+            cts.id AS chi_tiet_san_pham_id,
+            cts.gia_ban,
+            gh.so_luong,
+            pnk.so_luong_nhap,
+            dmh.so_luong_ban,
+            (COALESCE(pnk.so_luong_nhap, 0) - COALESCE(dmh.so_luong_ban, 0)) AS so_luong_con_lai,
+            gh.id
+        FROM 
+            tbl_gio_hang gh
+        JOIN 
+            tbl_chi_tiet_san_pham cts ON gh.chi_tiet_san_pham_id = cts.id
+        JOIN 
+            tbl_san_pham sp ON cts.san_pham_id = sp.id
+        JOIN 
+            tbl_mau_sac ms ON cts.mau_sac_id = ms.id
+        JOIN 
+            tbl_dung_luong dl ON cts.dung_luong_id = dl.id
+        LEFT JOIN (
+            SELECT 
+                san_pham_chi_tiet_id,
+                SUM(so_luong) AS so_luong_nhap
+            FROM 
+                tbl_chi_tiet_phieu_nhap_kho
+            GROUP BY 
+                san_pham_chi_tiet_id
+        ) AS pnk ON cts.id = pnk.san_pham_chi_tiet_id
+        LEFT JOIN (
+            SELECT 
+                chi_tiet_san_pham_id,
+                SUM(so_luong) AS so_luong_ban
+            FROM 
+                tbl_chi_tiet_don_mua_hang
+            JOIN 
+                tbl_don_mua_hang AS dmh ON tbl_chi_tiet_don_mua_hang.don_mua_hang_id = dmh.id
+            WHERE 
+                dmh.trang_thai != 5
+            GROUP BY 
+                chi_tiet_san_pham_id
+        ) AS dmh ON cts.id = dmh.chi_tiet_san_pham_id
+        WHERE 
+            gh.khach_hang_id = ?;
+        `;
+
         connect.query(query, [khach_hang_id], (err, results) => {
             if (err) {
                 console.error('Error retrieving cart items: ' + err.message);
@@ -74,9 +101,10 @@ class homeUserController {
                 user: req.session.user,
                 cartItems: results
             });
-            console.log(results)
+            console.log(results);
         });
     }
+
 
     add_to_cart(req, res) {
         let chi_tiet_san_pham_id = req.params.id;
@@ -126,17 +154,64 @@ class homeUserController {
         helper.deleteRecord_user(tableName, tableId, redirectPath, req, res);
     }
     updateQuantity(req, res) {
-        const { itemId, newQuantity } = req.body;
-        const sql = 'UPDATE tbl_gio_hang SET so_luong = ? WHERE id = ?';
+        const { itemId, newQuantity, chiTietSanPhamId } = req.body;
+        const sqlCheckStock = `
+        SELECT 
+        COALESCE(pnk.so_luong_nhap, 0) - COALESCE(dmh.so_luong_ban, 0) AS so_luong_con_lai
+    FROM 
+        tbl_chi_tiet_san_pham AS cts
+    LEFT JOIN (
+        SELECT 
+            san_pham_chi_tiet_id,
+            SUM(so_luong) AS so_luong_nhap
+        FROM 
+            tbl_chi_tiet_phieu_nhap_kho
+        GROUP BY 
+            san_pham_chi_tiet_id
+    ) AS pnk ON cts.id = pnk.san_pham_chi_tiet_id
+    LEFT JOIN (
+        SELECT 
+            chi_tiet_san_pham_id,
+            SUM(so_luong) AS so_luong_ban
+        FROM 
+            tbl_chi_tiet_don_mua_hang
+        JOIN 
+            tbl_don_mua_hang AS dmh ON tbl_chi_tiet_don_mua_hang.don_mua_hang_id = dmh.id
+        WHERE 
+            dmh.trang_thai != 5
+        GROUP BY 
+            chi_tiet_san_pham_id
+    ) AS dmh ON cts.id = dmh.chi_tiet_san_pham_id
+    WHERE 
+        cts.id = ?;
+    
+        `;
 
-        connect.query(sql, [newQuantity, itemId], (error, results, fields) => {
+        connect.query(sqlCheckStock, [chiTietSanPhamId], (error, results, fields) => {
             if (error) {
                 res.status(500).json({ error: 'Internal Server Error' });
-            } else {
-                res.status(200).send('Update successful');
+                return;
             }
+
+            const remainingStock = results[0].so_luong_con_lai;
+
+            if (newQuantity > remainingStock) {
+                res.status(400).json({ error: 'Not enough stock' });
+                return;
+            }
+
+            const sqlUpdateQuantity = 'UPDATE tbl_gio_hang SET so_luong = ? WHERE id = ?';
+
+            connect.query(sqlUpdateQuantity, [newQuantity, itemId], (error, results, fields) => {
+                if (error) {
+                    res.status(500).json({ error: 'Internal Server Error' });
+                } else {
+                    res.status(200).send('Update successful');
+                }
+            });
         });
     }
+
 
     dat_hang(req, res) {
         let id = req.params.id;

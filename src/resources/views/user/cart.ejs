@@ -22,6 +22,9 @@
                             <td>
                                 <%= index + 1 %>
                             </td>
+                            <td hidden id="chi_tiet_san_pham_id_<%= item.id %>">
+                                <%= item.chi_tiet_san_pham_id %>
+                            </td>
                             <td class="text-center">
                                 <img style="width: 150px; height: 100px;" class="img-thumbnail"
                                     src="/imgUpload/<%= item.hinh_anh %>">
@@ -45,14 +48,22 @@
                                     <button class="btn btn-outline-secondary btn-sm"
                                         onclick="increaseQuantity('<%= item.id %>')">+</button>
                                 </div>
-
+                                <span id="so_luong_con_lai_<%= item.id %>" hidden>
+                                    <%= item.so_luong_con_lai %>
+                                </span>
                             </td>
                             <td>
                                 <%= item.gia_ban %> <span>đ</span>
                             </td>
 
-                            <td>
-                                <input type="checkbox" name="selectedProducts" value="<%= item.id %>">
+                            <td width="10%">
+                                <input type="checkbox" name="selectedProducts" value="<%= item.id %>" <% if
+                                    (item.so_luong> item.so_luong_con_lai) { %>disabled<% } %>>
+                                    <span id="out-of-stock-msg_<%= item.id %>" class="text-danger" <% if (item.so_luong>
+                                        item.so_luong_con_lai) { %>style="display: inline;"<% } else { %>style="display:
+                                            none;"<% } %>>
+                                                Sản phẩm trong kho không đủ, hãy giảm số lượng
+                                    </span>
                             </td>
                             <td>
                                 <div class="d-flex ">
@@ -67,6 +78,8 @@
                                     <td colspan="7">Không có dữ liệu</td>
                                 </tr>
                                 <% } %>
+
+
 
             </tbody>
         </table>
@@ -107,28 +120,60 @@
         function decreaseQuantity(itemId) {
             var quantityElement = document.getElementById('so_luong_' + itemId);
             var currentQuantity = parseInt(quantityElement.innerText);
+            var chiTietSanPhamId = document.getElementById('chi_tiet_san_pham_id_' + itemId).innerText;
+            var soLuongConLai = parseInt(document.getElementById('so_luong_con_lai_' + itemId).innerText);
+
             if (currentQuantity > 1) {
-                updateQuantity(itemId, currentQuantity - 1);
+                updateQuantity(itemId, chiTietSanPhamId, currentQuantity - 1, soLuongConLai);
+            } else {
+                alert("Số lượng không thể nhỏ hơn 1");
             }
         }
 
         function increaseQuantity(itemId) {
             var quantityElement = document.getElementById('so_luong_' + itemId);
             var currentQuantity = parseInt(quantityElement.innerText);
-            updateQuantity(itemId, currentQuantity + 1);
+            var chiTietSanPhamId = document.getElementById('chi_tiet_san_pham_id_' + itemId).innerText;
+            var soLuongConLai = parseInt(document.getElementById('so_luong_con_lai_' + itemId).innerText);
+
+            if (currentQuantity < soLuongConLai) {
+                updateQuantity(itemId, chiTietSanPhamId, currentQuantity + 1, soLuongConLai);
+            } else {
+                alert("Số lượng trong kho không đủ");
+            }
         }
 
-        function updateQuantity(itemId, newQuantity) {
+        function updateQuantity(itemId, chiTietSanPhamId, newQuantity, soLuongConLai) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById('so_luong_' + itemId).innerText = newQuantity;
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        document.getElementById('so_luong_' + itemId).innerText = newQuantity;
+                        var checkbox = document.querySelector('input[name="selectedProducts"][value="' + itemId + '"]');
+                        var msgElement = document.getElementById('out-of-stock-msg_' + itemId);
+
+                        if (newQuantity > soLuongConLai) {
+                            checkbox.disabled = true;
+                            msgElement.style.display = 'inline';
+                            alert("Số lượng trong kho không đủ");
+                        } else {
+                            checkbox.disabled = false;
+                            msgElement.style.display = 'none';
+                        }
+                    } else if (this.status == 400) {
+                        alert("Không đủ hàng trong kho");
+                    } else {
+                        console.error('Update failed');
+                    }
                 }
             };
+
             xhttp.open("POST", "/updateQuantity", true);
             xhttp.setRequestHeader("Content-type", "application/json");
-            xhttp.send(JSON.stringify({ itemId: itemId, newQuantity: newQuantity }));
+            xhttp.send(JSON.stringify({ itemId: itemId, chiTietSanPhamId: chiTietSanPhamId, newQuantity: newQuantity }));
         }
+
+
     </script>
 
     <%- include('footerUser.ejs') %>

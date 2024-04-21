@@ -33,6 +33,7 @@ const danhmucController = require('../app/controllers/adminControllers/danhmucCo
 const hoadonController = require('../app/controllers/adminControllers/hoadonController');
 const baohanhController = require('../app/controllers/adminControllers/baohanhController');
 const nhapkhoController = require('../app/controllers/adminControllers/nhapkhoController');
+const baocaoController = require('../app/controllers/adminControllers/baocaoController');
 
 router.get('/', authMiddleware.loggedin, (req, res) => {
     res.render('admin/admin.ejs');
@@ -139,7 +140,8 @@ router.get('/xuatHoaDonPDF_nhapkho/:id', authMiddleware.loggedin, nhapkhoControl
 router.get('/xoa_nhapkho/:id', authMiddleware.loggedin, nhapkhoController.xoa_nhapkho);
 
 
-
+//bao_cao
+router.get('/baocao', authMiddleware.loggedin, baocaoController.index);
 
 
 router.post('/uploadfile', multipartMiddleware, (req, res) => {

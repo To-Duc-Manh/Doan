@@ -56,11 +56,10 @@
                     </div>
                 </div>
             </div>
-            <table style="margin-top: 50px;"
-                class="table table-PW table-striped table-hover table-borderless align-middle">
+            <table style="margin-top: 50px;" class="table table-PW table-hover table-borderless align-middle">
                 <thead class="table-light">
                     <caption>Danh sách hóa đơn</caption>
-                    <tr>
+                    <tr style="background-color: #e9e9e9;">
                         <th>STT</th>
                         <th>Mã hóa đơn</th>
                         <th>Tên khách hàng</th>
@@ -122,14 +121,27 @@
                                     <div class="d-flex ">
                                         <button class="btn btn-outline-secondary btn-sm mx-1 chuyenBtn"
                                             data-order-id="<%= hoadon.id %>">Chuyển</button>
-                                        <a href="/admin/edit_hoa_don/<%= hoadon.id %>"
-                                            class="btn btn-outline-success btn-sm mx-1"><i
-                                                class="fa-solid fa-pen-to-square"></i></a>
-                                        <a href="#" onclick="confirmDelete(`<%= hoadon.id %>`)"
-                                            class="btn btn-outline-danger btn-sm mx-1"><i
-                                                class="fa-solid fa-trash"></i></a>
-                                        <a href="/admin/chi_tiet_hoa_don/<%= hoadon.id %>"
-                                            class="btn btn-outline-info btn-sm mx-1"><i class="fa-solid fa-eye"></i></a>
+
+                                        <% if(user && user.ten_nhan_vien==='Admin' ) { %>
+                                            <a href="/admin/edit_hoa_don/<%= hoadon.id %>"
+                                                class="btn btn-outline-success btn-sm mx-1"><i
+                                                    class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="#" onclick="confirmDelete(`<%= hoadon.id %>`)"
+                                                class="btn btn-outline-danger btn-sm mx-1"><i
+                                                    class="fa-solid fa-trash"></i></a>
+                                            <% } else { %>
+                                                <a href="/admin/edit_hoa_don/<%= hoadon.id %>"
+                                                    class="btn btn-outline-success btn-sm mx-1"
+                                                    style="pointer-events: none; cursor: default;"><i
+                                                        class="fa-solid fa-pen-to-square"></i></a>
+                                                <a href="#" onclick="confirmDelete(`<%= hoadon.id %>`)"
+                                                    class="btn btn-outline-danger btn-sm mx-1"
+                                                    style="pointer-events: none; cursor: default;"><i
+                                                        class="fa-solid fa-trash"></i></a>
+                                                <% } %>
+                                                    <a href="/admin/chi_tiet_hoa_don/<%= hoadon.id %>"
+                                                        class="btn btn-outline-info btn-sm mx-1"><i
+                                                            class="fa-solid fa-eye"></i></a>
                                     </div>
 
                                 </td>

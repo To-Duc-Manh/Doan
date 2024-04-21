@@ -18,21 +18,22 @@
                                 <!-- <input type="text" name="dung_luong_name" class="form-control"
                                     placeholder="Hãng sản xuất" aria-label="Recipient's username"
                                     aria-describedby="button-addon2"> -->
-                                <select class="form-control" name="nha_san_xuat_name" id="">
-                                    <option value=""> Nhà sản xuất </option>
-                                    <% if (nhaSanXuatList && nhaSanXuatList.length> 0) { %>
-                                        <% nhaSanXuatList.forEach(function (nhaSanXuatList, index) { %>
-                                            <option value="<%- nhaSanXuatList.ten_nha_san_xuat %>"><%-
-                                                    nhaSanXuatList.ten_nha_san_xuat %>
-                                            </option>
-                                            <% }); %>
-                                                <% } else { %>
+                                <div class="select-wrapper">
+                                    <select class="form-control" name="nha_san_xuat_name" id="">
+                                        <option value=""> Nhà sản xuất </option>
+                                        <% if (nhaSanXuatList && nhaSanXuatList.length> 0) { %>
+                                            <% nhaSanXuatList.forEach(function (nhaSanXuatList, index) { %>
+                                                <option value="<%- nhaSanXuatList.ten_nha_san_xuat %>"><%-
+                                                        nhaSanXuatList.ten_nha_san_xuat %>
+                                                </option>
+                                                <% }); %>
+                                                    <% } else { %>
 
-                                                    <p>Không có dữ liệu</p>
+                                                        <p>Không có dữ liệu</p>
 
-                                                    <% } %>
-                                </select>
-
+                                                        <% } %>
+                                    </select>
+                                </div>
                                 <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
                                         class="fa fa-search"></i></button>
                             </div>
