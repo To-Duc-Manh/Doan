@@ -143,6 +143,8 @@
             }
         }
 
+
+
         function updateQuantity(itemId, chiTietSanPhamId, newQuantity, soLuongConLai) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
@@ -155,13 +157,17 @@
                         if (newQuantity > soLuongConLai) {
                             checkbox.disabled = true;
                             msgElement.style.display = 'inline';
-                            alert("Số lượng trong kho không đủ");
+
                         } else {
                             checkbox.disabled = false;
                             msgElement.style.display = 'none';
                         }
                     } else if (this.status == 400) {
                         alert("Không đủ hàng trong kho");
+                        var checkbox = document.querySelector('input[name="selectedProducts"][value="' + itemId + '"]');
+                        var msgElement = document.getElementById('out-of-stock-msg_' + itemId);
+                        checkbox.disabled = true;
+                        msgElement.style.display = 'inline';
                     } else {
                         console.error('Update failed');
                     }
@@ -172,8 +178,6 @@
             xhttp.setRequestHeader("Content-type", "application/json");
             xhttp.send(JSON.stringify({ itemId: itemId, chiTietSanPhamId: chiTietSanPhamId, newQuantity: newQuantity }));
         }
-
-
     </script>
 
     <%- include('footerUser.ejs') %>

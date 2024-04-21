@@ -627,4 +627,99 @@ BEGIN
   WHERE
         FIND_IN_SET(tbl_gio_hang.id, gioHangIds);
   END$$
-DELIMITER ;
+DELIMITER
+;
+
+
+WITH RECURSIVE dates AS
+  (
+    SELECT DATE(NOW()) AS date
+UNION ALL
+  SELECT DATE(date - INTERVAL
+1 DAY)
+    FROM dates
+    WHERE date > DATE
+(NOW
+()) - INTERVAL 6 DAY
+)
+
+
+//baocao có phân biệt sản phẩm
+SELECT
+  sp.id AS chi_tiet_san_pham_id,
+  sp.ten_san_pham,
+  cts.hinh_anh,
+  ms.ten_mau_sac,
+  dl.ten_dung_luong,
+  daily_sales.date AS ngay_ban,
+  COALESCE(daily_sales.so_luong_ban, 0) AS so_luong_ban
+FROM
+  tbl_san_pham AS sp
+  JOIN
+  tbl_chi_tiet_san_pham AS cts ON sp.id = cts.san_pham_id
+  JOIN
+  tbl_mau_sac AS ms ON cts.mau_sac_id = ms.id
+  JOIN
+  tbl_dung_luong AS dl ON cts.dung_luong_id = dl.id
+  LEFT JOIN (
+    SELECT
+    chi_tiet_san_pham_id,
+    DATE(dmh.ngay_tao) AS date,
+    SUM(so_luong) AS so_luong_ban
+  FROM
+    tbl_chi_tiet_don_mua_hang
+    JOIN
+    tbl_don_mua_hang AS dmh ON tbl_chi_tiet_don_mua_hang.don_mua_hang_id = dmh.id
+  WHERE 
+        dmh.trang_thai IN (4, 6) AND DATE(dmh.ngay_tao) >= DATE(NOW()) - INTERVAL 6 DAY 
+GROUP BY 
+        chi_tiet_san_pham_id, DATE(dmh.ngay_tao)
+) AS daily_sales ON cts.id = daily_sales.chi_tiet_san_pham_id
+JOIN 
+    dates ON DATE
+(daily_sales.date) = dates.date
+ORDER BY 
+    cts.id, daily_sales.date DESC;
+
+
+
+
+//báo cáo không phân biệt sản phẩm
+
+WITH RECURSIVE dates AS
+  (
+    SELECT DATE(NOW()) AS date
+UNION ALL
+  SELECT DATE(date - INTERVAL
+1 DAY)
+    FROM dates
+    WHERE date > DATE
+(NOW
+()) - INTERVAL 6 DAY
+)
+
+SELECT
+  daily_sales.date AS ngay_ban,
+  SUM(COALESCE(daily_sales.so_luong_ban, 0)) AS so_luong_ban
+FROM
+  (
+        SELECT
+    chi_tiet_san_pham_id,
+    DATE(dmh.ngay_tao) AS date,
+    SUM(so_luong) AS so_luong_ban
+  FROM
+    tbl_chi_tiet_don_mua_hang
+    JOIN
+    tbl_don_mua_hang AS dmh ON tbl_chi_tiet_don_mua_hang.don_mua_hang_id = dmh.id
+  WHERE 
+            dmh.trang_thai IN (4, 6) AND DATE(dmh.ngay_tao) >= DATE(NOW()) - INTERVAL 6 DAY
+GROUP BY 
+            chi_tiet_san_pham_id, DATE(dmh.ngay_tao)
+) AS daily_sales
+JOIN 
+    dates ON DATE
+(daily_sales.date) = dates.date
+GROUP BY 
+    daily_sales.date
+ORDER BY 
+    daily_sales.date DESC;

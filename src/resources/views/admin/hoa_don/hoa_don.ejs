@@ -67,6 +67,7 @@
                         <th>Thanh toán</th>
                         <th>Tong tien</th>
                         <th>Trạng Thái</th>
+                        <th>NV tạo</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -118,6 +119,9 @@
 
                                 </td>
                                 <td>
+                                    <%= hoadon.nhan_vien_id %>
+                                </td>
+                                <td>
                                     <div class="d-flex ">
                                         <button class="btn btn-outline-secondary btn-sm mx-1 chuyenBtn"
                                             data-order-id="<%= hoadon.id %>">Chuyển</button>
@@ -129,19 +133,26 @@
                                             <a href="#" onclick="confirmDelete(`<%= hoadon.id %>`)"
                                                 class="btn btn-outline-danger btn-sm mx-1"><i
                                                     class="fa-solid fa-trash"></i></a>
-                                            <% } else { %>
+                                            <% } else if(hoadon.nhan_vien_id !==null && hoadon.trang_thai !==4 &&
+                                                hoadon.trang_thai !==6) { %>
                                                 <a href="/admin/edit_hoa_don/<%= hoadon.id %>"
-                                                    class="btn btn-outline-success btn-sm mx-1"
-                                                    style="pointer-events: none; cursor: default;"><i
+                                                    class="btn btn-outline-success btn-sm mx-1"><i
                                                         class="fa-solid fa-pen-to-square"></i></a>
                                                 <a href="#" onclick="confirmDelete(`<%= hoadon.id %>`)"
-                                                    class="btn btn-outline-danger btn-sm mx-1"
-                                                    style="pointer-events: none; cursor: default;"><i
+                                                    class="btn btn-outline-danger btn-sm mx-1"><i
                                                         class="fa-solid fa-trash"></i></a>
-                                                <% } %>
-                                                    <a href="/admin/chi_tiet_hoa_don/<%= hoadon.id %>"
-                                                        class="btn btn-outline-info btn-sm mx-1"><i
-                                                            class="fa-solid fa-eye"></i></a>
+                                                <% } else { %>
+                                                    <a href="#" class="btn btn-outline-success btn-sm mx-1"
+                                                        style="pointer-events: none; cursor: default; opacity: 40%;"><i
+                                                            class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a href="#" class="btn btn-outline-danger btn-sm mx-1"
+                                                        style="pointer-events: none; cursor: default; opacity: 40%;"><i
+                                                            class="fa-solid fa-trash"></i></a>
+                                                    <% } %>
+                                                        <a href="/admin/chi_tiet_hoa_don/<%= hoadon.id %>"
+                                                            class="btn btn-outline-info btn-sm mx-1"><i
+                                                                class="fa-solid fa-eye"></i></a>
+
                                     </div>
 
                                 </td>

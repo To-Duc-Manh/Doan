@@ -194,11 +194,11 @@ class homeUserController {
             }
 
             const remainingStock = results[0].so_luong_con_lai;
-
-            if (newQuantity > remainingStock) {
-                res.status(400).json({ error: 'Not enough stock' });
-                return;
-            }
+            console.log(remainingStock, newQuantity);
+            // if (newQuantity > remainingStock) {
+            //     res.status(400).json({ error: 'Not enough stock' });
+            //     return;
+            // }
 
             const sqlUpdateQuantity = 'UPDATE tbl_gio_hang SET so_luong = ? WHERE id = ?';
 

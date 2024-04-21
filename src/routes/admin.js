@@ -142,7 +142,7 @@ router.get('/xoa_nhapkho/:id', authMiddleware.loggedin, nhapkhoController.xoa_nh
 
 //bao_cao
 router.get('/baocao', authMiddleware.loggedin, baocaoController.index);
-
+router.get('/search_baocao', authMiddleware.loggedin, baocaoController.search_baocao);
 
 router.post('/uploadfile', multipartMiddleware, (req, res) => {
     try {
