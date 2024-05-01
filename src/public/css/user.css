@@ -585,3 +585,49 @@ a {
   pointer-events: none;
   /* Để click vào icon không ảnh hưởng đến thẻ select */
 }
+
+.pagination {
+  margin-top: 20px;
+  display: block !important;
+}
+
+.active_page {
+  background-color: #007bff;
+}
+
+.pagination ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination ul li {
+  display: inline;
+  margin-right: 5px;
+}
+
+.pagination ul li a,
+.pagination ul li span {
+  display: inline-block;
+  padding: 5px 10px;
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.pagination ul li a:hover {
+  background-color: #f0f0f0;
+}
+
+.pagination ul li.active a {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pagination ul li.disabled span {
+  color: #999;
+  pointer-events: none;
+}

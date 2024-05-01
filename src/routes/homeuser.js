@@ -40,5 +40,6 @@ router.post('/doi_mk', authMiddleware.loggedinUser, homeUserController.doi_mk)
 //bao_hanh
 router.get('/bao_hanh', authMiddleware.loggedinUser, homeUserController.bao_hanh);
 router.post('/luu_phieu_bao_hanh', authMiddleware.loggedinUser, homeUserController.luu_phieu_bao_hanh);
+router.get('/baohanh_huy/:id', authMiddleware.loggedinUser, homeUserController.baohanh_huy);
 
 module.exports = router;

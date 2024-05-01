@@ -2,6 +2,7 @@ const connect = require('../../../config/db');
 const moment = require('moment');
 
 const helper = require('../../controllers/helper');
+const paginate = require('express-paginate');
 
 class homeUserController {
 
@@ -440,44 +441,119 @@ class homeUserController {
         }
     }
 
-    all_product(req, res) {
-        let nhaSanXuatSql = "SELECT * FROM tbl_nha_san_xuat";
+    async baohanh_huy(req, res) {
+        try {
+            const orderId = req.params.id;
 
-        connect.query(nhaSanXuatSql, (err, nhaSanXuatList) => {
+            // Xác định trạng thái mới
+            let newStatus = 5;
+
+            await new Promise((resolve, reject) => {
+                connect.query('UPDATE tbl_phieu_bao_hanh SET trang_thai = ? WHERE id = ?', [newStatus, orderId], (err) => {
+                    if (err) reject(err);
+                    else resolve();
+                });
+            });
+
+            console.log(`Cập nhật trạng thái thành công: ${newStatus} cho đơn hàng có id ${orderId}`);
+            res.redirect('/bao_hanh');
+        } catch (error) {
+            console.error('Lỗi khi cập nhật trạng thái:', error);
+            res.status(500).send('Lỗi khi cập nhật trạng thái.');
+        }
+    }
+
+    all_product(req, res) {
+        const perPage = 10; // Số lượng mục trên mỗi trang
+        let page = parseInt(req.query.page) || 1; // Trang hiện tại, mặc định là 1 nếu không có yêu cầu
+
+        // Đảm bảo trang không nhỏ hơn 1
+        if (page < 1) {
+            page = 1;
+        }
+
+        // Tính offset để lấy dữ liệu từ cơ sở dữ liệu
+        const offset = (page - 1) * perPage;
+
+        // Truy vấn để lấy số lượng tổng cộng của mục
+        const countQuery = `
+            SELECT COUNT(*) AS totalCount 
+            FROM tbl_san_pham sp 
+            JOIN tbl_chi_tiet_san_pham ctsanpham ON sp.id = ctsanpham.san_pham_id`;
+
+        connect.query(countQuery, (err, countResult) => {
             if (err) {
                 console.error(err);
                 return res.status(500).send('Internal Server Error');
             }
-            let sql = `
-        SELECT 
-            sp.ten_san_pham, 
-            ctsanpham.hinh_anh AS hinh_anh_chi_tiet, 
-            ctsanpham.id AS chi_tiet_id,
-            mausac.ten_mau_sac, 
-            dungluong.ten_dung_luong, 
-            ctsanpham.gia_ban, 
-            ctsanpham.serial,
-            ctsanpham.hinh_anh
-        FROM 
-            tbl_san_pham sp 
-            JOIN tbl_chi_tiet_san_pham ctsanpham ON sp.id = ctsanpham.san_pham_id 
-            JOIN tbl_mau_sac mausac ON ctsanpham.mau_sac_id = mausac.id 
-            JOIN tbl_dung_luong dungluong ON ctsanpham.dung_luong_id = dungluong.id 
-        WHERE 1 = 1`;
+            const totalCount = countResult[0].totalCount;
+
+            // Tính tổng số trang
+            const totalPages = Math.ceil(totalCount / perPage);
+
+            // Đảm bảo trang không lớn hơn tổng số trang
+            if (page > totalPages) {
+                page = totalPages;
+            }
+
+            // Truy vấn để lấy dữ liệu cho trang hiện tại
+            const sql = `
+                SELECT 
+                    sp.ten_san_pham, 
+                    ctsanpham.hinh_anh AS hinh_anh_chi_tiet, 
+                    ctsanpham.id AS chi_tiet_id,
+                    mausac.ten_mau_sac, 
+                    dungluong.ten_dung_luong, 
+                    ctsanpham.gia_ban, 
+                    ctsanpham.serial,
+                    ctsanpham.hinh_anh
+                FROM 
+                    tbl_san_pham sp 
+                    JOIN tbl_chi_tiet_san_pham ctsanpham ON sp.id = ctsanpham.san_pham_id 
+                    JOIN tbl_mau_sac mausac ON ctsanpham.mau_sac_id = mausac.id 
+                    JOIN tbl_dung_luong dungluong ON ctsanpham.dung_luong_id = dungluong.id 
+                LIMIT ${perPage} OFFSET ${offset}`;
+
             connect.query(sql, (err, data) => {
-                res.render('user/all_product.ejs', {
-                    data: data,
-                    user: req.session.user,
-                    nhaSanXuatList: nhaSanXuatList
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Internal Server Error');
+                }
+
+                // Truy vấn để lấy danh sách nhà sản xuất
+                let nhaSanXuatSql = "SELECT * FROM tbl_nha_san_xuat";
+
+                connect.query(nhaSanXuatSql, (err, nhaSanXuatList) => {
+                    if (err) {
+                        console.error(err);
+                        return res.status(500).send('Internal Server Error');
+                    }
+
+                    // Render template với dữ liệu và thông tin phân trang
+                    res.render('user/all_product.ejs', {
+                        data: data,
+                        user: req.session.user,
+                        nhaSanXuatList: nhaSanXuatList,
+                        pageCount: totalPages,
+                        itemCount: totalCount,
+                        currentPage: page, // Thêm currentPage vào để biết trang hiện tại
+                        pages: paginate.getArrayPages(req)(3, totalPages, page)
+                    });
                 });
             });
         });
     }
 
+
     search_product_all_user(req, res) {
         const keyword = req.query.name;
         const mau_sac_name = req.query.mau_sac_name;
         const nha_san_xuat_name = req.query.nha_san_xuat_name;
+        const min_price = req.query.min_price;
+        const max_price = req.query.max_price;
+        let page = parseInt(req.query.page) || 1; // Trang mặc định là 1
+        const limit = 20; // Số lượng kết quả trên mỗi trang
+        const offset = (page - 1) * limit; // Định vị bắt đầu của các kết quả
 
         let mau_sac_sql = "SELECT * FROM tbl_mau_sac";
         let nha_san_xuat_sql = "SELECT * FROM tbl_nha_san_xuat";
@@ -495,39 +571,75 @@ class homeUserController {
                     return res.status(500).send('Internal Server Error');
                 }
 
-                connect.query(sql_san_pham, (err, product) => {
-                    let sql = `
-                        SELECT 
-                            sp.ten_san_pham, 
-                            ctsanpham.hinh_anh AS hinh_anh, 
-                            mausac.ten_mau_sac, 
-                            nsx.ten_nha_san_xuat, 
-                            ctsanpham.gia_ban, 
-                            ctsanpham.serial 
-                        FROM 
-                            tbl_san_pham sp 
-                            JOIN tbl_chi_tiet_san_pham ctsanpham ON sp.id = ctsanpham.san_pham_id 
-                            JOIN tbl_mau_sac mausac ON ctsanpham.mau_sac_id = mausac.id 
-                            JOIN tbl_nha_san_xuat nsx ON sp.nha_san_xuat_id = nsx.id 
-                        WHERE 1 = 1
-                    `;
+                let sql = `
+                    SELECT 
+                        sp.ten_san_pham, 
+                        ctsanpham.hinh_anh AS hinh_anh, 
+                        mausac.ten_mau_sac, 
+                        nsx.ten_nha_san_xuat, 
+                        ctsanpham.gia_ban, 
+                        ctsanpham.serial 
+                    FROM 
+                        tbl_san_pham sp 
+                        JOIN tbl_chi_tiet_san_pham ctsanpham ON sp.id = ctsanpham.san_pham_id 
+                        JOIN tbl_mau_sac mausac ON ctsanpham.mau_sac_id = mausac.id 
+                        JOIN tbl_nha_san_xuat nsx ON sp.nha_san_xuat_id = nsx.id 
+                    WHERE 1 = 1
+                `;
 
-                    const queryParams = [];
+                const queryParams = [];
 
-                    if (keyword) {
-                        sql += " AND sp.ten_san_pham LIKE ?";
-                        queryParams.push(`%${keyword}%`);
+                if (keyword) {
+                    sql += " AND sp.ten_san_pham LIKE ?";
+                    queryParams.push(`%${keyword}%`);
+                }
+
+                if (mau_sac_name) {
+                    sql += " AND mausac.ten_mau_sac LIKE ?";
+                    queryParams.push(`%${mau_sac_name}%`);
+                }
+
+                if (nha_san_xuat_name) {
+                    sql += " AND nsx.ten_nha_san_xuat LIKE ?";
+                    queryParams.push(`%${nha_san_xuat_name}%`);
+                }
+
+                if (min_price && max_price) {
+                    sql += " AND ctsanpham.gia_ban BETWEEN ? AND ?";
+                    queryParams.push(min_price, max_price);
+                } else if (min_price) {
+                    sql += " AND ctsanpham.gia_ban >= ?";
+                    queryParams.push(min_price);
+                } else if (max_price) {
+                    sql += " AND ctsanpham.gia_ban <= ?";
+                    queryParams.push(max_price);
+                }
+
+                // Truy vấn để lấy số lượng tổng cộng của mục
+                const countQuery = `
+                    SELECT COUNT(*) AS totalCount 
+                    FROM tbl_san_pham sp 
+                    JOIN tbl_chi_tiet_san_pham ctsanpham ON sp.id = ctsanpham.san_pham_id 
+                    WHERE 1 = 1
+                `;
+
+                connect.query(countQuery, queryParams, (err, countResult) => {
+                    if (err) {
+                        console.error(err);
+                        return res.status(500).send('Internal Server Error');
+                    }
+                    const totalCount = countResult[0].totalCount;
+
+                    // Tính tổng số trang
+                    const pageCount = Math.ceil(totalCount / limit);
+
+                    // Đảm bảo trang không lớn hơn tổng số trang
+                    if (page > pageCount) {
+                        page = pageCount;
                     }
 
-                    if (mau_sac_name) {
-                        sql += " AND mausac.ten_mau_sac LIKE ?";
-                        queryParams.push(`%${mau_sac_name}%`);
-                    }
-
-                    if (nha_san_xuat_name) {
-                        sql += " AND nsx.ten_nha_san_xuat LIKE ?";
-                        queryParams.push(`%${nha_san_xuat_name}%`);
-                    }
+                    sql += " LIMIT ? OFFSET ?";
+                    queryParams.push(limit, offset);
 
                     connect.query(sql, queryParams, (err, data) => {
                         if (err) {
@@ -535,18 +647,32 @@ class homeUserController {
                             return res.status(500).send('Internal Server Error');
                         }
 
-                        res.render('user/all_product.ejs', {
-                            data: data,
-                            product: product,
-                            mau_sac: mau_sac,
-                            nhaSanXuatList: nhaSanXuatList,
-                            user: req.session.user
+                        // Truy vấn để lấy danh sách nhà sản xuất
+                        let nhaSanXuatSql = "SELECT * FROM tbl_nha_san_xuat";
+
+                        connect.query(nhaSanXuatSql, (err, nhaSanXuatList) => {
+                            if (err) {
+                                console.error(err);
+                                return res.status(500).send('Internal Server Error');
+                            }
+
+                            // Render template với dữ liệu và thông tin phân trang
+                            res.render('user/all_product.ejs', {
+                                data: data,
+                                mau_sac: mau_sac,
+                                nhaSanXuatList: nhaSanXuatList,
+                                user: req.session.user,
+                                currentPage: page, // Thêm currentPage vào để biết trang hiện tại
+                                pageCount: pageCount, // Thêm pageCount vào để biết tổng số trang
+                                pages: paginate.getArrayPages(req)(3, pageCount, page)
+                            });
                         });
                     });
                 });
             });
         });
     }
+
 
     searchPrice_product_all_user(req, res) {
         const min_price = req.query.min_price;

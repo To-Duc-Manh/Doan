@@ -77,7 +77,8 @@
                   </div>
 
                   <div class="text-end">
-                    <a href="#" onclick="" class="btn btn-outline-danger mx-2 mb-3">Hủy đơn hàng</a>
+                    <a href="#" onclick="confirmCancelOrder(`<%= data_item.id %>`)"
+                      class="btn btn-outline-danger mx-2 mb-3">Hủy đơn hàng</a>
                   </div>
                 </div>
                 <% } }); if (!hasActiveOrder) { %>
@@ -130,21 +131,147 @@
                   <% } %>
           </div>
           <div class="tab-pane" id="dang_giao">
+            <% if (data.length> 0) {
+              var hasActiveOrder = false;
+              data.forEach(function(data_item, index) {
+              if (data_item.trang_thai === 3) {
+              hasActiveOrder = true;
+              %>
+              <div class="row">
+                <div class="">
+                  <p class="user_order text-start">ĐƠN BẢO HÀNH: <%= data_item.id %>
+                  </p>
+                </div>
 
+                <div class="row">
+                  <div class="col-lg-3">
+                    <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                      src="/imgUpload/<%= data_item.hinh_anh_chi_tiet %>">
+                  </div>
+                  <div class="col-lg-4">
+                    <p>Thông tin sản phẩm</p>
+                    <p>
+                      <%= data_item.ten_san_pham %> - <%= data_item.ten_mau_sac %> - <%= data_item.ten_dung_luong %>
+                    </p>
+                  </div>
+                  <div class="col-lg-5">
+                    <p>Lí do bảo hành</p>
+                    <p>
+                      <%= data_item.ghi_chu %>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="text-end">
+
+                </div>
+              </div>
+              <% } }); if (!hasActiveOrder) { %>
+                <p>Không có dữ liệu</p>
+                <% } } else { %>
+                  <p>Không có dữ liệu</p>
+                  <% } %>
           </div>
           <div class="tab-pane" id="da_giao">
+            <% if (data.length> 0) {
+              var hasActiveOrder = false;
+              data.forEach(function(data_item, index) {
+              if (data_item.trang_thai === 4) {
+              hasActiveOrder = true;
+              %>
+              <div class="row">
+                <div class="">
+                  <p class="user_order text-start">ĐƠN BẢO HÀNH: <%= data_item.id %>
+                  </p>
+                </div>
 
-          </div>
-          <div class="tab-pane" id="thanh_cong">
+                <div class="row">
+                  <div class="col-lg-3">
+                    <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                      src="/imgUpload/<%= data_item.hinh_anh_chi_tiet %>">
+                  </div>
+                  <div class="col-lg-4">
+                    <p>Thông tin sản phẩm</p>
+                    <p>
+                      <%= data_item.ten_san_pham %> - <%= data_item.ten_mau_sac %> - <%= data_item.ten_dung_luong %>
+                    </p>
+                  </div>
+                  <div class="col-lg-5">
+                    <p>Lí do bảo hành</p>
+                    <p>
+                      <%= data_item.ghi_chu %>
+                    </p>
+                  </div>
+                </div>
 
+                <div class="text-end">
+
+                </div>
+              </div>
+              <% } }); if (!hasActiveOrder) { %>
+                <p>Không có dữ liệu</p>
+                <% } } else { %>
+                  <p>Không có dữ liệu</p>
+                  <% } %>
           </div>
           <div class="tab-pane" id="da_huy">
+            <% if (data.length> 0) {
+              var hasActiveOrder = false;
+              data.forEach(function(data_item, index) {
+              if (data_item.trang_thai === 5) {
+              hasActiveOrder = true;
+              %>
+              <div class="row">
+                <div class="">
+                  <p class="user_order text-start">ĐƠN BẢO HÀNH: <%= data_item.id %>
+                  </p>
+                </div>
 
+                <div class="row">
+                  <div class="col-lg-3">
+                    <img style="width: 150px; height: 100px;" class="img-thumbnail"
+                      src="/imgUpload/<%= data_item.hinh_anh_chi_tiet %>">
+                  </div>
+                  <div class="col-lg-4">
+                    <p>Thông tin sản phẩm</p>
+                    <p>
+                      <%= data_item.ten_san_pham %> - <%= data_item.ten_mau_sac %> - <%= data_item.ten_dung_luong %>
+                    </p>
+                  </div>
+                  <div class="col-lg-5">
+                    <p>Lí do bảo hành</p>
+                    <p>
+                      <%= data_item.ghi_chu %>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="text-end">
+
+                </div>
+              </div>
+              <% } }); if (!hasActiveOrder) { %>
+                <p>Không có dữ liệu</p>
+                <% } } else { %>
+                  <p>Không có dữ liệu</p>
+                  <% } %>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <script>
+    function confirmCancelOrder(orderId) {
+      if (confirm("Bạn có chắc chắn muốn hủy đơn bảo hành này không?")) {
+        // Nếu người dùng đồng ý, gửi yêu cầu hủy đơn hàng đến máy chủ
+        window.location.href = "/baohanh_huy/" + orderId;
+
+      } else {
+        // Nếu người dùng không đồng ý, không thực hiện hành động nào
+        return false;
+      }
+    }
+  </script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const currentPath = window.location.pathname;

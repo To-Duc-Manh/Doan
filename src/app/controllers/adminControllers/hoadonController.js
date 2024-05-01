@@ -3,18 +3,65 @@ const moment = require('moment');
 
 const helper = require('../../controllers/helper');
 const { json } = require('express');
+const paginate = require('express-paginate');
 
 class hoadonController {
-    index(req, res) {
-        let sql = " select * from tbl_don_mua_hang ";
-        connect.query(sql, (err, data) => {
-            res.render('admin/hoa_don/hoa_don.ejs', {
-                data: data,
-                user: req.session.user
-            });
-        })
 
+    index(req, res) {
+        const perPage = 6; // Số lượng mục trên mỗi trang
+        let page = parseInt(req.query.page) || 1; // Trang hiện tại, mặc định là 1 nếu không có yêu cầu
+
+        // Đảm bảo trang không nhỏ hơn 1 và không lớn hơn tổng số trang
+        if (page < 1) {
+            page = 1;
+        }
+
+        // Tính offset để lấy dữ liệu từ cơ sở dữ liệu
+        const offset = (page - 1) * perPage;
+
+        // Truy vấn để lấy số lượng tổng cộng của mục
+        const countQuery = "SELECT COUNT(*) AS totalCount FROM tbl_don_mua_hang";
+
+        connect.query(countQuery, (err, countResult) => {
+            if (err) {
+                throw err;
+            }
+            const totalCount = countResult[0].totalCount;
+
+            // Tính tổng số trang
+            const totalPages = Math.ceil(totalCount / perPage);
+
+            // Đảm bảo trang không lớn hơn tổng số trang
+            if (page > totalPages) {
+                page = totalPages;
+            }
+
+            // Truy vấn để lấy dữ liệu cho trang hiện tại
+            const sql = `SELECT tbl_don_mua_hang.*, tbl_nhan_vien.ten_nhan_vien 
+                         FROM tbl_don_mua_hang 
+                         LEFT JOIN tbl_nhan_vien ON tbl_don_mua_hang.nhan_vien_id = tbl_nhan_vien.id
+                         LIMIT ${perPage} OFFSET ${offset}`;
+
+            connect.query(sql, (err, data) => {
+                if (err) {
+                    throw err;
+                }
+
+                // Render template với dữ liệu và thông tin phân trang
+                res.render('admin/hoa_don/hoa_don.ejs', {
+                    data: data,
+                    user: req.session.user,
+                    pageCount: totalPages,
+                    itemCount: totalCount,
+                    currentPage: page, // Thêm currentPage vào để biết trang hiện tại
+                    pages: paginate.getArrayPages(req)(3, totalPages, page)
+                });
+            });
+        });
     }
+
+
+
 
     chi_tiet_hoa_don(req, res) {
         let id = req.params.id;

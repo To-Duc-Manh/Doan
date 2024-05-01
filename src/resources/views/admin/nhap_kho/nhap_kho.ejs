@@ -28,7 +28,6 @@
                         <th>Tên nhân viên tạo</th>
                         <th>Tổng tiền</th>
                         <th>Ngày tạo</th>
-                        <th>Ngày cập nhật</th>
                         <th>Trạng thái</th>
                         <th>Thao tác</th>
                     </tr>
@@ -50,15 +49,6 @@
                                     <%= new Intl.DateTimeFormat('vi-VN').format(new Date(phieunhapkho.ngay_tao)) %>
                                 </td>
                                 <td>
-                                    <% if (phieunhapkho.ngay_ket_thuc && phieunhapkho.ngay_ket_thuc
-                                        !=='0000-00-00 00:00:00' ) { %>
-                                        <%= new Intl.DateTimeFormat('vi-VN').format(new
-                                            Date(phieunhapkho.ngay_ket_thuc)) %>
-                                            <% } else { %>
-
-                                                <% } %>
-                                </td>
-                                <td>
                                     <% if (phieunhapkho.trang_thai===1) { %>
                                         <button class="btn btn-outline-secondary btn-sm"> Chờ thanh toán </button>
                                         <% } else if (phieunhapkho.trang_thai===2) { %>
@@ -70,8 +60,8 @@
                                 </td>
                                 <td>
                                     <div class="d-flex ">
-                                        <a href="#" class="btn btn-outline-success btn-sm mx-1"><i
-                                                class="fa-solid fa-pen-to-square"></i></a>
+                                        <!-- <a href="#" class="btn btn-outline-success btn-sm mx-1"><i
+                                                class="fa-solid fa-pen-to-square"></i></a> -->
                                         <a href="#" onclick="confirmDelete(`<%= phieunhapkho.id %>`)"
                                             class="btn btn-outline-danger btn-sm mx-1"><i
                                                 class="fa-solid fa-trash"></i></a>
