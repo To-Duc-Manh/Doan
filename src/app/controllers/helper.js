@@ -1,5 +1,6 @@
 const connect = require('../../config/db');
 const moment = require('moment');
+const paginate = require('express-paginate');
 
 function deleteRecord(tableName, tableId, redirectPath, req, res) {
     let id = req.params.id;
@@ -96,6 +97,10 @@ function searchInTable(req, res, tableName, searchField, redirectPath1, redirect
         });
     });
 }
+
+
+
+
 
 function checkAndInsertRecord(tableName, recordData, checkColumn, redirectPath, req, res) {
     const { [checkColumn]: checkValue, ...otherData } = recordData;

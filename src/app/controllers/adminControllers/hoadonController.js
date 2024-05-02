@@ -60,9 +60,6 @@ class hoadonController {
         });
     }
 
-
-
-
     chi_tiet_hoa_don(req, res) {
         let id = req.params.id;
 
@@ -488,13 +485,59 @@ class hoadonController {
     }
 
     search_don_mua_hang(req, res) {
-        const tableName = 'tbl_don_mua_hang';
-        const searchField = 'ten_nguoi_mua'; // Tên trường bạn muốn tìm kiếm, ví dụ: id, hinh_thuc_thanh_toan, trang_thai
-        const redirectPath1 = 'hoa_don';
-        const redirectPath2 = 'hoa_don';
-        const queryParams = req.query.name; // Đổi 'name' thành 'query' tương ứng với query parameter bạn sử dụng trong URL
-
-        helper.searchInTable(req, res, tableName, searchField, redirectPath1, redirectPath2, queryParams);
+        const perPage = 6; // Số lượng mục trên mỗi trang
+        let page = parseInt(req.query.page) || 1; // Trang hiện tại, mặc định là 1 nếu không có yêu cầu
+        const searchTerm = req.query.name; // Từ khóa tìm kiếm
+    
+        // Đảm bảo trang không nhỏ hơn 1
+        if (page < 1) {
+            page = 1;
+        }
+    
+        // Tính offset để lấy dữ liệu từ cơ sở dữ liệu
+        const offset = (page - 1) * perPage;
+    
+        // Truy vấn để lấy số lượng tổng cộng của mục theo từ khóa tìm kiếm
+        const countQuery = `SELECT COUNT(*) AS totalCount FROM tbl_don_mua_hang WHERE ten_nguoi_mua LIKE '%${searchTerm}%'`;
+    
+        connect.query(countQuery, (err, countResult) => {
+            if (err) {
+                throw err;
+            }
+            const totalCount = countResult[0].totalCount;
+    
+            // Tính tổng số trang
+            const totalPages = Math.ceil(totalCount / perPage);
+    
+            // Đảm bảo trang không lớn hơn tổng số trang
+            if (page > totalPages) {
+                page = totalPages;
+            }
+    
+            // Truy vấn để lấy dữ liệu cho trang hiện tại với điều kiện tìm kiếm
+            const sql = `SELECT tbl_don_mua_hang.*, tbl_nhan_vien.ten_nhan_vien 
+                         FROM tbl_don_mua_hang 
+                         LEFT JOIN tbl_nhan_vien ON tbl_don_mua_hang.nhan_vien_id = tbl_nhan_vien.id
+                         WHERE ten_nguoi_mua LIKE '%${searchTerm}%'
+                         LIMIT ${perPage} OFFSET ${offset}`;
+    
+            connect.query(sql, (err, data) => {
+                if (err) {
+                    throw err;
+                }
+    
+                // Render template với dữ liệu và thông tin phân trang
+                res.render('admin/hoa_don/hoa_don.ejs', {
+                    data: data,
+                    user: req.session.user,
+                    pageCount: totalPages,
+                    itemCount: totalCount,
+                    currentPage: page,
+                    pages: paginate.getArrayPages(req)(3, totalPages, page),
+                    searchTerm: searchTerm // Truyền từ khóa tìm kiếm để hiển thị trên giao diện
+                });
+            });
+        });
     }
 
 }
