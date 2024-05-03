@@ -178,7 +178,7 @@ class hoadonController {
                                 <th>Số lượng</th>
                                 <th>Giá</th>
                                 <th>Tổng tiền</th>
-                                <th>Thời gian bảo hành</th>
+                                
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
@@ -191,7 +191,6 @@ class hoadonController {
                                         <td>${hoadon.so_luong}</td>
                                         <td>${hoadon.gia}</td>
                                         <td>${hoadon.so_luong * hoadon.gia}</td>
-                                        <td>${hoadon.chi_tiet_san_pham_id}</td>
                                     </tr>
                                 `).join('') :
                         `<tr>
@@ -207,8 +206,6 @@ class hoadonController {
                         </div>
                         <div class="col-lg-4"></div>
                         <div class="col-lg-4">
-                            <p class="font-weight">Thành tiền: ...</p>
-                            <p class="font-weight">Phí vận chuyển: ...</p>
                             <p class="font-weight">Tổng tiền: ${don_mua_hang[0].tong_tien_thanh_toan} đ</p>
                         </div>
                     </div>
@@ -488,44 +485,44 @@ class hoadonController {
         const perPage = 6; // Số lượng mục trên mỗi trang
         let page = parseInt(req.query.page) || 1; // Trang hiện tại, mặc định là 1 nếu không có yêu cầu
         const searchTerm = req.query.name; // Từ khóa tìm kiếm
-    
+
         // Đảm bảo trang không nhỏ hơn 1
         if (page < 1) {
             page = 1;
         }
-    
+
         // Tính offset để lấy dữ liệu từ cơ sở dữ liệu
         const offset = (page - 1) * perPage;
-    
+
         // Truy vấn để lấy số lượng tổng cộng của mục theo từ khóa tìm kiếm
         const countQuery = `SELECT COUNT(*) AS totalCount FROM tbl_don_mua_hang WHERE ten_nguoi_mua LIKE '%${searchTerm}%'`;
-    
+
         connect.query(countQuery, (err, countResult) => {
             if (err) {
                 throw err;
             }
             const totalCount = countResult[0].totalCount;
-    
+
             // Tính tổng số trang
             const totalPages = Math.ceil(totalCount / perPage);
-    
+
             // Đảm bảo trang không lớn hơn tổng số trang
             if (page > totalPages) {
                 page = totalPages;
             }
-    
+
             // Truy vấn để lấy dữ liệu cho trang hiện tại với điều kiện tìm kiếm
             const sql = `SELECT tbl_don_mua_hang.*, tbl_nhan_vien.ten_nhan_vien 
                          FROM tbl_don_mua_hang 
                          LEFT JOIN tbl_nhan_vien ON tbl_don_mua_hang.nhan_vien_id = tbl_nhan_vien.id
                          WHERE ten_nguoi_mua LIKE '%${searchTerm}%'
                          LIMIT ${perPage} OFFSET ${offset}`;
-    
+
             connect.query(sql, (err, data) => {
                 if (err) {
                     throw err;
                 }
-    
+
                 // Render template với dữ liệu và thông tin phân trang
                 res.render('admin/hoa_don/hoa_don.ejs', {
                     data: data,

@@ -225,7 +225,7 @@ class nhapkhoController {
                                 <th>Số lượng</th>
                                 <th>Giá</th>
                                 <th>Tổng tiền</th>
-                                <th>Thời gian bảo hành</th>
+                          
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
@@ -238,7 +238,7 @@ class nhapkhoController {
                                         <td>${hoadon.so_luong}</td>
                                         <td>${hoadon.gia}</td>
                                         <td>${hoadon.so_luong * hoadon.gia}</td>
-                                        <td>${hoadon.so_thang_bao_hanh}</td>
+                                
                                     </tr>
                                 `).join('') :
                         `<tr>
@@ -254,8 +254,6 @@ class nhapkhoController {
                         </div>
                         <div class="col-lg-4"></div>
                         <div class="col-lg-4">
-                            <p class="font-weight">Thành tiền: ...</p>
-                            <p class="font-weight">Phí vận chuyển: ...</p>
                             <p class="font-weight">Tổng tiền thanh toán: ${phieu_nhap_kho[0].tong_tien} đ</p>
                         </div>
                     </div>
